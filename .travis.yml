@@ -1,0 +1,15 @@
+language: java
+
+sudo: false
+
+jdk:
+  - oraclejdk8
+
+notifications:
+  email: false
+
+install:
+  - cd $HOME/com.alma.boutique/ && mvn install -DskipTests=true -Dmaven.javadoc.skip=true -B -V
+
+test:
+  - cd $HOME/com.alma.boutique/ && mvn test
