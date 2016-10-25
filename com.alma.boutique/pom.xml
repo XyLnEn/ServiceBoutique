@@ -30,14 +30,15 @@
         </dependency>
     </dependencies>
 
-    <!--<reporting>
+    <reporting>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-pmd-plugin</artifactId>
+                <version>3.7</version>
             </plugin>
         </plugins>
-    </reporting>-->
+    </reporting>
 
     <build>
         <plugins>
@@ -57,5 +58,41 @@
             </plugin>
         </plugins>
     </build>
+
+    <developers>
+        <developer>
+            <id>tminier</id>
+            <name>Thomas Minier</name>
+            <email>tminier01@gmail.com</email>
+            <url>http://www.github.com/Callidon</url>
+            <organization>Master ALMA - Architectures Logicielles</organization>
+            <roles>
+                <role>architect</role>
+                <role>developer</role>
+            </roles>
+        </developer>
+        <developer>
+            <id>llucas</id>
+            <name>Lenny Lucasr</name>
+            <email>lenny.lucas44@gmail.com</email>
+            <url>http://www.github.com/Xylnen</url>
+            <organization>Master ALMA - Architectures Logicielles</organization>
+            <roles>
+                <role>architect</role>
+                <role>developer</role>
+            </roles>
+        </developer>
+    </developers>
+
+    <organization>
+        <name>Master ALMA - Architectures Logicielles</name>
+    </organization>
+
+    <licenses>
+        <license>
+            <name>The MIT License</name>
+            <url>https://opensource.org/licenses/MIT</url>
+        </license>
+    </licenses>
 
 </project>
