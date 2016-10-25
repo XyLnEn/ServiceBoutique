@@ -10,14 +10,6 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>com.alma.boutique.application</artifactId>
-    <dependencies>
-        <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <version>RELEASE</version>
-            <scope>test</scope>
-        </dependency>
-    </dependencies>
 
 
 </project>
