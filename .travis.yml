@@ -2,14 +2,20 @@ language: java
 
 sudo: false
 
-jdk:
-  - oraclejdk8
+jdk: oraclejdk8
+
+env:
+  global:
+    secure: WSKuWZcTp7n33XB5df6oR2teYp9Dd2jqrmEma7TT2CClSXFwu2R1ORmhCsdmE8MsTBpPdKbDSYl/NPhikjAsITB2uhuzEKO0FCCuSTBJ0Nq8fgBwT+YGRUBhFrtfOiFXOyKPlIGmkf/XauHBKqXiYW/7xTmY4IRzJ3FnDOVeC5a35kJAKTxYdlPIip1Gvv00eJVCF7Z7K5u1oF7oqaa2gRItlFH7eTuACgQRTDg9exfX694VGeDOND6XzLqo80AYCG7zloxmGxQbIOUkXFGuhunTLGknBIO6oF5BslH4FKkxJN3XknFeGJ79rC13XtYm0ajW6lvgSYJNNWinLYaDxpHvwaPiaqTBDvFXHwYsxhMbjq2VNGX/gTgSAfm4nr62IHKWFTPTs141oiN8VdMtlc45InpQEhcffRZ+mwjGkRPRkwHCLqbq6H4uMZNqtp/6Jn5qycPEgl0oFQkyITvDdLHmc3mJ/htE9sI3FYKtg5e5o8fwtiEu/sEkR93j5rYSZDBk3ikKANcqzD7qAGom7tFKhT/GQoMKohVp85+eIThyMHkbosMV34Xst3xft5BLV6/3gCqcPlyeETOT/lPQLNM7MC126xp81w3aiYXve+enOOjuA+CURS5yldHrO6zv23xGCXBC6j1wucDAzzZ4MRfeV40DBTf2p3o0HP+lebw=
 
 notifications:
   email: false
 
-install:
-  - cd $TRAVIS_BUILD_DIR/com.alma.boutique/ && mvn install -DskipTests=true -Dmaven.javadoc.skip=true -B -V
+addons:
+  sonarqube: true
 
-test:
-  - cd $TRAVIS_BUILD_DIR/com.alma.boutique/ && mvn test
+install: cd $TRAVIS_BUILD_DIR/com.alma.boutique/ && mvn install -DskipTests=true -Dmaven.javadoc.skip=true -B -V
+
+test: cd $TRAVIS_BUILD_DIR/com.alma.boutique/ && mvn test
+
+script: mvn sonar:sonar -Dsonar.login=$SONAR_TOKEN
