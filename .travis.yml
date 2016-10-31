@@ -16,6 +16,6 @@ addons:
 
 install: cd $TRAVIS_BUILD_DIR/com.alma.boutique/ && mvn install -DskipTests=true -Dmaven.javadoc.skip=true -B -V
 
-test: cd $TRAVIS_BUILD_DIR/com.alma.boutique/ && mvn test
-
-script: mvn sonar:sonar -Dsonar.login=$SONAR_TOKEN
+script:
+  - cd $TRAVIS_BUILD_DIR/com.alma.boutique/ && mvn test
+  - mvn sonar:sonar -Dsonar.login=$SONAR_TOKEN
