@@ -10,9 +10,9 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>com.alma.boutique.presentation</artifactId>
-    
+
     <properties>
-        <java.version>1.8</java.version>
+        <spring.boot.version>1.4.1.RELEASE</spring.boot.version>
     </properties>
 
 	<dependencies>
@@ -24,20 +24,32 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
-            <version>1.4.1.RELEASE</version>
+            <version>${spring.boot.version}</version>
+            <!-- Exclusions to resolve conflict with sl4j-log4j bindings in parent pom.xml -->
+            <exclusions>
+                <exclusion>
+                    <artifactId>logback-classic</artifactId>
+                    <groupId>ch.qos.logback</groupId>
+                </exclusion>
+                <exclusion>
+                    <artifactId>log4j-over-slf4j</artifactId>
+                    <groupId>org.slf4j</groupId>
+                </exclusion>
+            </exclusions>
         </dependency>
-        <dependency>
+        <!-- Those dependencies are disabled until we decide if they are really necessary -->
+        <!--<dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
-            <version>1.4.1.RELEASE</version>
-        </dependency>
-        <dependency>
+            <version>${spring.boot.version}</version>
+        </dependency>-->
+        <!--<dependency>
             <groupId>com.jayway.jsonpath</groupId>
             <artifactId>json-path</artifactId>
             <scope>test</scope>
             <version>RELEASE</version>
-        </dependency>
+        </dependency>-->
     </dependencies>
 
     <build>
@@ -45,7 +57,7 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
-                <version>1.4.1.RELEASE</version>
+                <version>${spring.boot.version}</version>
             </plugin>
         </plugins>
     </build>
