@@ -30,6 +30,12 @@
             <scope>test</scope>
         </dependency>
         <dependency>
+            <groupId>org.assertj</groupId>
+            <artifactId>assertj-core</artifactId>
+            <version>3.5.2</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-log4j12</artifactId>
             <version>1.7.21</version>
@@ -84,7 +90,7 @@
         </developer>
         <developer>
             <id>llucas</id>
-            <name>Lenny Lucasr</name>
+            <name>Lenny Lucas</name>
             <email>lenny.lucas44@gmail.com</email>
             <url>http://www.github.com/Xylnen</url>
             <organization>Master ALMA - Architectures Logicielles</organization>
