@@ -6,9 +6,9 @@ import java.util.UUID;
  * Created by thomas on 07/11/16.
  */
 public class EntityID {
-    private UUID id;
+  private UUID id;
 
-    public EntityID() {
-        this.id = UUID.randomUUID();
-    }
+  public EntityID() {
+      this.id = UUID.randomUUID();
+  }
 }
