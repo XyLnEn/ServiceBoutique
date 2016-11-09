@@ -1,7 +1,10 @@
 package com.alma.boutique.domain.thirdperson;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import com.alma.boutique.domain.exceptions.OrderNotFoundException;
+import com.alma.boutique.domain.exceptions.ProductNotFoundException;
 import com.alma.boutique.domain.product.Product;
 import com.alma.boutique.domain.shared.Entity;
 /**
@@ -15,12 +18,40 @@ public class Order extends Entity {
 	private OrderStatus orderStatus;
 	private String deliverer;
 	
-	public Order(List<Product> products, OrderStatus orderStatus, String deliverer) {
+	public Order(OrderStatus orderStatus, String deliverer) {
 		super();
-		this.products = products;
+		this.products = new ArrayList<>();
 		this.orderStatus = orderStatus;
 		this.deliverer = deliverer;
 	}
+	
+	public Product createProduct() {
+		//creation of the Product with the factory and addition to the products
+		return null;
+		//how do they determine if we want to create which type of product?
+	}
+	
+	public Product getProduct(Product prod) throws ProductNotFoundException {
+		for (Product product : products) {
+			if (product.sameIdentityAs(prod)){
+				return product;
+			}
+		}
+		throw new ProductNotFoundException("Product not found");//in case the order doesn't exist
+	}
+	
+	public void updateProduct(Product prod) {
+		for (Product product : products) {
+			if (product.sameIdentityAs(prod)){
+//				product.updateProduct(prod);
+			}
+		}
+	}
+	
+	public void deleteProduct(Product prod) {
+		products.remove(prod);
+	}
+	
 	/**
 	 * update the order with new values
 	 * @param ord the new value

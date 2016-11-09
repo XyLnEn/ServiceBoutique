@@ -1,16 +1,25 @@
 package com.alma.boutique.domain.thirdperson;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.alma.boutique.domain.exceptions.OrderNotFoundException;
+import com.alma.boutique.domain.product.Product;
 import com.alma.boutique.domain.shared.*;
 
 abstract class ThirdParty extends Entity {
 
 	private List<Order> orderHistory;
 
-	public void createOrder() {
+	public ThirdParty() {
+		this.orderHistory = new ArrayList<>();
+	}
+	
+	public Order createOrder(List<Product> products, OrderStatus orderStatus, String deliverer) {
 		//creation of the Order with the factory and addition to the orderHistory
+		Order newOrd = new Order(orderStatus, deliverer);
+		this.orderHistory.add(newOrd);
+		return newOrd;
 	}
 	
 	public Order getOrder(Order ord) throws OrderNotFoundException {
@@ -40,11 +49,9 @@ abstract class ThirdParty extends Entity {
 	public void setId(EntityID id) {
 		this.id = id;
 	}
-	public List<Order> getHistoriqueTransaction() {
+	public List<Order> getOrderHistory() {
 		return orderHistory;
 	}
-	public void setHistoriqueTransaction(List<Order> historiqueTransaction) {
-		this.orderHistory = historiqueTransaction;
-	}
+	
 	
 }
