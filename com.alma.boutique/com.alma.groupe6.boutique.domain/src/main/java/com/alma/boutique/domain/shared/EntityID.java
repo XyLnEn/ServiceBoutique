@@ -3,7 +3,8 @@ package com.alma.boutique.domain.shared;
 import java.util.UUID;
 
 /**
- * Created by thomas on 07/11/16.
+ *
+ * @user thomas
  */
 public class EntityID {
     private UUID id;
