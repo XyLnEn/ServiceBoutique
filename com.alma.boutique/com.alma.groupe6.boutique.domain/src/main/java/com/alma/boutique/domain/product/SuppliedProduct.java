@@ -6,7 +6,7 @@ package com.alma.boutique.domain.product;
 public class SuppliedProduct extends Product {
     private String provider; // TODO replace this wwith the good class from Tiers aggregate
 
-    public SuppliedProduct(String name, float price, String description, int stock) {
-        super(name, price, description, stock);
+    public SuppliedProduct(String name, float price, String description) {
+        super(name, price, description);
     }
 }
