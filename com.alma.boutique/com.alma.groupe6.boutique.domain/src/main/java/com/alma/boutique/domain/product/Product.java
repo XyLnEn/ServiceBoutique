@@ -1,5 +1,6 @@
 package com.alma.boutique.domain.product;
 
+import com.alma.boutique.domain.exceptions.IllegalDiscountException;
 import com.alma.boutique.domain.shared.Entity;
 
 /**
@@ -9,6 +10,7 @@ public abstract class Product extends Entity {
     private String name;
     private float price;
     private String description;
+    private float discount;
     private int stock;
 
     public Product(String name, float price, String description, int stock) {
@@ -16,6 +18,18 @@ public abstract class Product extends Entity {
         this.price = price;
         this.description = description;
         this.stock = stock;
+        discount = 0;
+    }
+
+    public void addDiscount(float discount) {
+        this.discount += discount;
+    }
+
+    public float calculatePrice() throws IllegalDiscountException {
+        if(price - discount < 0) {
+            throw new IllegalDiscountException("Total discounts is superior to product's prize");
+        }
+        return price - discount;
     }
 
     public String getName() {
@@ -48,5 +62,9 @@ public abstract class Product extends Entity {
 
     public void setStock(int stock) {
         this.stock = stock;
+    }
+
+    public float getDiscount() {
+        return discount;
     }
 }
