@@ -6,7 +6,7 @@ import com.alma.boutique.domain.shared.Entity;
 
 public class Order extends Entity {
 
-//	private List<StockProduct> products; \\TODO class StockProduct
+//	private List<Stock> products; \\TODO class Stock
 	private OrderStatus orderStatus;
 	private float totalPrice;
 	private String deliverer;
