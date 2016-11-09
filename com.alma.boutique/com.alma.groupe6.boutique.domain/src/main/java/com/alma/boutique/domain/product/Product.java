@@ -7,17 +7,15 @@ import com.alma.boutique.domain.shared.Entity;
  * @author Thomas Minier
  */
 public abstract class Product extends Entity {
-    private String name;
-    private float price;
-    private String description;
+    protected String name;
+    protected float price;
+    protected String description;
     private float discount;
-    private int stock;
 
-    public Product(String name, float price, String description, int stock) {
+    public Product(String name, float price, String description) {
         this.name = name;
         this.price = price;
         this.description = description;
-        this.stock = stock;
         discount = 0;
     }
 
@@ -54,14 +52,6 @@ public abstract class Product extends Entity {
 
     public void setDescription(String description) {
         this.description = description;
-    }
-
-    public int getStock() {
-        return stock;
-    }
-
-    public void setStock(int stock) {
-        this.stock = stock;
     }
 
     public float getDiscount() {
