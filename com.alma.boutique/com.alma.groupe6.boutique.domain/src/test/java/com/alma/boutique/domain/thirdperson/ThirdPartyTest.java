@@ -8,7 +8,7 @@ public class ThirdPartyTest {
 	
 	@Test
 	public void testCreateOrder() {
-		// TODO
+		assertThat(true);
 	}
 
 	@Test
