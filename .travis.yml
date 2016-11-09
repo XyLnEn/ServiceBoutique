@@ -16,6 +16,4 @@ addons:
 
 install: cd $TRAVIS_BUILD_DIR/com.alma.boutique/ && mvn install -DskipTests=true -Dmaven.javadoc.skip=true -B -V
 
-script:
-  - cd $TRAVIS_BUILD_DIR/com.alma.boutique/ && mvn test
-  - mvn org.jacoco:jacoco-maven-plugin:prepare-agent sonar:sonar -Dsonar.login=$SONAR_TOKEN -Dsonar.host.url=https://sonarqube.com/
+script: cd $TRAVIS_BUILD_DIR/com.alma.boutique/ && mvn clean org.jacoco:jacoco-maven-plugin:prepare-agent install sonar:sonar -Dsonar.login=$SONAR_TOKEN -Dsonar.host.url=https://sonarqube.com/
