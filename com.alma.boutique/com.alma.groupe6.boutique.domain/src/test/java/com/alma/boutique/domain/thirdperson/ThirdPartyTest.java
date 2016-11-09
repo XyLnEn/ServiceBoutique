@@ -13,7 +13,7 @@ public class ThirdPartyTest {
 
 	@Test
 	public void testGetOrder() {
-		// TODO
+		
 	}
 
 	@Test

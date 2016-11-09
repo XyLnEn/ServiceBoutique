@@ -28,7 +28,7 @@ public class OrderTest {
 		assertThat(ord.getOrderStatus()).as("check the update of the state of the order").isEqualTo(OrderStatus.TRAVELING);
 		
 		List<Product> list2 = new ArrayList<Product>();
-		list2.add(new SoldProduct("DAB", 5, "On 'em", 500));
+		list2.add(new SoldProduct("DAB", 5, "On 'em"));
 		Order newList = new Order(list2, OrderStatus.TRAVELING, "DPS");
 		ord.updateOrder(newList);
 		assertThat(ord.getProducts()).as("check the update on the Product list").isEqualTo(list2);
@@ -42,7 +42,7 @@ public class OrderTest {
 		assertThat(ord.getTotalPrice()).as("test with the initial price").isEqualTo(0);
 		
 		List<Product> list2 = new ArrayList<Product>();
-		list2.add(new SoldProduct("DAB", 5, "On 'em", 500));
+		list2.add(new SoldProduct("DAB", 5, "On 'em"));
 		Order newList = new Order(list2, OrderStatus.TRAVELING, "DPS");
 		assertThat(newList.getTotalPrice()).as("test with a non-empty Product list").isEqualTo(5);
 		
