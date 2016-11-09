@@ -7,9 +7,9 @@ import java.util.UUID;
  * @user thomas
  */
 public class EntityID {
-    private UUID id;
+  private UUID id;
 
-    public EntityID() {
-        this.id = UUID.randomUUID();
-    }
+  public EntityID() {
+      this.id = UUID.randomUUID();
+  }
 }
