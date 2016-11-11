@@ -7,15 +7,17 @@ import com.alma.boutique.domain.shared.Entity;
  * @author Thomas Minier
  */
 public abstract class Product extends Entity {
-    protected String name;
-    protected float price;
-    protected String description;
+    private String name;
+    private float price;
+    private String description;
+    private Category category;
     private float discount;
 
-    public Product(String name, float price, String description) {
+    public Product(String name, float price, String description, Category category) {
         this.name = name;
         this.price = price;
         this.description = description;
+        this.category = category;
         discount = 0;
     }
 
@@ -57,4 +59,38 @@ public abstract class Product extends Entity {
     public float getDiscount() {
         return discount;
     }
+
+    public Category getCategory() {
+        return category;
+    }
+
+    public void setCategory(Category category) {
+        this.category = category;
+    }
+
+    public boolean sameCategoryAs(Product product) {
+        return category.equals(product.getCategory());
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        Product product = (Product) o;
+        return Float.compare(product.getPrice(), getPrice()) == 0 && getName().equals(product.getName())
+                && getDescription().equals(product.getDescription()) && getCategory().equals(product.getCategory());
+
+    }
+
+    @Override
+    public int hashCode() {
+        return this.id.hashCode();
+    }
 }
+
+
+

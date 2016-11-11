@@ -42,13 +42,7 @@ abstract class ThirdParty extends Entity {
 	public void deleteOrder(Order ord) {
 		orderHistory.remove(ord);
 	}
-	
-	public EntityID getId() {
-		return id;
-	}
-	public void setId(EntityID id) {
-		this.id = id;
-	}
+
 	public List<Order> getOrderHistory() {
 		return orderHistory;
 	}
