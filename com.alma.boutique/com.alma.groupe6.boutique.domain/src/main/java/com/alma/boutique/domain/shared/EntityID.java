@@ -12,4 +12,9 @@ public class EntityID {
   public EntityID() {
       this.id = UUID.randomUUID();
   }
+  
+
+	public UUID getId() {
+		return id;
+	}
 }

@@ -2,50 +2,138 @@ package com.alma.boutique.domain.thirdperson;
 
 import static org.assertj.core.api.Assertions.*;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import com.alma.boutique.domain.product.Category;
 import org.junit.Test;
 
+import com.alma.boutique.domain.exceptions.ProductNotFoundException;
+import com.alma.boutique.domain.factories.FactoryOrder;
+import com.alma.boutique.domain.factories.FactorySoldProduct;
 import com.alma.boutique.domain.product.Product;
-import com.alma.boutique.domain.product.SoldProduct;
 
 public class OrderTest {
 
 	@Test
 	public void testUpdateOrder() {
-		Order ord = new Order(OrderStatus.ORDERED, "USP");
+		
+		FactoryOrder factoryOrd = new FactoryOrder();
+		FactorySoldProduct factoryProd = new FactorySoldProduct();
+		
+		Order ord = factoryOrd.make("USP", factoryProd);
 		assertThat(ord.getDeliverer()).as("check the initial deliverer").isEqualTo("USP");
 
-		Order newDeliverer = new Order(OrderStatus.ORDERED, "DPS");
+		Order newDeliverer = factoryOrd.make("DPS", factoryProd);
 		ord.updateOrder(newDeliverer);
 		assertThat(ord.getDeliverer()).as("check the update of the deliverer").isEqualTo("DPS");
 		
-		Order newStatus = new Order(OrderStatus.TRAVELING, "DPS");
+		Order newStatus = factoryOrd.make("DPS", factoryProd);
+		newStatus.advanceState();
 		ord.updateOrder(newStatus);
 		assertThat(ord.getOrderStatus()).as("check the update of the state of the order").isEqualTo(OrderStatus.TRAVELING);
-		
-		List<Product> list2 = new ArrayList<Product>();
-		Category category = new Category("category");
-		Product prod = new SoldProduct("DAB", 5, "On 'em", category);
-		list2.add(prod);
-		ord.createProduct();//not functioning
-		//assertThat(ord.getProducts()).as("check the update on the Product list").isEqualTo(list2);
+
+		Order newProd = factoryOrd.make("DPS", factoryProd);
+		newProd.createProduct("DAB", 5, "On 'em", "lol");
+		ord.updateOrder(newProd);
+		assertThat(ord.getProducts().get(0).getDescription()).as("check the update on the Product list").isEqualTo("On 'em");
 		
 	}
 
 	@Test
-	public void testgetTotalPrice() {
-		List<Product> list = new ArrayList<Product>();
-		Order ord = new Order(OrderStatus.ORDERED, "USP");
+	public void testGetTotalPrice() {
+		
+		FactoryOrder factoryOrd = new FactoryOrder();
+		FactorySoldProduct factoryProd = new FactorySoldProduct();
+		
+		Order ord = factoryOrd.make("DPS", factoryProd);
 		assertThat(ord.getTotalPrice()).as("test with the initial price").isEqualTo(0);
 		
-		List<Product> list2 = new ArrayList<Product>();
-		Category category = new Category("category");
-		list2.add(new SoldProduct("DAB", 5, "On 'em", category));
-		Order newList = new Order(OrderStatus.TRAVELING, "DPS");
-//		assertThat(newList.getTotalPrice()).as("test with a non-empty Product list").isEqualTo(5);
+		ord.createProduct("DAB", 5, "On 'em", "lol");
+		assertThat(ord.getTotalPrice()).as("test with a non-empty Product list").isEqualTo(5);
 		
+	}
+	
+	@Test
+	public void testCreateProduct() {
+		FactoryOrder factoryOrd = new FactoryOrder();
+		FactorySoldProduct factoryProd = new FactorySoldProduct();
+		Order ord = factoryOrd.make("DPS", factoryProd);
+		assertThat(ord.getProducts()).as("check that the order is created empty").isEmpty();
+		Product prod = ord.createProduct("duck", 1, "a very charismatic duck", "weapon");
+		assertThat(ord.getProducts()).as("check that the product was added successfully").containsExactly(prod);
+	}
+	
+	@Test
+	public void testGetProduct() {
+		FactoryOrder factoryOrd = new FactoryOrder();
+		FactorySoldProduct factoryProd = new FactorySoldProduct();
+		Order ord = factoryOrd.make("DPS", factoryProd);
+		
+		Product prod = ord.createProduct("duck", 1, "a very charismatic duck", "weapon");
+		Product prodNotAdded = ord.getFactoryProd().make("gun", 1, "a very charismatic gun", "food");
+		try {
+			assertThat(ord.getProduct(prod)).as("check that the order return the right product").isEqualTo(prod);
+		} catch (ProductNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		assertThatExceptionOfType(ProductNotFoundException.class).isThrownBy(() -> ord.getProduct(prodNotAdded))
+		.as("check if the order can react when he is asked to get an order he doesn't have");
+		
+	}
+	
+	@Test
+	public void testUpdateProduct() {
+		FactoryOrder factoryOrd = new FactoryOrder();
+		FactorySoldProduct factoryProd = new FactorySoldProduct();
+		Order ord = factoryOrd.make("DPS", factoryProd);
+		
+		Product prod = ord.createProduct("duck", 1, "a very charismatic duck", "weapon");
+		Product prodNew = ord.getFactoryProd().make("gun", 2, "I could use this", "food");
+		try {
+			ord.updateProduct(prod, prodNew);
+			assertThat(ord.getProduct(prod).getName()).as("check that the order's name was updated successfully").isEqualTo(prodNew.getName());
+			assertThat(ord.getProduct(prod).getPrice()).as("check that the order's price was updated successfully").isEqualTo(prodNew.getPrice());
+			assertThat(ord.getProduct(prod).getDescription()).as("check that the order's description was updated successfully").isEqualTo(prodNew.getDescription());
+			assertThat(ord.getProduct(prod).getCategory().getName()).as("check that the order's category was updated successfully").isEqualTo(prodNew.getCategory().getName());
+		} catch (ProductNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		assertThatExceptionOfType(ProductNotFoundException.class).isThrownBy(() -> ord.getProduct(factoryProd.make("NAN", 10000, "Not a number", "number")))
+		.as("check if the order can react when he is asked to update an order he doesn't have");
+	}
+	
+	@Test
+	public void testDeleteProduct() {
+		FactoryOrder factoryOrd = new FactoryOrder();
+		FactorySoldProduct factoryProd = new FactorySoldProduct();
+		Order ord = factoryOrd.make("DPS", factoryProd);
+		
+		Product prod = ord.createProduct("duck", 1, "a very charismatic duck", "weapon");
+		try {
+			assertThat(ord.getProduct(prod)).as("check that the order is not empty").isEqualTo(prod);
+			ord.deleteProduct(prod);
+		} catch (ProductNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		assertThatExceptionOfType(ProductNotFoundException.class).isThrownBy(() -> ord.getProduct(prod))
+		.as("check if the order has indeed deleted the product");
+	}
+	
+	@Test
+	public void testAdvanceState() {
+		FactoryOrder factoryOrd = new FactoryOrder();
+		FactorySoldProduct factoryProd = new FactorySoldProduct();
+		Order ord = factoryOrd.make("DPS", factoryProd);
+		assertThat(ord.getOrderStatus()).as("check the initial value of the state of the order is correct").isEqualTo(OrderStatus.ORDERED);
+		ord.advanceState();
+		assertThat(ord.getOrderStatus()).as("check the next value of the state is correct").isEqualTo(OrderStatus.TRAVELING);
+		ord.advanceState();
+		assertThat(ord.getOrderStatus()).as("check the next value of the state is correct").isEqualTo(OrderStatus.ARRIVED);
+		ord.advanceState();
+		assertThat(ord.getOrderStatus()).as("check the next value of the state is correct").isEqualTo(OrderStatus.DELIVERED);
+		ord.advanceState();
+		assertThat(ord.getOrderStatus()).as("check the value of the state doesn't go beyond the last state").isEqualTo(OrderStatus.DELIVERED);
 	}
 }

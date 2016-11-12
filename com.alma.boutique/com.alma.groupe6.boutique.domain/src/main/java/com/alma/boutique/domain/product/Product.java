@@ -31,6 +31,14 @@ public abstract class Product extends Entity {
         }
         return price - discount;
     }
+    
+    public void updateProduct(Product pro){
+    	this.name = pro.getName();
+      this.price = pro.getPrice();
+      this.description = pro.getDescription();
+      this.category = pro.getCategory();
+      this.discount = pro.getDiscount();
+    }
 
     public String getName() {
         return name;

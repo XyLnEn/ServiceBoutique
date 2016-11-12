@@ -4,20 +4,24 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.alma.boutique.domain.exceptions.OrderNotFoundException;
-import com.alma.boutique.domain.product.Product;
+import com.alma.boutique.domain.factories.FactoryOrder;
 import com.alma.boutique.domain.shared.*;
 
 abstract class ThirdParty extends Entity {
 
 	private List<Order> orderHistory;
+	private FactoryOrder factoryOrd;
+	private FactoryProduct factoryProd;
 
 	public ThirdParty() {
 		this.orderHistory = new ArrayList<>();
+		this.factoryOrd =  new FactoryOrder();
 	}
 	
-	public Order createOrder(List<Product> products, OrderStatus orderStatus, String deliverer) {
-		//creation of the Order with the factory and addition to the orderHistory
-		Order newOrd = new Order(orderStatus, deliverer);
+	
+	
+	public Order createOrder(String deliverer) {
+		Order newOrd = factoryOrd.make(deliverer,factoryProd);
 		this.orderHistory.add(newOrd);
 		return newOrd;
 	}
@@ -31,21 +35,43 @@ abstract class ThirdParty extends Entity {
 		throw new OrderNotFoundException("Order not found");//in case the order doesn't exist
 	}
 	
-	public void updateOrder(Order ord) {
+	public void updateOrder(Order ordBase, Order newOrd) throws OrderNotFoundException {
 		for (Order order : orderHistory) {
-			if (order.sameIdentityAs(ord)){
-				order.updateOrder(ord);
+			if (order.sameIdentityAs(ordBase)){
+				order.updateOrder(newOrd);
+				return ;
 			}
 		}
+		throw new OrderNotFoundException("Order not found");//in case the order doesn't exist
 	}
 	
 	public void deleteOrder(Order ord) {
 		orderHistory.remove(ord);
 	}
 
+	
+	
 	public List<Order> getOrderHistory() {
 		return orderHistory;
 	}
+
+	public FactoryOrder getFactoryOrd() {
+		return factoryOrd;
+	}
+
+	public void setFactoryOrd(FactoryOrder factoryOrd) {
+		this.factoryOrd = factoryOrd;
+	}
+
+	public FactoryProduct getFactoryProd() {
+		return factoryProd;
+	}
+
+	public void setFactoryProd(FactoryProduct factoryProd) {
+		this.factoryProd = factoryProd;
+	}
+	
+	
 	
 	
 }

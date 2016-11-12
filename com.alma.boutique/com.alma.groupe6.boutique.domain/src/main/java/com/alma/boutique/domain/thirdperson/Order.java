@@ -3,10 +3,10 @@ package com.alma.boutique.domain.thirdperson;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.alma.boutique.domain.exceptions.OrderNotFoundException;
 import com.alma.boutique.domain.exceptions.ProductNotFoundException;
 import com.alma.boutique.domain.product.Product;
 import com.alma.boutique.domain.shared.Entity;
+import com.alma.boutique.domain.shared.FactoryProduct;
 /**
  * 
  * @author lenny
@@ -18,17 +18,20 @@ public class Order extends Entity {
 	private OrderStatus orderStatus;
 	private String deliverer;
 	
-	public Order(OrderStatus orderStatus, String deliverer) {
+	private FactoryProduct factoryProd;
+	
+	public Order(OrderStatus orderStatus, String deliverer, FactoryProduct factory) {
 		super();
 		this.products = new ArrayList<>();
 		this.orderStatus = orderStatus;
 		this.deliverer = deliverer;
+		this.factoryProd = factory;
 	}
 	
-	public Product createProduct() {
-		//creation of the Product with the factory and addition to the products
-		return null;
-		//how do they determine if we want to create which type of product?
+	public Product createProduct(String name, float price, String description,  String categoryName) {
+		Product prod = this.factoryProd.make(name, price, description, categoryName);
+		products.add(prod);
+		return prod;
 	}
 	
 	public Product getProduct(Product prod) throws ProductNotFoundException {
@@ -40,12 +43,14 @@ public class Order extends Entity {
 		throw new ProductNotFoundException("Product not found");//in case the order doesn't exist
 	}
 	
-	public void updateProduct(Product prod) {
+	public void updateProduct(Product oldProd, Product newProd) throws ProductNotFoundException {
 		for (Product product : products) {
-			if (product.sameIdentityAs(prod)){
-//				product.updateProduct(prod);
+			if (product.sameIdentityAs(oldProd)){
+				product.updateProduct(newProd);
+				return;
 			}
 		}
+		throw new ProductNotFoundException("Product not found");//in case the order doesn't exist
 	}
 	
 	public void deleteProduct(Product prod) {
@@ -60,6 +65,25 @@ public class Order extends Entity {
 		this.products = ord.getProducts();
 		this.orderStatus = ord.getOrderStatus();
 		this.deliverer = ord.getDeliverer();
+	}
+	
+	public void advanceState(){
+		switch (this.orderStatus) {
+		case ORDERED:
+			this.orderStatus = OrderStatus.TRAVELING;
+			break;
+
+		case TRAVELING:
+			this.orderStatus = OrderStatus.ARRIVED;
+			break;
+			
+		case ARRIVED:
+			this.orderStatus = OrderStatus.DELIVERED;
+			break;
+			
+		default:
+			break;
+		}
 	}
 	
 	public List<Product> getProducts() {
@@ -93,5 +117,9 @@ public class Order extends Entity {
 	public void setDeliverer(String deliverer) {
 		this.deliverer = deliverer;
 	}
+	public FactoryProduct getFactoryProd() {
+		return factoryProd;
+	}
+	
 	
 }
