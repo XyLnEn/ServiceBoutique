@@ -11,9 +11,9 @@ import static org.assertj.core.api.Java6Assertions.assertThat;
 /**
  * @author Thomas Minier
  */
-public class ExternalServiceTest {
+public class ExternalWebserviceTest {
     private final static String jsonPlaceholderURL = "https://jsonplaceholder.typicode.com";
-    private ExternalService externalService;
+    private ExternalWebservice externalWebservice;
 
     // private class used to store the data provided by jsonplaceholder' webservices
     private static class Comment {
@@ -89,7 +89,7 @@ public class ExternalServiceTest {
     }
     @Before
     public void setUp() throws Exception {
-        externalService = new ExternalService(jsonPlaceholderURL);
+        externalWebservice = new ExternalWebservice(jsonPlaceholderURL);
     }
 
     @Test
@@ -97,7 +97,7 @@ public class ExternalServiceTest {
         Comment expected = new Comment(1, 1, "id labore ex et quam laborum", "Eliseo@gardner.biz", "laudantium enim quasi est quidem magnam voluptate ipsam eos\ntempora quo necessitatibus\ndolor quam autem quasi\nreiciendis et nam sapiente accusantium");
 
         // test if the get method correctly fetch data from jsonplaceholder webservice
-        Comment msg = externalService.get("/comments/1", Comment.class);
+        Comment msg = externalWebservice.get("/comments/1", Comment.class);
         assertThat(msg).as("we should received the expected message gfrom jsonplaceholder.com/comments/1").isEqualTo(expected);
     }
 
@@ -106,7 +106,7 @@ public class ExternalServiceTest {
         Comment firstComment = new Comment(1, 1, "id labore ex et quam laborum", "Eliseo@gardner.biz", "laudantium enim quasi est quidem magnam voluptate ipsam eos\ntempora quo necessitatibus\ndolor quam autem quasi\nreiciendis et nam sapiente accusantium");
 
         // test if the get method correctly fetch data from jsonplaceholder webservice
-        List<Comment> list = externalService.getList("/comments", Comment.class);
+        List<Comment> list = externalWebservice.getList("/comments", Comment.class);
         assertThat(list).as("the retrieved list should contains the first two elements expected").contains(firstComment);
     }
 
