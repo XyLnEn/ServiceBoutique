@@ -27,4 +27,9 @@ public class Category extends Entity {
         Category category = (Category) o;
         return getName().equals(category.getName());
     }
+
+    @Override
+    public int hashCode() {
+        return this.id.hashCode();
+    }
 }

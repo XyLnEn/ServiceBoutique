@@ -1,13 +1,23 @@
 package com.alma.boutique.domain.product;
 
+import com.alma.boutique.domain.thirdperson.Supplier;
+
 /**
  * @author Thomas Minier
  */
 public class SuppliedProduct extends Product {
-    private String provider; // TODO replace this wwith the good class from Tiers aggregate
+    private Supplier supplier;
 
     public SuppliedProduct(String name, float price, String description, Category category) {
         super(name, price, description, category);
+    }
+
+    public Supplier getSupplier() {
+        return supplier;
+    }
+
+    public void setSupplier(Supplier supplier) {
+        this.supplier = supplier;
     }
 
     @Override
@@ -20,5 +30,11 @@ public class SuppliedProduct extends Product {
         }
         SuppliedProduct product = (SuppliedProduct) o;
         return Float.compare(product.getPrice(), getPrice()) == 0 && getName().equals(product.getName())
-                && getDescription().equals(product.getDescription()) && getCategory().equals(product.getCategory());    }
+                && getDescription().equals(product.getDescription()) && getCategory().equals(product.getCategory());
+    }
+
+    @Override
+    public int hashCode() {
+        return this.id.hashCode();
+    }
 }

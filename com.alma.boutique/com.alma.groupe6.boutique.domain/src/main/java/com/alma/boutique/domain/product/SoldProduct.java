@@ -22,5 +22,11 @@ public class SoldProduct extends Product {
         }
         SoldProduct product = (SoldProduct) o;
         return Float.compare(product.getPrice(), getPrice()) == 0 && getName().equals(product.getName())
-                && getDescription().equals(product.getDescription()) && getCategory().equals(product.getCategory());    }
+                && getDescription().equals(product.getDescription()) && getCategory().equals(product.getCategory());
+    }
+
+    @Override
+    public int hashCode() {
+        return this.id.hashCode();
+    }
 }
