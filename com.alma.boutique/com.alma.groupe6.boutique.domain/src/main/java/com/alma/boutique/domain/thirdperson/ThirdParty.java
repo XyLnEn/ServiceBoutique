@@ -7,7 +7,7 @@ import com.alma.boutique.domain.exceptions.OrderNotFoundException;
 import com.alma.boutique.domain.factories.FactoryOrder;
 import com.alma.boutique.domain.shared.*;
 
-abstract class ThirdParty extends Entity {
+public abstract class ThirdParty extends Entity {
 
 	private List<Order> orderHistory;
 	private FactoryOrder factoryOrd;
