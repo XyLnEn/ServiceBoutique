@@ -14,3 +14,6 @@ hs_err_pid*
 .idea/
 target/
 *.iml
+
+# credential for connection to the mongodb database
+# mongodb.properties
