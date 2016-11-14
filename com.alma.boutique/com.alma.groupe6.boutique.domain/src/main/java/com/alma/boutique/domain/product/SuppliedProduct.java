@@ -35,12 +35,18 @@ public class SuppliedProduct extends Product {
             return false;
         }
         SuppliedProduct product = (SuppliedProduct) o;
+
+        if(!supplier.equals(product.getSupplier())) {
+            return false;
+        }
         return getPrice().equals(product.getPrice()) && getName().equals(product.getName())
                 && getDescription().equals(product.getDescription()) && getCategory().equals(product.getCategory());
     }
 
     @Override
     public int hashCode() {
-        return this.id.hashCode();
+        int result = super.hashCode();
+        result = 31 * result + supplier.hashCode();
+        return result;
     }
 }

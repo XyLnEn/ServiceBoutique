@@ -52,6 +52,24 @@ public class Client extends ThirdParty {
 	public void setInfo(Identity info) {
 		this.info = info;
 	}
-	
 
+	@Override
+	public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        Client client = (Client) o;
+        return firstName.equals(client.firstName) && lastName.equals(client.lastName) && info.equals(client.info);
+    }
+
+	@Override
+	public int hashCode() {
+		int result = firstName.hashCode();
+		result = 31 * result + lastName.hashCode();
+		result = 31 * result + info.hashCode();
+		return result;
+	}
 }

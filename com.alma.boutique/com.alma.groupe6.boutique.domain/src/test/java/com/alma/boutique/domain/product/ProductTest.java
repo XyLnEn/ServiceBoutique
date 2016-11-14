@@ -48,8 +48,7 @@ public class ProductTest {
 
     @Test
     public void testPojoStandard() {
-        final Class<?> referenceClass = StubProduct.class;
-        assertPojoMethodsFor(referenceClass).testing(Method.GETTER, Method.SETTER, Method.EQUALS, Method.HASH_CODE).areWellImplemented();
+        assertPojoMethodsFor(StubProduct.class).testing(Method.GETTER, Method.SETTER, Method.EQUALS, Method.HASH_CODE).areWellImplemented();
     }
 
     @Test

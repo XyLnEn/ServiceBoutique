@@ -11,7 +11,6 @@ import static pl.pojo.tester.api.assertion.Assertions.assertPojoMethodsFor;
 public class PriceTest {
     @Test
     public void testPojoStandard() {
-        final Class<?> referenceClass = Price.class;
-        assertPojoMethodsFor(referenceClass).testing(Method.GETTER, Method.SETTER, Method.EQUALS, Method.HASH_CODE).areWellImplemented();
+        assertPojoMethodsFor(Price.class).testing(Method.GETTER, Method.SETTER, Method.EQUALS, Method.HASH_CODE).areWellImplemented();
     }
 }

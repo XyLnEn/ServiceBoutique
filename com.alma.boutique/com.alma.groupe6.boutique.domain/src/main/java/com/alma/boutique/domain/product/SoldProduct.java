@@ -32,6 +32,6 @@ public class SoldProduct extends Product {
 
 	@Override
 	public int hashCode() {
-		return this.id.hashCode();
+		return super.hashCode();
 	}
 }

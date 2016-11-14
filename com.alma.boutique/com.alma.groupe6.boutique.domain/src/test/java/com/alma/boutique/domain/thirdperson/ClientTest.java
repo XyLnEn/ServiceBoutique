@@ -1,11 +1,12 @@
 package com.alma.boutique.domain.thirdperson;
 
-import static org.assertj.core.api.Assertions.*;
-
-import org.junit.Test;
-
 import com.alma.boutique.domain.exceptions.OrderNotFoundException;
 import com.alma.boutique.domain.factories.FactoryClient;
+import org.junit.Test;
+import pl.pojo.tester.api.assertion.Method;
+
+import static org.assertj.core.api.Assertions.*;
+import static pl.pojo.tester.api.assertion.Assertions.assertPojoMethodsFor;
 
 public class ClientTest {
 	
@@ -75,6 +76,11 @@ public class ClientTest {
 		}
 		cli.deleteOrder(oldOrder);
 		assertThat(cli.getOrderHistory()).as("check that the history list is empty").isEmpty();
+	}
+
+	@Test
+	public void testPojoStandard() {
+		assertPojoMethodsFor(Client.class).testing(Method.GETTER, Method.SETTER).areWellImplemented();
 	}
 
 }

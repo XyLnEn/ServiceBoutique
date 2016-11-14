@@ -1,28 +1,22 @@
 package com.alma.boutique.domain.history;
 
-import static org.assertj.core.api.Assertions.*;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import org.junit.Before;
-import org.junit.Test;
-
 import com.alma.boutique.domain.exceptions.OrderNotFoundException;
 import com.alma.boutique.domain.exceptions.TransactionNotFoundException;
-import com.alma.boutique.domain.factories.FactoryClient;
-import com.alma.boutique.domain.factories.FactoryOrder;
-import com.alma.boutique.domain.factories.FactoryShop;
-import com.alma.boutique.domain.factories.FactorySoldProduct;
-import com.alma.boutique.domain.factories.FactorySuppliedProduct;
-import com.alma.boutique.domain.factories.FactorySupplier;
-import com.alma.boutique.domain.factories.FactoryTransaction;
+import com.alma.boutique.domain.factories.*;
 import com.alma.boutique.domain.product.Product;
-import com.alma.boutique.domain.factories.FactoryProduct;
 import com.alma.boutique.domain.thirdperson.Client;
 import com.alma.boutique.domain.thirdperson.Order;
 import com.alma.boutique.domain.thirdperson.Shop;
 import com.alma.boutique.domain.thirdperson.Supplier;
+import org.junit.Before;
+import org.junit.Test;
+import pl.pojo.tester.api.assertion.Method;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import static org.assertj.core.api.Assertions.*;
+import static pl.pojo.tester.api.assertion.Assertions.assertPojoMethodsFor;
 
 public class HistoryTest {
 
@@ -121,7 +115,7 @@ public class HistoryTest {
 			hist.deleteTransaction(trans);
 			assertThat(hist.getHistory()).as("assert that the transaction was removed successfully").doesNotContain(trans);
 		} catch (OrderNotFoundException e) {
-			// TODO Auto-generated catch block
+			fail(e.getMessage());
 			e.printStackTrace();
 		}
 	}
@@ -138,7 +132,7 @@ public class HistoryTest {
 			hist.buy(list, supp1, shop, "USP");
 			assertThat(hist.getBalance()).as("assert that the current balance is correct").isEqualTo(-5);
 		} catch (OrderNotFoundException e) {
-			// TODO Auto-generated catch block
+			fail(e.getMessage());
 			e.printStackTrace();
 		}
 		
@@ -151,9 +145,14 @@ public class HistoryTest {
 			assertThat(hist.getBalance()).as("assert that the current balance is correct").isEqualTo(0);
 			assertThat(hist.getBalance()).as("assert that the current balance is not changed").isEqualTo(0);
 		} catch (OrderNotFoundException e) {
-			// TODO Auto-generated catch block
+			fail(e.getMessage());
 			e.printStackTrace();
 		}
+	}
+
+	@Test
+	public void testPojoStandard() {
+		assertPojoMethodsFor(History.class).testing(Method.GETTER, Method.SETTER).areWellImplemented();
 	}
 
 }

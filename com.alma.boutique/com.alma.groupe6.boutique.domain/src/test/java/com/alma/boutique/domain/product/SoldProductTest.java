@@ -8,9 +8,9 @@ import static pl.pojo.tester.api.assertion.Assertions.assertPojoMethodsFor;
 /**
  * @author Thomas Minier
  */
-public class CategoryTest {
+public class SoldProductTest {
     @Test
     public void testPojoStandard() {
-        assertPojoMethodsFor(Category.class).testing(Method.GETTER, Method.SETTER, Method.EQUALS, Method.HASH_CODE).areWellImplemented();
+        assertPojoMethodsFor(SoldProduct.class).testing(Method.GETTER, Method.SETTER, Method.EQUALS, Method.HASH_CODE).areWellImplemented();
     }
 }

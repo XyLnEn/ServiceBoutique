@@ -131,6 +131,4 @@ public class Order extends Entity {
 	public void setFactoryProd(FactoryProduct factoryProd) {
 		this.factoryProd = factoryProd;
 	}
-	
-	
 }

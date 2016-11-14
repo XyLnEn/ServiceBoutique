@@ -53,6 +53,25 @@ public class Transaction extends Entity {
 	public void setTo(ThirdParty to) {
 		this.to = to;
 	}
-	
-	
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) {
+			return true;
+		}
+		if (o == null || getClass() != o.getClass()) {
+			return false;
+		}
+		Transaction that = (Transaction) o;
+		return order.equals(that.order) && from.equals(that.from) && to.equals(that.to);
+
+	}
+
+	@Override
+	public int hashCode() {
+		int result = order.hashCode();
+		result = 31 * result + from.hashCode();
+		result = 31 * result + to.hashCode();
+		return result;
+	}
 }

@@ -29,5 +29,23 @@ public class Account {
 	public void setOwner(ThirdParty owner) {
 		this.owner = owner;
 	}
-	
+
+	@Override
+	public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        Account account = (Account) o;
+        return Float.compare(account.currentBalance, currentBalance) == 0 && owner.equals(account.owner);
+    }
+
+	@Override
+	public int hashCode() {
+		int result = Float.compare(currentBalance, +0.0f) != 0 ? Float.floatToIntBits(currentBalance) : 0;
+		result = 31 * result + owner.hashCode();
+		return result;
+	}
 }

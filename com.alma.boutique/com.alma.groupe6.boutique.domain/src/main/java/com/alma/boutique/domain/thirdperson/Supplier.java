@@ -39,7 +39,4 @@ public class Supplier extends ThirdParty {
 	public void setSupplierId(Identity supplierId) {
 		this.supplierId = supplierId;
 	}
-	
-	
-
 }

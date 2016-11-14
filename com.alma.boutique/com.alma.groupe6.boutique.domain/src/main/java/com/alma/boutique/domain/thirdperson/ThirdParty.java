@@ -51,8 +51,6 @@ public abstract class ThirdParty extends Entity {
 	public void deleteOrder(Order ord) {
 		orderHistory.remove(ord);
 	}
-
-	
 	
 	public List<Order> getOrderHistory() {
 		return orderHistory;
@@ -77,8 +75,4 @@ public abstract class ThirdParty extends Entity {
 	public void setOrderHistory(List<Order> orderHistory) {
 		this.orderHistory = orderHistory;
 	}
-	
-	
-	
-	
 }

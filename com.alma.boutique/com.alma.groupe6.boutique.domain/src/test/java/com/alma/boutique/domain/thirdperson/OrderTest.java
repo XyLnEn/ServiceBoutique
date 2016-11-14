@@ -1,13 +1,14 @@
 package com.alma.boutique.domain.thirdperson;
 
-import static org.assertj.core.api.Assertions.*;
-
-import org.junit.Test;
-
 import com.alma.boutique.domain.exceptions.ProductNotFoundException;
 import com.alma.boutique.domain.factories.FactoryOrder;
 import com.alma.boutique.domain.factories.FactorySoldProduct;
 import com.alma.boutique.domain.product.Product;
+import org.junit.Test;
+import pl.pojo.tester.api.assertion.Method;
+
+import static org.assertj.core.api.Assertions.*;
+import static pl.pojo.tester.api.assertion.Assertions.assertPojoMethodsFor;
 
 public class OrderTest {
 
@@ -136,4 +137,9 @@ public class OrderTest {
 		ord.advanceState();
 		assertThat(ord.getOrderStatus()).as("check the value of the state doesn't go beyond the last state").isEqualTo(OrderStatus.DELIVERED);
 	}
+
+    @Test
+    public void testPojoStandard() {
+        assertPojoMethodsFor(Order.class).testing(Method.GETTER, Method.SETTER).areWellImplemented();
+    }
 }
