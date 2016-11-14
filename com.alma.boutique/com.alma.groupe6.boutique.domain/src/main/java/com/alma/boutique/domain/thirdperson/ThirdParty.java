@@ -7,7 +7,11 @@ import com.alma.boutique.domain.exceptions.OrderNotFoundException;
 import com.alma.boutique.domain.factories.FactoryOrder;
 import com.alma.boutique.domain.factories.FactoryProduct;
 import com.alma.boutique.domain.shared.*;
-
+/**
+ * 
+ * @author lenny
+ *
+ */
 public abstract class ThirdParty extends Entity {
 
 	private List<Order> orderHistory;
@@ -18,8 +22,6 @@ public abstract class ThirdParty extends Entity {
 		this.orderHistory = new ArrayList<>();
 		this.factoryOrd =  new FactoryOrder();
 	}
-	
-	
 	
 	public Order createOrder(String deliverer) {
 		Order newOrd = factoryOrd.make(deliverer,factoryProd);
@@ -70,6 +72,10 @@ public abstract class ThirdParty extends Entity {
 
 	public void setFactoryProd(FactoryProduct factoryProd) {
 		this.factoryProd = factoryProd;
+	}
+
+	public void setOrderHistory(List<Order> orderHistory) {
+		this.orderHistory = orderHistory;
 	}
 	
 	

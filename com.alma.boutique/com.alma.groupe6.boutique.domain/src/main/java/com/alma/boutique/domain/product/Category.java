@@ -6,7 +6,11 @@ import com.alma.boutique.domain.shared.Entity;
  * @author Thomas Minier
  */
 public class Category extends Entity {
-    private final String name;
+    private String name;
+    
+    public Category() {
+    	super();
+    }
 
     public Category(String name) {
         this.name = name;
@@ -15,6 +19,10 @@ public class Category extends Entity {
     public String getName() {
         return name;
     }
+    
+    public void setName(String name) {
+			this.name = name;
+		}
 
     @Override
     public boolean equals(Object o) {

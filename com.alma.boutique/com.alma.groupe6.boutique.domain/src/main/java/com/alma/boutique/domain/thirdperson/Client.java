@@ -9,11 +9,14 @@ import com.alma.boutique.domain.factories.FactorySoldProduct;
  */
 public class Client extends ThirdParty {	
 	
-	private final String firstName;
-	private final String lastName;
-	private final Identity info;
+	private String firstName;
+	private String lastName;
+	private Identity info;
 	
-
+	public Client() {
+		super();
+	}
+	
 	public Client(String firstName, String lastName, Identity info) {
 		super();
 		this.setFactoryProd(new FactorySoldProduct());
@@ -33,5 +36,18 @@ public class Client extends ThirdParty {
 	public Identity getInfo() {
 		return info;
 	}
+
+	public void setFirstName(String firstName) {
+		this.firstName = firstName;
+	}
+
+	public void setLastName(String lastName) {
+		this.lastName = lastName;
+	}
+
+	public void setInfo(Identity info) {
+		this.info = info;
+	}
+	
 
 }

@@ -6,6 +6,10 @@ package com.alma.boutique.domain.product;
 public class Price {
     private float value;
     private String currency;
+    
+    public Price() {
+    	//empty constructor for serialisability
+		}
 
     public Price(float value, String currency) {
         this.value = value;
@@ -27,6 +31,7 @@ public class Price {
     public void setCurrency(String currency) {
         this.currency = currency;
     }
+    
 
     @Override
     public boolean equals(Object o) {

@@ -70,4 +70,11 @@ public class Stock {
             products.put(provisionCategory, newPair);
         }
     }
+    
+    public Map<Category, Pair<Product, Integer>> getProducts() {
+			return products;
+		}
+    public void setProducts(Map<Category, Pair<Product, Integer>> products) {
+			this.products = products;
+		}
 }

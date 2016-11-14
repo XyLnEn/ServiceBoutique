@@ -13,6 +13,10 @@ public abstract class Product extends Entity {
     private Category category;
     private float discount;
 
+    public Product() {
+    	super();
+    }
+    
     public Product(String name, Price price, String description, Category category) {
         this.name = name;
         this.price = price;
@@ -75,10 +79,15 @@ public abstract class Product extends Entity {
     public void setCategory(Category category) {
         this.category = category;
     }
+    
+    public void setDiscount(float discount) {
+			this.discount = discount;
+		}
 
     public boolean sameCategoryAs(Product product) {
         return category.equals(product.getCategory());
     }
+    
 
     @Override
     public boolean equals(Object o) {

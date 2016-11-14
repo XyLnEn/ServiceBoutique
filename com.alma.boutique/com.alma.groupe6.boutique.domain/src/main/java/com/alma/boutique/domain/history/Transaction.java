@@ -10,6 +10,10 @@ public class Transaction extends Entity {
 	private ThirdParty from;
 	private ThirdParty to;
 	
+	public Transaction() {
+		super();
+	}
+	
 	public Transaction(Order order, ThirdParty from, ThirdParty to) {
 		super();
 		this.order = order;

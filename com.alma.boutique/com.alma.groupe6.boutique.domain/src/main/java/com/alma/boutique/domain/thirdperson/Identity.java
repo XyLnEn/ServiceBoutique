@@ -1,9 +1,17 @@
 package com.alma.boutique.domain.thirdperson;
-
+/**
+ * 
+ * @author lenny
+ *
+ */
 public class Identity {
 
-	private final String address;
-	private final String telNumber;
+	private String address;
+	private String telNumber;
+	
+	public Identity() {
+		//empty for serialisation
+	}
 	
 	public Identity(String address, String telNumber) {
 		this.address = address;
@@ -18,6 +26,15 @@ public class Identity {
 		return telNumber;
 	}
 
+	public void setAddress(String address) {
+		this.address = address;
+	}
+
+	public void setTelNumber(String telNumber) {
+		this.telNumber = telNumber;
+	}
+
+	
 	
 	
 }

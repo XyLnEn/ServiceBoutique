@@ -18,7 +18,9 @@ public class History extends Entity {
 	private List<Transaction> transactionHistory;
 	private Account account;
 	
-	
+	public History() {
+		super();
+	}
 	
 	public History(FactoryTransaction factory, Account account) {
 		super();
@@ -80,6 +82,7 @@ public class History extends Entity {
 	public List<Transaction> getHistory() {
 		return transactionHistory;
 	}
+	
 	public Account getAccount() {
 		return account;
 	}
@@ -88,4 +91,33 @@ public class History extends Entity {
 		return changedbalance;
 	}
 
+	public FactoryTransaction getFactory() {
+		return factory;
+	}
+
+	public void setFactory(FactoryTransaction factory) {
+		this.factory = factory;
+	}
+
+	public boolean isChangedbalance() {
+		return changedbalance;
+	}
+
+	public void setChangedbalance(boolean changedbalance) {
+		this.changedbalance = changedbalance;
+	}
+
+	public List<Transaction> getTransactionHistory() {
+		return transactionHistory;
+	}
+
+	public void setTransactionHistory(List<Transaction> transactionHistory) {
+		this.transactionHistory = transactionHistory;
+	}
+
+	public void setAccount(Account account) {
+		this.account = account;
+	}
+	
+	
 }

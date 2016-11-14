@@ -7,6 +7,10 @@ import com.alma.boutique.domain.thirdperson.Supplier;
  */
 public class SuppliedProduct extends Product {
     private Supplier supplier;
+    
+    public SuppliedProduct() {
+    	super();
+		}
 
     public SuppliedProduct(String name, Price price, String description, Category category) {
         super(name, price, description, category);
@@ -19,6 +23,7 @@ public class SuppliedProduct extends Product {
     public void setSupplier(Supplier supplier) {
         this.supplier = supplier;
     }
+    
 
     @Override
     public boolean equals(Object o) {

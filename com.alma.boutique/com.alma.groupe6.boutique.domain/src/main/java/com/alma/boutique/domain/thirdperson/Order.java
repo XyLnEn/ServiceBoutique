@@ -20,6 +20,10 @@ public class Order extends Entity {
 	
 	private FactoryProduct factoryProd;
 	
+	public Order(){
+		super();
+	}
+	
 	public Order(OrderStatus orderStatus, String deliverer, FactoryProduct factory) {
 		super();
 		this.products = new ArrayList<>();
@@ -119,6 +123,9 @@ public class Order extends Entity {
 	}
 	public FactoryProduct getFactoryProd() {
 		return factoryProd;
+	}
+	public void setFactoryProd(FactoryProduct factoryProd) {
+		this.factoryProd = factoryProd;
 	}
 	
 	

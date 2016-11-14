@@ -1,13 +1,19 @@
 package com.alma.boutique.domain.thirdperson;
 
 import com.alma.boutique.domain.factories.FactorySoldProduct;
-
+/**
+ * 
+ * @author lenny
+ *
+ */
 public class Shop extends ThirdParty {
 
-	private final String shopName;
-	private final Identity shopId;
+	private String shopName;
+	private Identity shopId;
 	
-	
+	public Shop() {
+		super();
+	}
 	public Shop(String shopName, Identity shopId) {
 		super();
 		this.setFactoryProd(new FactorySoldProduct());
@@ -20,7 +26,12 @@ public class Shop extends ThirdParty {
 	public Identity getShopId() {
 		return shopId;
 	}
-	
+	public void setShopName(String shopName) {
+		this.shopName = shopName;
+	}
+	public void setShopId(Identity shopId) {
+		this.shopId = shopId;
+	}
 	
 	
 }

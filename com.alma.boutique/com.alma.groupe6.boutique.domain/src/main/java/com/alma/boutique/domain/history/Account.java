@@ -6,7 +6,9 @@ public class Account {
 	private float currentBalance;
 	private ThirdParty owner;
 	
-	
+	public Account() {
+		// empty constructor for serialisation
+	}
 	
 	public Account(ThirdParty owner) {
 		super();
@@ -26,6 +28,5 @@ public class Account {
 	public void setOwner(ThirdParty owner) {
 		this.owner = owner;
 	}
-	
 	
 }
