@@ -7,6 +7,9 @@ import com.alma.boutique.domain.exceptions.OrderNotFoundException;
 import com.alma.boutique.domain.factories.FactoryOrder;
 import com.alma.boutique.domain.factories.FactoryProduct;
 import com.alma.boutique.domain.shared.*;
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+
 /**
  * 
  * @author lenny
@@ -74,5 +77,33 @@ public abstract class ThirdParty extends Entity {
 
 	public void setOrderHistory(List<Order> orderHistory) {
 		this.orderHistory = orderHistory;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (obj == null) {
+			return false;
+		}
+		if (obj == this) {
+			return true;
+		}
+		if (obj.getClass() != getClass()) {
+			return false;
+		}
+		ThirdParty rhs = (ThirdParty) obj;
+		return new EqualsBuilder()
+				.append(this.orderHistory, rhs.orderHistory)
+				.append(this.factoryOrd, rhs.factoryOrd)
+				.append(this.factoryProd, rhs.factoryProd)
+				.isEquals();
+	}
+
+	@Override
+	public int hashCode() {
+		return new HashCodeBuilder()
+				.append(orderHistory)
+				.append(factoryOrd)
+				.append(factoryProd)
+				.toHashCode();
 	}
 }

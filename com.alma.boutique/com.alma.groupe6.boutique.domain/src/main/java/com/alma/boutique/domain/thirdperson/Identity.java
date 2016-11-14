@@ -1,4 +1,8 @@
 package com.alma.boutique.domain.thirdperson;
+
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+
 /**
  * 
  * @author lenny
@@ -36,22 +40,28 @@ public class Identity {
 	}
 
 	@Override
-	public boolean equals(Object o) {
-		if (this == o) {
-			return true;
-		}
-		if (o == null || getClass() != o.getClass()) {
+	public boolean equals(Object obj) {
+		if (obj == null) {
 			return false;
 		}
-		Identity identity = (Identity) o;
-		return address.equals(identity.address) && telNumber.equals(identity.telNumber);
-
+		if (obj == this) {
+			return true;
+		}
+		if (obj.getClass() != getClass()) {
+			return false;
+		}
+		Identity rhs = (Identity) obj;
+		return new EqualsBuilder()
+				.append(this.address, rhs.address)
+				.append(this.telNumber, rhs.telNumber)
+				.isEquals();
 	}
 
 	@Override
 	public int hashCode() {
-		int result = address.hashCode();
-		result = 31 * result + telNumber.hashCode();
-		return result;
+		return new HashCodeBuilder()
+				.append(address)
+				.append(telNumber)
+				.toHashCode();
 	}
 }

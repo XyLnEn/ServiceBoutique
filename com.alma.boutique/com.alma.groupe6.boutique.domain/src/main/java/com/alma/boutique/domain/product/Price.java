@@ -1,5 +1,8 @@
 package com.alma.boutique.domain.product;
 
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+
 /**
  * @author Thomas Minier
  */
@@ -32,25 +35,30 @@ public class Price {
     public void setCurrency(String currency) {
         this.currency = currency;
     }
-    
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (o == null || getClass() != o.getClass()) {
+    public boolean equals(Object obj) {
+        if (obj == null) {
             return false;
         }
-        Price price = (Price) o;
-        return Float.compare(price.value, value) == 0 && currency.equals(price.currency);
-
+        if (obj == this) {
+            return true;
+        }
+        if (obj.getClass() != getClass()) {
+            return false;
+        }
+        Price rhs = (Price) obj;
+        return new EqualsBuilder()
+                .append(this.value, rhs.value)
+                .append(this.currency, rhs.currency)
+                .isEquals();
     }
 
     @Override
     public int hashCode() {
-        int result = Float.compare(value, 0.0f) != 0 ? Float.floatToIntBits(value) : 0;
-        result = 31 * result + currency.hashCode();
-        return result;
+        return new HashCodeBuilder()
+                .append(value)
+                .append(currency)
+                .toHashCode();
     }
 }

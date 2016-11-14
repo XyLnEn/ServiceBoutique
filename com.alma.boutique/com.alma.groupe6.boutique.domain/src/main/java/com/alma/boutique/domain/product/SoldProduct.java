@@ -1,5 +1,8 @@
 package com.alma.boutique.domain.product;
 
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+
 /**
  * @author Thomas Minier
  */
@@ -18,20 +21,25 @@ public class SoldProduct extends Product {
 	}
 
 	@Override
-	public boolean equals(Object o) {
-		if (this == o) {
-			return true;
-		}
-		if (o == null || getClass() != o.getClass()) {
+	public boolean equals(Object obj) {
+		if (obj == null) {
 			return false;
 		}
-		SoldProduct product = (SoldProduct) o;
-		return getPrice().equals(product.getPrice()) && getName().equals(product.getName())
-				&& getDescription().equals(product.getDescription()) && getCategory().equals(product.getCategory());
+		if (obj == this) {
+			return true;
+		}
+		if (obj.getClass() != getClass()) {
+			return false;
+		}
+		return new EqualsBuilder()
+				.appendSuper(super.equals(obj))
+				.isEquals();
 	}
 
 	@Override
 	public int hashCode() {
-		return super.hashCode();
+		return new HashCodeBuilder()
+				.appendSuper(super.hashCode())
+				.toHashCode();
 	}
 }

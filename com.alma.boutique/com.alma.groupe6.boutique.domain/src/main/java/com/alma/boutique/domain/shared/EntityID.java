@@ -16,21 +16,4 @@ public class EntityID {
 	public UUID getId() {
 		return id;
 	}
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (o == null || getClass() != o.getClass()) {
-            return false;
-        }
-        EntityID entityID = (EntityID) o;
-        return id.equals(entityID.id);
-    }
-
-    @Override
-    public int hashCode() {
-        return id.hashCode();
-    }
 }

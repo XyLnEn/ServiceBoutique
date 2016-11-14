@@ -1,6 +1,8 @@
 package com.alma.boutique.domain.product;
 
 import com.alma.boutique.domain.thirdperson.Supplier;
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 /**
  * @author Thomas Minier
@@ -24,29 +26,31 @@ public class SuppliedProduct extends Product {
     public void setSupplier(Supplier supplier) {
         this.supplier = supplier;
     }
-    
+
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) {
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+        if (obj == this) {
             return true;
         }
-        if (o == null || getClass() != o.getClass()) {
+        if (obj.getClass() != getClass()) {
             return false;
         }
-        SuppliedProduct product = (SuppliedProduct) o;
-
-        if(!supplier.equals(product.getSupplier())) {
-            return false;
-        }
-        return getPrice().equals(product.getPrice()) && getName().equals(product.getName())
-                && getDescription().equals(product.getDescription()) && getCategory().equals(product.getCategory());
+        SuppliedProduct rhs = (SuppliedProduct) obj;
+        return new EqualsBuilder()
+                .appendSuper(super.equals(obj))
+                .append(this.supplier, rhs.supplier)
+                .isEquals();
     }
 
     @Override
     public int hashCode() {
-        int result = super.hashCode();
-        result = 31 * result + supplier.hashCode();
-        return result;
+        return new HashCodeBuilder()
+                .appendSuper(super.hashCode())
+                .append(supplier)
+                .toHashCode();
     }
 }

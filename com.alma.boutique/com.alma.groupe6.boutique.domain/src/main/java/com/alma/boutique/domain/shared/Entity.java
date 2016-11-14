@@ -14,4 +14,5 @@ public abstract class Entity {
   public boolean sameIdentityAs(Entity entity) {
       return entity != null && this.id.equals(entity.id);
   }
+
 }

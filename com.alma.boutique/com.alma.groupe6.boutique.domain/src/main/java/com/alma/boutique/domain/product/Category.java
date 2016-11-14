@@ -1,6 +1,8 @@
 package com.alma.boutique.domain.product;
 
 import com.alma.boutique.domain.shared.Entity;
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 /**
  * @author Thomas Minier
@@ -26,19 +28,26 @@ public class Category extends Entity {
 		}
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (o == null || getClass() != o.getClass()) {
+    public boolean equals(Object obj) {
+        if (obj == null) {
             return false;
         }
-        Category category = (Category) o;
-        return getName().equals(category.getName());
+        if (obj == this) {
+            return true;
+        }
+        if (obj.getClass() != getClass()) {
+            return false;
+        }
+        Category rhs = (Category) obj;
+        return new EqualsBuilder()
+                .append(this.name, rhs.name)
+                .isEquals();
     }
 
     @Override
     public int hashCode() {
-        return name.hashCode();
+        return new HashCodeBuilder()
+                .append(name)
+                .toHashCode();
     }
 }

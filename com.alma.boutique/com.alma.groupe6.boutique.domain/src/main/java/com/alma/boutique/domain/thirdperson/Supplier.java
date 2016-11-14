@@ -1,6 +1,9 @@
 package com.alma.boutique.domain.thirdperson;
 
 import com.alma.boutique.domain.factories.FactorySuppliedProduct;
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+
 /**
  * 
  * @author lenny
@@ -38,5 +41,33 @@ public class Supplier extends ThirdParty {
 	}
 	public void setSupplierId(Identity supplierId) {
 		this.supplierId = supplierId;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (obj == null) {
+			return false;
+		}
+		if (obj == this) {
+			return true;
+		}
+		if (obj.getClass() != getClass()) {
+			return false;
+		}
+		Supplier rhs = (Supplier) obj;
+		return new EqualsBuilder()
+				.appendSuper(super.equals(obj))
+				.append(this.supplierName, rhs.supplierName)
+				.append(this.supplierId, rhs.supplierId)
+				.isEquals();
+	}
+
+	@Override
+	public int hashCode() {
+		return new HashCodeBuilder()
+				.appendSuper(super.hashCode())
+				.append(supplierName)
+				.append(supplierId)
+				.toHashCode();
 	}
 }

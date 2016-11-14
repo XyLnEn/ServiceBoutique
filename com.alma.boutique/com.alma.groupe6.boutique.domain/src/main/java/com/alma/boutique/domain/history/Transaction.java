@@ -3,6 +3,8 @@ package com.alma.boutique.domain.history;
 import com.alma.boutique.domain.shared.Entity;
 import com.alma.boutique.domain.thirdperson.Order;
 import com.alma.boutique.domain.thirdperson.ThirdParty;
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 public class Transaction extends Entity {
 	
@@ -55,23 +57,30 @@ public class Transaction extends Entity {
 	}
 
 	@Override
-	public boolean equals(Object o) {
-		if (this == o) {
-			return true;
-		}
-		if (o == null || getClass() != o.getClass()) {
+	public boolean equals(Object obj) {
+		if (obj == null) {
 			return false;
 		}
-		Transaction that = (Transaction) o;
-		return order.equals(that.order) && from.equals(that.from) && to.equals(that.to);
-
+		if (obj == this) {
+			return true;
+		}
+		if (obj.getClass() != getClass()) {
+			return false;
+		}
+		Transaction rhs = (Transaction) obj;
+		return new EqualsBuilder()
+				.append(this.order, rhs.order)
+				.append(this.from, rhs.from)
+				.append(this.to, rhs.to)
+				.isEquals();
 	}
 
 	@Override
 	public int hashCode() {
-		int result = order.hashCode();
-		result = 31 * result + from.hashCode();
-		result = 31 * result + to.hashCode();
-		return result;
+		return new HashCodeBuilder()
+				.append(order)
+				.append(from)
+				.append(to)
+				.toHashCode();
 	}
 }

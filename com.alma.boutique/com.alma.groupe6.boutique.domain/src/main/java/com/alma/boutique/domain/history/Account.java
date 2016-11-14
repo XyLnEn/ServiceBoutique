@@ -2,6 +2,8 @@ package com.alma.boutique.domain.history;
 
 import com.alma.boutique.domain.thirdperson.Shop;
 import com.alma.boutique.domain.thirdperson.ThirdParty;
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 public class Account {
 	private float currentBalance;
@@ -31,21 +33,28 @@ public class Account {
 	}
 
 	@Override
-	public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (o == null || getClass() != o.getClass()) {
-            return false;
-        }
-        Account account = (Account) o;
-        return Float.compare(account.currentBalance, currentBalance) == 0 && owner.equals(account.owner);
-    }
+	public boolean equals(Object obj) {
+		if (obj == null) {
+			return false;
+		}
+		if (obj == this) {
+			return true;
+		}
+		if (obj.getClass() != getClass()) {
+			return false;
+		}
+		Account rhs = (Account) obj;
+		return new EqualsBuilder()
+				.append(this.currentBalance, rhs.currentBalance)
+				.append(this.owner, rhs.owner)
+				.isEquals();
+	}
 
 	@Override
 	public int hashCode() {
-		int result = Float.compare(currentBalance, +0.0f) != 0 ? Float.floatToIntBits(currentBalance) : 0;
-		result = 31 * result + owner.hashCode();
-		return result;
+		return new HashCodeBuilder()
+				.append(currentBalance)
+				.append(owner)
+				.toHashCode();
 	}
 }

@@ -7,6 +7,9 @@ import com.alma.boutique.domain.exceptions.ProductNotFoundException;
 import com.alma.boutique.domain.product.Product;
 import com.alma.boutique.domain.shared.Entity;
 import com.alma.boutique.domain.factories.FactoryProduct;
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+
 /**
  * 
  * @author lenny
@@ -130,5 +133,35 @@ public class Order extends Entity {
 	}
 	public void setFactoryProd(FactoryProduct factoryProd) {
 		this.factoryProd = factoryProd;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (obj == null) {
+			return false;
+		}
+		if (obj == this) {
+			return true;
+		}
+		if (obj.getClass() != getClass()) {
+			return false;
+		}
+		Order rhs = (Order) obj;
+		return new EqualsBuilder()
+				.append(this.products, rhs.products)
+				.append(this.orderStatus, rhs.orderStatus)
+				.append(this.deliverer, rhs.deliverer)
+				.append(this.factoryProd, rhs.factoryProd)
+				.isEquals();
+	}
+
+	@Override
+	public int hashCode() {
+		return new HashCodeBuilder()
+				.append(products)
+				.append(orderStatus)
+				.append(deliverer)
+				.append(factoryProd)
+				.toHashCode();
 	}
 }
