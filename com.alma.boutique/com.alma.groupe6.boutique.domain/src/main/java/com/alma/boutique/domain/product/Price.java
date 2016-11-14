@@ -43,7 +43,7 @@ public class Price {
 
     @Override
     public int hashCode() {
-        int result = (value != +0.0f ? Float.floatToIntBits(value) : 0);
+        int result = Float.compare(value, 0.0f) == 0 ? Float.floatToIntBits(value) : 0;
         result = 31 * result + currency.hashCode();
         return result;
     }
