@@ -10,6 +10,7 @@ public class SuppliedProduct extends Product {
     
     public SuppliedProduct() {
     	super();
+    	this.supplier = new Supplier();
 		}
 
     public SuppliedProduct(String name, Price price, String description, Category category) {

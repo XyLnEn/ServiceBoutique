@@ -20,6 +20,10 @@ public class History extends Entity {
 	
 	public History() {
 		super();
+		this.factory = null;
+		this.changedbalance = false;
+		this.transactionHistory = new ArrayList<>();
+		this.account = new Account();
 	}
 	
 	public History(FactoryTransaction factory, Account account) {

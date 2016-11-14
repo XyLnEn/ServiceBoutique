@@ -15,14 +15,20 @@ public abstract class Product extends Entity {
 
     public Product() {
     	super();
+      this.name = "";
+      this.price = new Price();
+      this.description = "";
+      this.category = new Category();
+      discount = 0;
     }
     
     public Product(String name, Price price, String description, Category category) {
-        this.name = name;
-        this.price = price;
-        this.description = description;
-        this.category = category;
-        discount = 0;
+    	super();
+      this.name = name;
+      this.price = price;
+      this.description = description;
+      this.category = category;
+      discount = 0;
     }
 
     public void addDiscount(float discount) {

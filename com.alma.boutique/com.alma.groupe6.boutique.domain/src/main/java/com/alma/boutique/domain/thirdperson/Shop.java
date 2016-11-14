@@ -13,6 +13,9 @@ public class Shop extends ThirdParty {
 	
 	public Shop() {
 		super();
+		this.setFactoryProd(new FactorySoldProduct());
+		this.shopName = "";
+		this.shopId = new Identity();
 	}
 	public Shop(String shopName, Identity shopId) {
 		super();

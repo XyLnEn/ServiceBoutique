@@ -1,5 +1,6 @@
 package com.alma.boutique.domain.history;
 
+import com.alma.boutique.domain.thirdperson.Shop;
 import com.alma.boutique.domain.thirdperson.ThirdParty;
 
 public class Account {
@@ -7,11 +8,11 @@ public class Account {
 	private ThirdParty owner;
 	
 	public Account() {
-		// empty constructor for serialisation
+		this.owner = new Shop();
+		this.currentBalance = 0;
 	}
 	
 	public Account(ThirdParty owner) {
-		super();
 		this.owner = owner;
 		this.currentBalance = 0;
 	}

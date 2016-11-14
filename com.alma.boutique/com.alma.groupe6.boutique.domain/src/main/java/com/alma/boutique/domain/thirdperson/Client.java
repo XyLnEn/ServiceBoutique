@@ -15,6 +15,10 @@ public class Client extends ThirdParty {
 	
 	public Client() {
 		super();
+		this.setFactoryProd(new FactorySoldProduct());
+		this.firstName = "";
+		this.lastName = "";
+		this.info = new Identity();
 	}
 	
 	public Client(String firstName, String lastName, Identity info) {

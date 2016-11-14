@@ -10,6 +10,7 @@ public class Category extends Entity {
     
     public Category() {
     	super();
+    	this.name = "";
     }
 
     public Category(String name) {

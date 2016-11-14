@@ -8,7 +8,8 @@ public class Price {
     private String currency;
     
     public Price() {
-    	//empty constructor for serialisability
+      this.value = 0;
+      this.currency = "";
 		}
 
     public Price(float value, String currency) {

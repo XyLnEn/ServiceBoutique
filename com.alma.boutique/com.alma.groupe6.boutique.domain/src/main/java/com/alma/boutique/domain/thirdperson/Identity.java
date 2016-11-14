@@ -10,7 +10,8 @@ public class Identity {
 	private String telNumber;
 	
 	public Identity() {
-		//empty for serialisation
+		this.address = "";
+		this.telNumber = "";
 	}
 	
 	public Identity(String address, String telNumber) {

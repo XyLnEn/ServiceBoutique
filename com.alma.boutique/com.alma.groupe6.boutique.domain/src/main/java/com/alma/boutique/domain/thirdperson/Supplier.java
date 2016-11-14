@@ -13,7 +13,12 @@ public class Supplier extends ThirdParty {
 	
 	public Supplier() {
 		super();
+		this.setFactoryProd(new FactorySuppliedProduct());
+		this.supplierName = "";
+		this.supplierId = new Identity();
 	}
+	
+	
 	public Supplier(String supplierName, Identity supplierId) {
 		super();
 		this.setFactoryProd(new FactorySuppliedProduct());

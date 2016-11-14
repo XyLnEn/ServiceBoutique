@@ -22,6 +22,10 @@ public class Order extends Entity {
 	
 	public Order(){
 		super();
+		this.products = new ArrayList<>();
+		this.orderStatus = OrderStatus.ORDERED;
+		this.deliverer = "";
+		this.factoryProd = null;
 	}
 	
 	public Order(OrderStatus orderStatus, String deliverer, FactoryProduct factory) {
