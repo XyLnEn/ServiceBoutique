@@ -28,12 +28,12 @@ public class History extends Entity {
 		this.account = account;
 	}
 
-	public Transaction Acheter(List<Product> list, ThirdParty from, ThirdParty to, String deliverer) throws OrderNotFoundException {
+	public Transaction buy(List<Product> list, ThirdParty from, ThirdParty to, String deliverer) throws OrderNotFoundException {
 		Order ord1 = from.createOrder(deliverer);
 		Order ord2 = to.createOrder(deliverer);
 		for (Product product : list) {
-			ord1.createProduct(product.getName(), product.getPrice(), product.getDescription(), product.getCategory().getName());
-			ord2.createProduct(product.getName(), product.getPrice(), product.getDescription(), product.getCategory().getName());
+			ord1.createProduct(product.getName(), product.getPrice().getValue(), product.getPrice().getCurrency(), product.getDescription(), product.getCategory().getName());
+			ord2.createProduct(product.getName(), product.getPrice().getValue(), product.getPrice().getCurrency(), product.getDescription(), product.getCategory().getName());
 		}
 		from.updateOrder(ord1, ord1);
 		to.updateOrder(ord2, ord2);
@@ -77,8 +77,6 @@ public class History extends Entity {
 		return account.getCurrentBalance();
 	}
 	
-	
-	
 	public List<Transaction> getHistory() {
 		return transactionHistory;
 	}
@@ -86,14 +84,8 @@ public class History extends Entity {
 		return account;
 	}
 
-	public boolean isChangedbalance() {
+	public boolean balanceHasChanged() {
 		return changedbalance;
 	}
 
-	public void setChangedbalance(boolean changedbalance) {
-		this.changedbalance = changedbalance;
-	}
-	
-
-	
 }

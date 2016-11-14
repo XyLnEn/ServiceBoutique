@@ -4,7 +4,7 @@ package com.alma.boutique.domain.product;
  * @author Thomas Minier
  */
 public class SoldProduct extends Product {
-    public SoldProduct(String name, float price, String description, Category category) {
+    public SoldProduct(String name, Price price, String description, Category category) {
         super(name, price, description, category);
     }
 
@@ -21,7 +21,7 @@ public class SoldProduct extends Product {
             return false;
         }
         SoldProduct product = (SoldProduct) o;
-        return Float.compare(product.getPrice(), getPrice()) == 0 && getName().equals(product.getName())
+        return getPrice().equals(product.getPrice()) && getName().equals(product.getName())
                 && getDescription().equals(product.getDescription()) && getCategory().equals(product.getCategory());
     }
 

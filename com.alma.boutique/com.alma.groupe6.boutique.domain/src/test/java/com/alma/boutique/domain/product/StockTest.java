@@ -18,7 +18,8 @@ public class StockTest {
     @Before
     public void setUp() throws Exception {
         referenceCategory = new Category("reference category");
-        suppliedProduct = new SuppliedProduct("provision product", 15, "a provision", referenceCategory);
+        Price price = new Price(15, "EUR");
+        suppliedProduct = new SuppliedProduct("provision product", price, "a provision", referenceCategory);
     }
 
     @Test

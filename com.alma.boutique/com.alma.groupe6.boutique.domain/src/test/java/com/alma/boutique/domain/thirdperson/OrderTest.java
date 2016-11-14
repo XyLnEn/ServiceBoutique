@@ -30,7 +30,7 @@ public class OrderTest {
 		assertThat(ord.getOrderStatus()).as("check the update of the state of the order").isEqualTo(OrderStatus.TRAVELING);
 
 		Order newProd = factoryOrd.make("DPS", factoryProd);
-		newProd.createProduct("DAB", 5, "On 'em", "lol");
+		newProd.createProduct("DAB", 5, "EUR", "On 'em", "lol");
 		ord.updateOrder(newProd);
 		assertThat(ord.getProducts().get(0).getDescription()).as("check the update on the Product list").isEqualTo("On 'em");
 		
@@ -45,7 +45,7 @@ public class OrderTest {
 		Order ord = factoryOrd.make("DPS", factoryProd);
 		assertThat(ord.getTotalPrice()).as("test with the initial price").isEqualTo(0);
 		
-		ord.createProduct("DAB", 5, "On 'em", "lol");
+		ord.createProduct("DAB", 5, "EUR", "On 'em", "lol");
 		assertThat(ord.getTotalPrice()).as("test with a non-empty Product list").isEqualTo(5);
 		
 	}
@@ -56,7 +56,7 @@ public class OrderTest {
 		FactorySoldProduct factoryProd = new FactorySoldProduct();
 		Order ord = factoryOrd.make("DPS", factoryProd);
 		assertThat(ord.getProducts()).as("check that the order is created empty").isEmpty();
-		Product prod = ord.createProduct("duck", 1, "a very charismatic duck", "weapon");
+		Product prod = ord.createProduct("duck", 1, "EUR", "a very charismatic duck", "weapon");
 		assertThat(ord.getProducts()).as("check that the product was added successfully").containsExactly(prod);
 	}
 	
@@ -66,12 +66,12 @@ public class OrderTest {
 		FactorySoldProduct factoryProd = new FactorySoldProduct();
 		Order ord = factoryOrd.make("DPS", factoryProd);
 		
-		Product prod = ord.createProduct("duck", 1, "a very charismatic duck", "weapon");
-		Product prodNotAdded = ord.getFactoryProd().make("gun", 1, "a very charismatic gun", "food");
+		Product prod = ord.createProduct("duck", 1, "EUR", "a very charismatic duck", "weapon");
+		Product prodNotAdded = ord.getFactoryProd().make("gun", 1, "EUR", "a very charismatic gun", "food");
 		try {
 			assertThat(ord.getProduct(prod)).as("check that the order return the right product").isEqualTo(prod);
 		} catch (ProductNotFoundException e) {
-			// TODO Auto-generated catch block
+			fail(e.getMessage());
 			e.printStackTrace();
 		}
 		
@@ -86,8 +86,8 @@ public class OrderTest {
 		FactorySoldProduct factoryProd = new FactorySoldProduct();
 		Order ord = factoryOrd.make("DPS", factoryProd);
 		
-		Product prod = ord.createProduct("duck", 1, "a very charismatic duck", "weapon");
-		Product prodNew = ord.getFactoryProd().make("gun", 2, "I could use this", "food");
+		Product prod = ord.createProduct("duck", 1, "EUR", "a very charismatic duck", "weapon");
+		Product prodNew = ord.getFactoryProd().make("gun", 2, "EUR", "I could use this", "food");
 		try {
 			ord.updateProduct(prod, prodNew);
 			assertThat(ord.getProduct(prod).getName()).as("check that the order's name was updated successfully").isEqualTo(prodNew.getName());
@@ -95,11 +95,11 @@ public class OrderTest {
 			assertThat(ord.getProduct(prod).getDescription()).as("check that the order's description was updated successfully").isEqualTo(prodNew.getDescription());
 			assertThat(ord.getProduct(prod).getCategory().getName()).as("check that the order's category was updated successfully").isEqualTo(prodNew.getCategory().getName());
 		} catch (ProductNotFoundException e) {
-			// TODO Auto-generated catch block
+			fail(e.getMessage());
 			e.printStackTrace();
 		}
 		
-		assertThatExceptionOfType(ProductNotFoundException.class).isThrownBy(() -> ord.getProduct(factoryProd.make("NAN", 10000, "Not a number", "number")))
+		assertThatExceptionOfType(ProductNotFoundException.class).isThrownBy(() -> ord.getProduct(factoryProd.make("NAN", 10000, "EUR", "Not a number", "number")))
 		.as("check if the order can react when he is asked to update an order he doesn't have");
 	}
 	
@@ -109,12 +109,12 @@ public class OrderTest {
 		FactorySoldProduct factoryProd = new FactorySoldProduct();
 		Order ord = factoryOrd.make("DPS", factoryProd);
 		
-		Product prod = ord.createProduct("duck", 1, "a very charismatic duck", "weapon");
+		Product prod = ord.createProduct("duck", 1, "EUR", "a very charismatic duck", "weapon");
 		try {
 			assertThat(ord.getProduct(prod)).as("check that the order is not empty").isEqualTo(prod);
 			ord.deleteProduct(prod);
 		} catch (ProductNotFoundException e) {
-			// TODO Auto-generated catch block
+			fail(e.getMessage());
 			e.printStackTrace();
 		}
 		assertThatExceptionOfType(ProductNotFoundException.class).isThrownBy(() -> ord.getProduct(prod))

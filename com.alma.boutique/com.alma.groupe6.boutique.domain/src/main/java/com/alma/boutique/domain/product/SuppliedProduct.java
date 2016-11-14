@@ -8,7 +8,7 @@ import com.alma.boutique.domain.thirdperson.Supplier;
 public class SuppliedProduct extends Product {
     private Supplier supplier;
 
-    public SuppliedProduct(String name, float price, String description, Category category) {
+    public SuppliedProduct(String name, Price price, String description, Category category) {
         super(name, price, description, category);
     }
 
@@ -29,7 +29,7 @@ public class SuppliedProduct extends Product {
             return false;
         }
         SuppliedProduct product = (SuppliedProduct) o;
-        return Float.compare(product.getPrice(), getPrice()) == 0 && getName().equals(product.getName())
+        return getPrice().equals(product.getPrice()) && getName().equals(product.getName())
                 && getDescription().equals(product.getDescription()) && getCategory().equals(product.getCategory());
     }
 

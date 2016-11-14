@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.alma.boutique.domain.exceptions.OrderNotFoundException;
 import com.alma.boutique.domain.factories.FactoryOrder;
+import com.alma.boutique.domain.factories.FactoryProduct;
 import com.alma.boutique.domain.shared.*;
 
 public abstract class ThirdParty extends Entity {

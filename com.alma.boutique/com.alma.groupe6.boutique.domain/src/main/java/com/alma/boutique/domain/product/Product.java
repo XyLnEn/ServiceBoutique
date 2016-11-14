@@ -8,12 +8,12 @@ import com.alma.boutique.domain.shared.Entity;
  */
 public abstract class Product extends Entity {
     private String name;
-    private float price;
+    private Price price;
     private String description;
     private Category category;
     private float discount;
 
-    public Product(String name, float price, String description, Category category) {
+    public Product(String name, Price price, String description, Category category) {
         this.name = name;
         this.price = price;
         this.description = description;
@@ -26,10 +26,10 @@ public abstract class Product extends Entity {
     }
 
     public float calculatePrice() throws IllegalDiscountException {
-        if(price - discount < 0) {
+        if(price.getValue() - discount < 0) {
             throw new IllegalDiscountException("Total discounts is superior to product's prize");
         }
-        return price - discount;
+        return price.getValue() - discount;
     }
     
     public void updateProduct(Product pro){
@@ -48,11 +48,11 @@ public abstract class Product extends Entity {
         this.name = name;
     }
 
-    public float getPrice() {
+    public Price getPrice() {
         return price;
     }
 
-    public void setPrice(float price) {
+    public void setPrice(Price price) {
         this.price = price;
     }
 
@@ -89,7 +89,7 @@ public abstract class Product extends Entity {
             return false;
         }
         Product product = (Product) o;
-        return Float.compare(product.getPrice(), getPrice()) == 0 && getName().equals(product.getName())
+        return price.equals(product.getPrice()) && getName().equals(product.getName())
                 && getDescription().equals(product.getDescription()) && getCategory().equals(product.getCategory());
 
     }

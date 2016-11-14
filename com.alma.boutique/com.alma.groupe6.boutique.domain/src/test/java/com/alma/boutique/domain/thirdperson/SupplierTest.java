@@ -20,7 +20,7 @@ public class SupplierTest {
 		try {
 			assertThat(supp.getOrder(ord)).as("check if the order was created correctly").isEqualTo(ord);
 		} catch (OrderNotFoundException e) {
-			// TODO Auto-generated catch block
+			fail(e.getMessage());
 			e.printStackTrace();
 		}
 		
@@ -54,11 +54,11 @@ public class SupplierTest {
 			
 			assertThat(supp.getOrder(oldOrder).getDeliverer()).as("check that the initial order has the right deliverer").isEqualTo("JAUNE");
 		} catch (OrderNotFoundException e) {
-			// TODO Auto-generated catch block
+			fail(e.getMessage());
 			e.printStackTrace();
 		}
 		Order notExistingOrd = supp.getFactoryOrd().make("jesus", supp.getFactoryProd());
-		Order notLaicOrd = supp.getFactoryOrd().make("CRIST", supp.getFactoryProd());
+		Order notLaicOrd = supp.getFactoryOrd().make("CHRIST", supp.getFactoryProd());
 		assertThatExceptionOfType(OrderNotFoundException.class).isThrownBy(() -> supp.updateOrder(notExistingOrd, notLaicOrd))
 			.as("check if %s %s can react when he is asked to provide an order he doesn't have", supp.getSupplierName());
 		
@@ -72,7 +72,7 @@ public class SupplierTest {
 		try {
 			assertThat(supp.getOrder(oldOrder).getDeliverer()).as("check the presence of the initial order").isEqualTo("VERT");
 		} catch (OrderNotFoundException e) {
-			// TODO Auto-generated catch block
+			fail(e.getMessage());
 			e.printStackTrace();
 		}
 		supp.deleteOrder(oldOrder);

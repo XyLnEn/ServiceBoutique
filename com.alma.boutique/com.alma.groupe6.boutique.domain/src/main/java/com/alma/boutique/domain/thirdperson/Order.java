@@ -6,7 +6,7 @@ import java.util.List;
 import com.alma.boutique.domain.exceptions.ProductNotFoundException;
 import com.alma.boutique.domain.product.Product;
 import com.alma.boutique.domain.shared.Entity;
-import com.alma.boutique.domain.shared.FactoryProduct;
+import com.alma.boutique.domain.factories.FactoryProduct;
 /**
  * 
  * @author lenny
@@ -28,8 +28,8 @@ public class Order extends Entity {
 		this.factoryProd = factory;
 	}
 	
-	public Product createProduct(String name, float price, String description,  String categoryName) {
-		Product prod = this.factoryProd.make(name, price, description, categoryName);
+	public Product createProduct(String name, float price, String currency, String description,  String categoryName) {
+		Product prod = this.factoryProd.make(name, price, currency, description, categoryName);
 		products.add(prod);
 		return prod;
 	}
@@ -107,7 +107,7 @@ public class Order extends Entity {
 	public float getTotalPrice() {//calculated
 		float calculatedPrice = 0;
 		for (Product stockProduct : products) {
-			calculatedPrice += stockProduct.getPrice();
+			calculatedPrice += stockProduct.getPrice().getValue();
 		}
 		return calculatedPrice;
 	}
