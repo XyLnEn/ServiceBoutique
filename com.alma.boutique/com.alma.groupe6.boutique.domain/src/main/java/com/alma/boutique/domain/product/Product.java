@@ -111,7 +111,12 @@ public abstract class Product extends Entity {
 
     @Override
     public int hashCode() {
-        return this.id.hashCode();
+        int result = name.hashCode();
+        result = 31 * result + price.hashCode();
+        result = 31 * result + description.hashCode();
+        result = 31 * result + category.hashCode();
+        result = 31 * result + (Float.compare(discount, +0.0f) != 0 ? Float.floatToIntBits(discount) : 0);
+        return result;
     }
 }
 

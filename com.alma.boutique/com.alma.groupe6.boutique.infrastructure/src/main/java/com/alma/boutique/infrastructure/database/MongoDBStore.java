@@ -109,7 +109,6 @@ public class MongoDBStore implements DatabaseFacade {
 
     @Override
     public void update(int id, Object entity) {
-        // TODO : replace the dirty delete/create by a true update field by field ?
         delete(id, entity.getClass());
         create(id, entity);
     }
