@@ -14,6 +14,11 @@
 
     <dependencies>
         <dependency>
+            <groupId>com.alma.groupe6.boutique</groupId>
+            <artifactId>com.alma.groupe6.boutique.api</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+        <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-databind</artifactId>
             <version>2.8.4</version>

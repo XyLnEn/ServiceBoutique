@@ -12,15 +12,15 @@ import static org.assertj.core.api.Java6Assertions.assertThat;
  * @author Thomas Minier
  */
 public class MongoDBStoreTest {
-    private MongoDBStore store;
+    private MongoDBStore<Comment> store;
     @Before
     public void setUp() throws Exception {
-        store = MongoDBStore.getInstance();
+        store = MongoDBStore.getInstance(Comment.class);
     }
 
     @Test
     public void getInstance() throws Exception {
-        MongoDBStore otherStore = MongoDBStore.getInstance();
+        MongoDBStore<Comment> otherStore = MongoDBStore.getInstance(Comment.class);
         assertThat(otherStore).as("getInstance should always return the same instance of MongoDBStore").isSameAs(store);
     }
 
@@ -32,24 +32,24 @@ public class MongoDBStoreTest {
         store.create(firstComment.getId(), firstComment);
 
         // check if the element has been inserted in the base
-        Comment mongoComment = store.retrieve(firstComment.getId(), Comment.class);
+        Comment mongoComment = store.retrieve(firstComment.getId());
         assertThat(mongoComment).as("the first comment should have been correctly inserted in the database").isEqualTo(firstComment);
 
         // test the retrieveAll method
         store.create(secondComment.getId(), secondComment);
-        List<Comment> allComments = store.retrieveAll(Comment.class);
+        List<Comment> allComments = store.retrieveAll();
         assertThat(allComments).as("the two documents should be retrieved as a list from the database").contains(firstComment, secondComment);
 
         // test the update method
         firstComment.setBody("a new body");
         store.update(firstComment.getId(), firstComment);
-        mongoComment = store.retrieve(firstComment.getId(), Comment.class);
+        mongoComment = store.retrieve(firstComment.getId());
         assertThat(mongoComment).as("the comment should be updated in the database").isEqualTo(firstComment);
 
         // test the delete operator
-        store.delete(firstComment.getId(), Comment.class);
-        store.delete(secondComment.getId(), Comment.class);
-        allComments = store.retrieveAll(Comment.class);
+        store.delete(firstComment.getId());
+        store.delete(secondComment.getId());
+        allComments = store.retrieveAll();
         assertThat(allComments).as("the database should be empty after the deletion").isEmpty();
     }
 }

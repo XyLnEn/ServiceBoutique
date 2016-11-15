@@ -13,15 +13,17 @@ import java.util.List;
 /**
  * @author Thomas Minier
  */
-public class ExternalWebservice {
+public class ExternalWebservice<T> {
     private static final Logger logger = Logger.getLogger(ExternalWebservice.class);
 
     private String baseURL;
     private ObjectMapper mapper;
+    private Class<T> referenceClass;
 
-    public ExternalWebservice(String baseURL) {
+    public ExternalWebservice(String baseURL, Class<T> referenceClass) {
         this.baseURL = baseURL;
         mapper = new ObjectMapper();
+        this.referenceClass = referenceClass;
     }
 
     /**
@@ -37,22 +39,22 @@ public class ExternalWebservice {
         return httpCon;
     }
 
-    public <C> C get(String url, Class<C> targetClass) throws IOException {
-        Object value = null;
+    public T get(String url) throws IOException {
+        T value = null;
         try {
             HttpURLConnection httpCon = setupConnection(baseURL + url);
-            value = mapper.readValue(httpCon.getInputStream(), targetClass);
+            value = mapper.readValue(httpCon.getInputStream(), referenceClass);
         } catch (MalformedURLException e) {
            logger.error(e.getMessage());
         }
-        return (C) value;
+        return value;
     }
 
-    public <C> List<C> getList(String url, Class<C> targetClass) throws IOException {
-        List<C> elements = new ArrayList<>();
+    public List<T> getList(String url) throws IOException {
+        List<T> elements = new ArrayList<>();
         try {
             HttpURLConnection httpCon = setupConnection(baseURL + url);
-            elements.addAll(mapper.readValue(httpCon.getInputStream(), mapper.getTypeFactory().constructCollectionType(List.class, targetClass)));
+            elements.addAll(mapper.readValue(httpCon.getInputStream(), mapper.getTypeFactory().constructCollectionType(List.class, referenceClass)));
         } catch (MalformedURLException e) {
             logger.error(e.getMessage());
         }

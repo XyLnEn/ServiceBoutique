@@ -18,15 +18,17 @@ import static com.mongodb.client.model.Filters.eq;
 /**
  * @author Thomas Minier
  */
-public class MongoDBStore implements DatabaseFacade {
+public class MongoDBStore<T> {
     private static final Logger logger = Logger.getLogger(MongoDBStore.class);
 
     private static MongoDBStore instance = null;
+    private Class<T> referenceClass;
+    private String collectionName;
     private MongoClient client;
     private MongoDatabase database;
     private ObjectMapper mapper;
 
-    private MongoDBStore() throws IOException {
+    private MongoDBStore(Class<T> referenceClass) throws IOException {
         try {
             Properties infos = new Properties();
             infos.load(new FileInputStream("src/main/resources/mongodb.properties"));
@@ -35,40 +37,39 @@ public class MongoDBStore implements DatabaseFacade {
             client = new MongoClient(new MongoClientURI(mongodbURL));
             database = client.getDatabase(infos.getProperty("database.name"));
             mapper = new ObjectMapper();
+            this.referenceClass = referenceClass;
+            collectionName = referenceClass.getSimpleName() + "Collection";
         } catch (IOException e) {
             logger.error(e);
             throw e;
         }
     }
 
-    public static MongoDBStore getInstance() throws IOException {
+    public static MongoDBStore getInstance(Class<?> referenceClass) throws IOException {
         if(instance == null) {
           synchronized (MongoDBStore.class) {
               if(instance == null) {
-                  instance = new MongoDBStore();
+                  instance = new MongoDBStore(referenceClass);
               }
           }
         }
         return instance;
     }
 
-    private MongoCollection<Document> getCollection(Class dataClass) {
-        String collectionName = dataClass.getSimpleName() + "Collection";
+    private MongoCollection<Document> getCollection() {
         MongoCollection<Document> collection = database.getCollection(collectionName);
         if(collection == null) {
             // create the new collection
-            collectionName = dataClass.getSimpleName() + "Collection";
             database.createCollection(collectionName);
             collection = database.getCollection(collectionName);
         }
         return collection;
     }
 
-    @Override
-    public void create(int id, Object entity) {
+    public void create(int id, T entity) {
         try {
             // get the collection corresponding to the object, then insert it
-            MongoCollection<Document> collection = getCollection(entity.getClass());
+            MongoCollection<Document> collection = getCollection();
             // create mongodb object to insert into the database using reflection
             Document newDocument = Document.parse(mapper.writeValueAsString(entity));
             collection.insertOne(newDocument);
@@ -77,29 +78,27 @@ public class MongoDBStore implements DatabaseFacade {
         }
     }
 
-    @Override
-    public <C> C retrieve(int id, Class<C> entityType) {
-        Object entity = null;
-        Document document = getCollection(entityType).find(eq("id", id)).first();
+    public T retrieve(int id) {
+        T entity = null;
+        Document document = getCollection().find(eq("id", id)).first();
         // remove mongodb metadata before deserialization
         document.remove("_id");
         try {
-            entity = mapper.readValue(document.toJson(), entityType);
+            entity = mapper.readValue(document.toJson(), referenceClass);
         } catch (IOException e) {
             logger.warn(e);
         }
-        return (C) entity;
+        return entity;
     }
 
-    @Override
-    public <C> List<C> retrieveAll(Class<C> entityType) {
-        List<C> results = new ArrayList<>();
-        FindIterable<Document> allDocuments = getCollection(entityType).find();
+    public List<T> retrieveAll() {
+        List<T> results = new ArrayList<>();
+        FindIterable<Document> allDocuments = getCollection().find();
         for(Document document : allDocuments) {
             // remove mongodb metadata before deserialization
             document.remove("_id");
             try {
-                results.add(mapper.readValue(document.toJson(), entityType));
+                results.add(mapper.readValue(document.toJson(), referenceClass));
             } catch (IOException e) {
                 logger.warn(e);
             }
@@ -107,15 +106,13 @@ public class MongoDBStore implements DatabaseFacade {
         return results;
     }
 
-    @Override
-    public void update(int id, Object entity) {
-        delete(id, entity.getClass());
+    public void update(int id, T entity) {
+        delete(id);
         create(id, entity);
     }
 
-    @Override
-    public void delete(int id, Class entityType) {
+    public void delete(int id) {
         // get the collection corresponding to the object, then apply deletion
-        getCollection(entityType).deleteOne(eq("id", id));
+        getCollection().deleteOne(eq("id", id));
     }
 }
