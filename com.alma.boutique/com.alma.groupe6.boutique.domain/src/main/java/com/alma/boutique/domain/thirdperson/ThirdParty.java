@@ -23,17 +23,7 @@ public abstract class ThirdParty extends Entity {
 		this.orderHistory = new ArrayList<>();
 	}
 	
-	public Order createOrder(IFactory<OrderSoldProduct> factoryOrd) {
-		OrderSoldProduct newOrd = null;
-		try {
-			newOrd = factoryOrd.create();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		this.getOrderHistory().add(newOrd);
-		return newOrd;
-	}
+	public abstract Order createOrder(IFactory factoryOrd);
 
 	
 	public Order getOrder(Order ord) throws OrderNotFoundException {

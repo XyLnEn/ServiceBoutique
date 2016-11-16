@@ -28,10 +28,10 @@ public class OrderSuppliedProduct extends Order {
 		this.deliverer = deliverer;
 	}
 	
-	public Product createProduct(IFactory<SuppliedProduct> factoryProd) {
-		Product prod = null;
+	public Product createProduct(IFactory factoryProd) {
+		SuppliedProduct prod = null;
 		try {
-			prod = factoryProd.create();
+			prod = (SuppliedProduct) factoryProd.create();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

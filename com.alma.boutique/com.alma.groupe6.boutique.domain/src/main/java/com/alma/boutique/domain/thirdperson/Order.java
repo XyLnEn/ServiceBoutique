@@ -23,6 +23,8 @@ public abstract class Order extends Entity {
 	}
 	
 
+	public abstract Product createProduct(IFactory factoryProduct);
+	
 	public Product getProduct(Product prod) throws ProductNotFoundException {
 		for (Product product : products) {
 			if (product.sameIdentityAs(prod)){

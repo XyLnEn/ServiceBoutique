@@ -28,10 +28,10 @@ public class ShopOwner extends ThirdParty {
 		this.shopId = shopId;
 	}
 	
-	public Order createOrder(IFactory<OrderSuppliedProduct> factoryOrd) {
+	public Order createOrder(IFactory factoryOrd) {
 		OrderSuppliedProduct newOrd = null;
 		try {
-			newOrd = factoryOrd.create();
+			newOrd = (OrderSuppliedProduct) factoryOrd.create();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

@@ -15,11 +15,11 @@ public class Transaction extends Entity {
 	
 	public Transaction() {
 		super();
-		this.order = new OrderSuppliedProduct();
-		this.from = new ThirdParty() {
-		};
-		this.to = new ThirdParty() {
-		};
+		this.order = new OrderSuppliedProduct();////////////////////////////////////////////////////////
+//		this.from = new ThirdParty() {
+//		};
+//		this.to = new ThirdParty() {
+//		};
 	}
 	
 	public Transaction(Order order, ThirdParty from, ThirdParty to) {

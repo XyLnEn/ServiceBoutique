@@ -23,10 +23,10 @@ public class OrderSoldProduct extends Order {
 		this.deliverer = deliverer;
 	}
 	
-	public Product createProduct(IFactory<SoldProduct> factoryProd) {
-		Product prod = null;
+	public Product createProduct(IFactory factoryProd) {
+		SoldProduct prod = null;
 		try {
-			prod = factoryProd.create();
+			prod = (SoldProduct) factoryProd.create();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

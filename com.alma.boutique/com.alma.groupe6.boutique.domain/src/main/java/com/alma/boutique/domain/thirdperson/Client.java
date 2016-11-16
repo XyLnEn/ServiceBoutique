@@ -32,10 +32,10 @@ public class Client extends ThirdParty {
 		this.info = info;
 	}
 	
-	public Order createOrder(IFactory<OrderSoldProduct> factoryOrd) {
+	public Order createOrder(IFactory factoryOrd) {
 		OrderSoldProduct newOrd = null;
 		try {
-			newOrd = factoryOrd.create();
+			newOrd = (OrderSoldProduct) factoryOrd.create();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
