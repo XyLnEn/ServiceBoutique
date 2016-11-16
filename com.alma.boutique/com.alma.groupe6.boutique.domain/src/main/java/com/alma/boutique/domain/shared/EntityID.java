@@ -14,8 +14,9 @@ public class EntityID implements ID {
     public EntityID() {
       this.id = UUID.randomUUID();
   }
-    
-	public UUID getId() {
-		return id;
+
+  @Override
+  public int getId() {
+		return id.hashCode();
 	}
 }

@@ -1,4 +1,4 @@
-package com.alma.boutique.infrastructure;
+package com.alma.boutique.infrastructure.webservice;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.log4j.Logger;
@@ -11,16 +11,17 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
+ * JSONWebservice représente un WebService utilisant du JSON
  * @author Thomas Minier
  */
-public class ExternalWebservice<T> {
-    private static final Logger logger = Logger.getLogger(ExternalWebservice.class);
+public class JSONWebservice<T> implements WebService<T> {
+    private static final Logger logger = Logger.getLogger(JSONWebservice.class);
 
     private String baseURL;
     private ObjectMapper mapper;
     private Class<T> referenceClass;
 
-    public ExternalWebservice(String baseURL, Class<T> referenceClass) {
+    public JSONWebservice(String baseURL, Class<T> referenceClass) {
         this.baseURL = baseURL;
         mapper = new ObjectMapper();
         this.referenceClass = referenceClass;
@@ -39,7 +40,8 @@ public class ExternalWebservice<T> {
         return httpCon;
     }
 
-    public T get(String url) throws IOException {
+    @Override
+    public T read(String url) throws IOException {
         T value = null;
         try {
             HttpURLConnection httpCon = setupConnection(baseURL + url);
@@ -50,7 +52,8 @@ public class ExternalWebservice<T> {
         return value;
     }
 
-    public List<T> getList(String url) throws IOException {
+    @Override
+    public List<T> browse(String url) throws IOException {
         List<T> elements = new ArrayList<>();
         try {
             HttpURLConnection httpCon = setupConnection(baseURL + url);
