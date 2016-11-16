@@ -1,11 +1,11 @@
 package com.alma.boutique.domain.thirdperson;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.alma.boutique.api.IFactory;
 import com.alma.boutique.domain.exceptions.OrderNotFoundException;
-import com.alma.boutique.domain.factories.FactoryOrder;
-import com.alma.boutique.domain.factories.FactoryProduct;
 import com.alma.boutique.domain.shared.*;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
@@ -18,19 +18,23 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 public abstract class ThirdParty extends Entity {
 
 	private List<Order> orderHistory;
-	private FactoryOrder factoryOrd;
-	private FactoryProduct factoryProd;
 
 	public ThirdParty() {
 		this.orderHistory = new ArrayList<>();
-		this.factoryOrd =  new FactoryOrder();
 	}
 	
-	public Order createOrder(String deliverer) {
-		Order newOrd = factoryOrd.make(deliverer,factoryProd);
-		this.orderHistory.add(newOrd);
+	public Order createOrder(IFactory<OrderSoldProduct> factoryOrd) {
+		OrderSoldProduct newOrd = null;
+		try {
+			newOrd = factoryOrd.create();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		this.getOrderHistory().add(newOrd);
 		return newOrd;
 	}
+
 	
 	public Order getOrder(Order ord) throws OrderNotFoundException {
 		for (Order order : orderHistory) {
@@ -59,22 +63,6 @@ public abstract class ThirdParty extends Entity {
 		return orderHistory;
 	}
 
-	public FactoryOrder getFactoryOrd() {
-		return factoryOrd;
-	}
-
-	public void setFactoryOrd(FactoryOrder factoryOrd) {
-		this.factoryOrd = factoryOrd;
-	}
-
-	public FactoryProduct getFactoryProd() {
-		return factoryProd;
-	}
-
-	public void setFactoryProd(FactoryProduct factoryProd) {
-		this.factoryProd = factoryProd;
-	}
-
 	public void setOrderHistory(List<Order> orderHistory) {
 		this.orderHistory = orderHistory;
 	}
@@ -93,8 +81,6 @@ public abstract class ThirdParty extends Entity {
 		ThirdParty rhs = (ThirdParty) obj;
 		return new EqualsBuilder()
 				.append(this.orderHistory, rhs.orderHistory)
-				.append(this.factoryOrd, rhs.factoryOrd)
-				.append(this.factoryProd, rhs.factoryProd)
 				.isEquals();
 	}
 
@@ -102,8 +88,6 @@ public abstract class ThirdParty extends Entity {
 	public int hashCode() {
 		return new HashCodeBuilder()
 				.append(orderHistory)
-				.append(factoryOrd)
-				.append(factoryProd)
 				.toHashCode();
 	}
 }

@@ -140,6 +140,6 @@ public class OrderTest {
 
     @Test
     public void testPojoStandard() {
-        assertPojoMethodsFor(Order.class).testing(Method.GETTER, Method.SETTER).areWellImplemented();
+        assertPojoMethodsFor(OrderSuppliedProduct.class).testing(Method.GETTER, Method.SETTER).areWellImplemented();
     }
 }

@@ -1,8 +1,11 @@
 package com.alma.boutique.domain.thirdperson;
 
-import com.alma.boutique.domain.factories.FactorySoldProduct;
+import java.io.IOException;
+
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
+
+import com.alma.boutique.api.IFactory;
 
 /**
  * 
@@ -17,7 +20,6 @@ public class Client extends ThirdParty {
 	
 	public Client() {
 		super();
-		this.setFactoryProd(new FactorySoldProduct());
 		this.firstName = "";
 		this.lastName = "";
 		this.info = new Identity();
@@ -25,10 +27,21 @@ public class Client extends ThirdParty {
 	
 	public Client(String firstName, String lastName, Identity info) {
 		super();
-		this.setFactoryProd(new FactorySoldProduct());
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.info = info;
+	}
+	
+	public Order createOrder(IFactory<OrderSoldProduct> factoryOrd) {
+		OrderSoldProduct newOrd = null;
+		try {
+			newOrd = factoryOrd.create();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		this.getOrderHistory().add(newOrd);
+		return newOrd;
 	}
 
 	public String getFirstName() {

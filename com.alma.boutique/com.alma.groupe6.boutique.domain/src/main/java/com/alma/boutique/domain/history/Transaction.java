@@ -2,6 +2,7 @@ package com.alma.boutique.domain.history;
 
 import com.alma.boutique.domain.shared.Entity;
 import com.alma.boutique.domain.thirdperson.Order;
+import com.alma.boutique.domain.thirdperson.OrderSuppliedProduct;
 import com.alma.boutique.domain.thirdperson.ThirdParty;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
@@ -14,7 +15,7 @@ public class Transaction extends Entity {
 	
 	public Transaction() {
 		super();
-		this.order = new Order();
+		this.order = new OrderSuppliedProduct();
 		this.from = new ThirdParty() {
 		};
 		this.to = new ThirdParty() {

@@ -1,11 +1,12 @@
 package com.alma.boutique.domain.history;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.alma.boutique.api.IFactory;
 import com.alma.boutique.domain.exceptions.OrderNotFoundException;
 import com.alma.boutique.domain.exceptions.TransactionNotFoundException;
-import com.alma.boutique.domain.factories.FactoryTransaction;
 import com.alma.boutique.domain.product.Product;
 import com.alma.boutique.domain.shared.Entity;
 import com.alma.boutique.domain.thirdperson.Order;
@@ -13,28 +14,25 @@ import com.alma.boutique.domain.thirdperson.ThirdParty;
 
 public class History extends Entity {
 
-	private FactoryTransaction factory;
 	private boolean changedbalance;
 	private List<Transaction> transactionHistory;
 	private Account account;
 	
 	public History() {
 		super();
-		this.factory = null;
 		this.changedbalance = false;
 		this.transactionHistory = new ArrayList<>();
 		this.account = new Account();
 	}
 	
-	public History(FactoryTransaction factory, Account account) {
+	public History(IFactory<Transaction> factory, Account account) {
 		super();
-		this.factory = factory;
 		this.changedbalance = false;
 		this.transactionHistory = new ArrayList<>();
 		this.account = account;
 	}
 
-	public Transaction buy(List<Product> list, ThirdParty from, ThirdParty to, String deliverer) throws OrderNotFoundException {
+	public Transaction buy(IFactory<Transaction> factoryTrans, List<Product> list, ThirdParty from, ThirdParty to, String deliverer) throws OrderNotFoundException {
 		Order ord1 = from.createOrder(deliverer);
 		Order ord2 = to.createOrder(deliverer);
 		for (Product product : list) {
@@ -43,11 +41,16 @@ public class History extends Entity {
 		}
 		from.updateOrder(ord1, ord1);
 		to.updateOrder(ord2, ord2);
-		return createTransaction(ord1, from, to);
+		return createTransaction(factoryTrans);
 	}
 	
-	public Transaction createTransaction(Order ord, ThirdParty from, ThirdParty to) {
-		Transaction trans = factory.make(ord, from, to);
+	public Transaction createTransaction(IFactory<Transaction> factory) {
+		Transaction trans = null;
+		try {
+			trans = factory.create();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 		this.transactionHistory.add(trans);
 		this.changedbalance = true;
 		return trans;
@@ -89,14 +92,6 @@ public class History extends Entity {
 
 	public boolean balanceHasChanged() {
 		return changedbalance;
-	}
-
-	public FactoryTransaction getFactory() {
-		return factory;
-	}
-
-	public void setFactory(FactoryTransaction factory) {
-		this.factory = factory;
 	}
 
 	public boolean isChangedbalance() {
