@@ -7,6 +7,6 @@ import java.util.List;
  * @author Thomas Minier
  */
 @FunctionalInterface
-public interface BrowseSuppliesService {
-    List<String> browse();
+public interface BrowseSuppliesService<T> {
+    List<T> browse();
 }
