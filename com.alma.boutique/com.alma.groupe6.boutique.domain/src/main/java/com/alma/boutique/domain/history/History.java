@@ -83,10 +83,6 @@ public class History extends Entity {
 		return account.getCurrentBalance();
 	}
 	
-	public List<Transaction> getHistory() {
-		return transactionHistory;
-	}
-	
 	public Account getAccount() {
 		return account;
 	}
