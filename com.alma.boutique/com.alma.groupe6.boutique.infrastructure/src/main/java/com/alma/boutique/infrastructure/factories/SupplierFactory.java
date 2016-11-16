@@ -10,12 +10,12 @@ import java.io.IOException;
  *
  * @author Thomas Minier
  */
-public class FactorySupplier implements IFactory<Supplier> {
+public class SupplierFactory implements IFactory<Supplier> {
 	private String supplierName;
     private String address;
     private String telNumber;
 
-    public FactorySupplier(String supplierName, String address, String telNumber) {
+    public SupplierFactory(String supplierName, String address, String telNumber) {
         this.supplierName = supplierName;
         this.address = address;
         this.telNumber = telNumber;
