@@ -18,7 +18,7 @@ import static com.mongodb.client.model.Filters.eq;
 /**
  * @author Thomas Minier
  */
-public class MongoDBStore implements DatabaseFacade {
+public class MongoDBStore implements Database {
     private static final Logger logger = Logger.getLogger(MongoDBStore.class);
 
     private static MongoDBStore instance = null;

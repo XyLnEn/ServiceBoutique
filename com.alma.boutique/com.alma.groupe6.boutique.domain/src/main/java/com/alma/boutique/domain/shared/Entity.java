@@ -11,6 +11,10 @@ public abstract class Entity {
       this.id = new EntityID();
   }
 
+  public int getID() {
+      return this.id.getId();
+  }
+
   public boolean sameIdentityAs(Entity entity) {
       return entity != null && this.id.equals(entity.id);
   }

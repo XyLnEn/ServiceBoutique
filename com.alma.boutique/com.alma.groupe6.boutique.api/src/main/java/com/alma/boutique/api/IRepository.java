@@ -11,5 +11,5 @@ public interface IRepository<T> {
     T read(ID id);
     void edit(ID id, T entity);
     void delete(ID id);
-    T add(ID id, T value);
+    void add(ID id, T value);
 }
