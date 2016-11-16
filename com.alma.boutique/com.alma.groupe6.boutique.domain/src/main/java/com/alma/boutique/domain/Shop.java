@@ -8,6 +8,7 @@ import com.alma.boutique.domain.product.SoldProduct;
 import com.alma.boutique.domain.product.SuppliedProduct;
 import com.alma.boutique.domain.shared.Entity;
 import com.alma.boutique.domain.thirdperson.Client;
+import com.alma.boutique.domain.thirdperson.OrderSoldProduct;
 import com.alma.boutique.domain.thirdperson.OrderSuppliedProduct;
 import com.alma.boutique.domain.thirdperson.ShopOwner;
 import com.alma.boutique.domain.thirdperson.Supplier;
@@ -19,7 +20,8 @@ public class Shop extends Entity{
 	private ThirdParty shopOwner;
 	private IFactory<Supplier> factorySupplier;
 	private IFactory<Client> factoryClient;
-	private IFactory<OrderSuppliedProduct> factoryOrder;
+	private IFactory<OrderSuppliedProduct> factoryOrderSupplied;
+	private IFactory<OrderSoldProduct> factoryOrderSold;
 	private IFactory<SuppliedProduct> factorySuppliedProduct;
 	private IFactory<SoldProduct> factorySoldProduct;
 	private IFactory<Transaction> factoryTransaction;
@@ -31,7 +33,30 @@ public class Shop extends Entity{
 	private IRepository<Transaction> repositoryTransaction;
 	
 	
-	public Shop(IFactory<Supplier> factorySupplier, IFactory<Client> factoryClient, IFactory<OrderSuppliedProduct> factoryOrder,
+	
+	public Shop() {
+		this.factorySupplier = null;
+		this.factoryClient = null;
+		this.factoryOrderSupplied = null;
+		this.factoryOrderSold = null;
+		this.factorySuppliedProduct = null;
+		this.factorySoldProduct = null;
+		this.factoryTransaction = null;
+		this.repositorySupplier = null;
+		this.repositoryClient = null;
+		this.repositoryShopOwner = null;
+		this.repositoryOrder = null;
+		this.repositorySoldProduct = null;
+		this.repositoryTransaction = null;
+		
+
+		this.shopOwner = null;
+		this.shopHistory = new History();
+	}
+
+
+	public Shop(IFactory<Supplier> factorySupplier, IFactory<Client> factoryClient, IFactory<OrderSuppliedProduct> factoryOrderSupplied,
+			IFactory<OrderSoldProduct> factoryOrderSold,
 	    IFactory<SuppliedProduct> factorySuppliedProduct, IFactory<SoldProduct> factorySoldProduct,
 	    IFactory<Transaction> factoryTransaction, IRepository<Supplier> repositorySupplier,
 	    IRepository<Client> repositoryClient, IRepository<ShopOwner> repositoryShopOwner,
@@ -40,7 +65,8 @@ public class Shop extends Entity{
 		super();
 		this.factorySupplier = factorySupplier;
 		this.factoryClient = factoryClient;
-		this.factoryOrder = factoryOrder;
+		this.factoryOrderSupplied = factoryOrderSupplied;
+		this.factoryOrderSold = factoryOrderSold;
 		this.factorySuppliedProduct = factorySuppliedProduct;
 		this.factorySoldProduct = factorySoldProduct;
 		this.factoryTransaction = factoryTransaction;
@@ -94,16 +120,6 @@ public class Shop extends Entity{
 
 	public void setFactoryClient(IFactory<Client> factoryClient) {
 		this.factoryClient = factoryClient;
-	}
-
-
-	public IFactory<OrderSuppliedProduct> getFactoryOrder() {
-		return factoryOrder;
-	}
-
-
-	public void setFactoryOrder(IFactory<OrderSuppliedProduct> factoryOrder) {
-		this.factoryOrder = factoryOrder;
 	}
 
 
@@ -194,6 +210,26 @@ public class Shop extends Entity{
 
 	public void setRepositoryTransaction(IRepository<Transaction> repositoryTransaction) {
 		this.repositoryTransaction = repositoryTransaction;
+	}
+
+
+	public IFactory<OrderSuppliedProduct> getFactoryOrderSupplied() {
+		return factoryOrderSupplied;
+	}
+
+
+	public void setFactoryOrderSupplied(IFactory<OrderSuppliedProduct> factoryOrderSupplied) {
+		this.factoryOrderSupplied = factoryOrderSupplied;
+	}
+
+
+	public IFactory<OrderSoldProduct> getFactoryOrderSold() {
+		return factoryOrderSold;
+	}
+
+
+	public void setFactoryOrderSold(IFactory<OrderSoldProduct> factoryOrderSold) {
+		this.factoryOrderSold = factoryOrderSold;
 	}
 	
 	

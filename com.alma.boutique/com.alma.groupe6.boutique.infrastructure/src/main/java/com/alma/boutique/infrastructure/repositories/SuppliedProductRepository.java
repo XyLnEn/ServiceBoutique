@@ -1,6 +1,5 @@
 package com.alma.boutique.infrastructure.repositories;
 
-import com.alma.boutique.api.ID;
 import com.alma.boutique.api.IRepository;
 import com.alma.boutique.domain.product.SuppliedProduct;
 import com.alma.boutique.infrastructure.database.Database;

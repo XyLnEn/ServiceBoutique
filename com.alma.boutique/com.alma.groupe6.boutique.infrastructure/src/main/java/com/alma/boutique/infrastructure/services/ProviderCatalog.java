@@ -2,11 +2,14 @@ package com.alma.boutique.infrastructure.services;
 
 import com.alma.boutique.api.services.BrowseSuppliesService;
 import com.alma.boutique.domain.product.SuppliedProduct;
+import com.alma.boutique.domain.shared.Entity;
 import com.alma.boutique.infrastructure.webservice.WebService;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+
+import org.slf4j.LoggerFactory;
 
 /**
  * @author Thomas Minier
@@ -27,7 +30,7 @@ public class ProviderCatalog implements BrowseSuppliesService<SuppliedProduct> {
             List<SuppliedProduct> products = webService.browse(browseURL);
             catalog.addAll(products);
         } catch (IOException e) {
-            e.printStackTrace();
+        	LoggerFactory.getLogger(Entity.class).warn(e.getMessage(),e);
         }
         return catalog;
     }
