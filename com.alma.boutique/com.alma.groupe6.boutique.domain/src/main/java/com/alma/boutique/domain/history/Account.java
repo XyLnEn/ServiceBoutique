@@ -1,6 +1,6 @@
 package com.alma.boutique.domain.history;
 
-import com.alma.boutique.domain.thirdperson.Shop;
+import com.alma.boutique.domain.thirdperson.ShopOwner;
 import com.alma.boutique.domain.thirdperson.ThirdParty;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
@@ -10,7 +10,7 @@ public class Account {
 	private ThirdParty owner;
 	
 	public Account() {
-		this.owner = new Shop();
+		this.owner = new ShopOwner();
 		this.currentBalance = 0;
 	}
 	

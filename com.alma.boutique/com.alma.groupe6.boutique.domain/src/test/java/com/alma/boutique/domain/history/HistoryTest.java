@@ -6,7 +6,7 @@ import com.alma.boutique.domain.factories.*;
 import com.alma.boutique.domain.product.Product;
 import com.alma.boutique.domain.thirdperson.Client;
 import com.alma.boutique.domain.thirdperson.Order;
-import com.alma.boutique.domain.thirdperson.Shop;
+import com.alma.boutique.domain.thirdperson.ShopOwner;
 import com.alma.boutique.domain.thirdperson.Supplier;
 import org.junit.Before;
 import org.junit.Test;
@@ -29,7 +29,7 @@ public class HistoryTest {
 	private Client cli1;
 	private Client cli2;
 	private Supplier supp1;
-	private Shop shop;
+	private ShopOwner shop;
 
 	@Before
 	public void setUp() throws Exception {

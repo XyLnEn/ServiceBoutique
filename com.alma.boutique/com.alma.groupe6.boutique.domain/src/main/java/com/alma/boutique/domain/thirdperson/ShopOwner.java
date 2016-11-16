@@ -9,31 +9,31 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
  * @author lenny
  *
  */
-public class Shop extends ThirdParty {
+public class ShopOwner extends ThirdParty {
 
-	private String shopName;
+	private String shopOwnerName;
 	private Identity shopId;
 	
-	public Shop() {
+	public ShopOwner() {
 		super();
 		this.setFactoryProd(new FactorySoldProduct());
-		this.shopName = "";
+		this.shopOwnerName = "";
 		this.shopId = new Identity();
 	}
-	public Shop(String shopName, Identity shopId) {
+	public ShopOwner(String shopName, Identity shopId) {
 		super();
 		this.setFactoryProd(new FactorySoldProduct());
-		this.shopName = shopName;
+		this.shopOwnerName = shopName;
 		this.shopId = shopId;
 	}
-	public String getShopName() {
-		return shopName;
+	public String getShopOwnerName() {
+		return shopOwnerName;
 	}
 	public Identity getShopId() {
 		return shopId;
 	}
-	public void setShopName(String shopName) {
-		this.shopName = shopName;
+	public void setShopOwnerName(String shopName) {
+		this.shopOwnerName = shopName;
 	}
 	public void setShopId(Identity shopId) {
 		this.shopId = shopId;
@@ -50,10 +50,10 @@ public class Shop extends ThirdParty {
 		if (obj.getClass() != getClass()) {
 			return false;
 		}
-		Shop rhs = (Shop) obj;
+		ShopOwner rhs = (ShopOwner) obj;
 		return new EqualsBuilder()
 				.appendSuper(super.equals(obj))
-				.append(this.shopName, rhs.shopName)
+				.append(this.shopOwnerName, rhs.shopOwnerName)
 				.append(this.shopId, rhs.shopId)
 				.isEquals();
 	}
@@ -62,7 +62,7 @@ public class Shop extends ThirdParty {
 	public int hashCode() {
 		return new HashCodeBuilder()
 				.appendSuper(super.hashCode())
-				.append(shopName)
+				.append(shopOwnerName)
 				.append(shopId)
 				.toHashCode();
 	}
