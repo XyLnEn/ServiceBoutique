@@ -14,7 +14,7 @@ import java.util.Map;
  * @author Thomas Minier
  */
 public class SuppliedProductMockRepository implements IRepository<SuppliedProduct> {
-    private Map<ID, SuppliedProduct> elements = new HashMap<>();
+    private Map<Integer, SuppliedProduct> elements = new HashMap<>();
 
     @Override
     public List<SuppliedProduct> browse() {
@@ -22,24 +22,24 @@ public class SuppliedProductMockRepository implements IRepository<SuppliedProduc
     }
 
     @Override
-    public SuppliedProduct read(ID id) {
+    public SuppliedProduct read(int id) {
         return elements.get(id);
     }
 
     @Override
-    public void edit(ID id, SuppliedProduct entity) {
+    public void edit(int id, SuppliedProduct entity) {
         if(elements.containsKey(id)) {
             elements.put(id, entity);
         }
     }
 
     @Override
-    public void delete(ID id) {
+    public void delete(int id) {
         elements.remove(id);
     }
 
     @Override
-    public void add(ID id, SuppliedProduct value) {
+    public void add(int id, SuppliedProduct value) {
         elements.put(id, value);
     }
 }

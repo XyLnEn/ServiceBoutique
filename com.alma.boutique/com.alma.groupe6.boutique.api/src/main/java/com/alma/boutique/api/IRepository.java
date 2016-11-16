@@ -8,8 +8,8 @@ import java.util.List;
  */
 public interface IRepository<T> {
     List<T> browse();
-    T read(ID id);
-    void edit(ID id, T entity);
-    void delete(ID id);
-    void add(ID id, T value);
+    T read(int id);
+    void edit(int id, T entity);
+    void delete(int id);
+    void add(int id, T value);
 }

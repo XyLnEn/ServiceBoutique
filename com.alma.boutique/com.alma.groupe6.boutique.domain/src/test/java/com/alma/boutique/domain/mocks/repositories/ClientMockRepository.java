@@ -13,7 +13,7 @@ import java.util.Map;
  * @author Thomas Minier
  */
 public class ClientMockRepository implements IRepository<Client> {
-    private Map<ID, Client> elements = new HashMap<>();
+    private Map<Integer, Client> elements = new HashMap<>();
 
     @Override
     public List<Client> browse() {
@@ -21,24 +21,24 @@ public class ClientMockRepository implements IRepository<Client> {
     }
 
     @Override
-    public Client read(ID id) {
+    public Client read(int id) {
         return elements.get(id);
     }
 
     @Override
-    public void edit(ID id, Client entity) {
+    public void edit(int id, Client entity) {
         if(elements.containsKey(id)) {
             elements.put(id, entity);
         }
     }
 
     @Override
-    public void delete(ID id) {
+    public void delete(int id) {
         elements.remove(id);
     }
 
     @Override
-    public void add(ID id, Client value) {
+    public void add(int id, Client value) {
         elements.put(id, value);
     }
 }

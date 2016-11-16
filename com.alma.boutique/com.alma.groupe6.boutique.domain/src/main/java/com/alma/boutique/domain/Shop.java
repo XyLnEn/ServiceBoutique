@@ -2,10 +2,8 @@ package com.alma.boutique.domain;
 
 import com.alma.boutique.api.IFactory;
 import com.alma.boutique.api.IRepository;
-import com.alma.boutique.domain.history.Account;
 import com.alma.boutique.domain.history.History;
 import com.alma.boutique.domain.history.Transaction;
-import com.alma.boutique.domain.product.Product;
 import com.alma.boutique.domain.product.SoldProduct;
 import com.alma.boutique.domain.product.SuppliedProduct;
 import com.alma.boutique.domain.shared.Entity;
@@ -54,9 +52,148 @@ public class Shop extends Entity{
 		this.repositoryTransaction = repositoryTransaction;
 		this.shopOwner = this.repositoryShopOwner.browse().get(0);
 		this.shopHistory = new History();
-		this.shopHistory.getTransactionHistory().addAll(repositoryTransaction.browse());
 		this.shopHistory.getAccount().setOwner(this.shopOwner);
 		this.shopHistory.setChangedbalance(true);
+	}
+
+
+	public History getShopHistory() {
+		return shopHistory;
+	}
+
+
+	public void setShopHistory(History shopHistory) {
+		this.shopHistory = shopHistory;
+	}
+
+
+	public ThirdParty getShopOwner() {
+		return shopOwner;
+	}
+
+
+	public void setShopOwner(ThirdParty shopOwner) {
+		this.shopOwner = shopOwner;
+	}
+
+
+	public IFactory<Supplier> getFactorySupplier() {
+		return factorySupplier;
+	}
+
+
+	public void setFactorySupplier(IFactory<Supplier> factorySupplier) {
+		this.factorySupplier = factorySupplier;
+	}
+
+
+	public IFactory<Client> getFactoryClient() {
+		return factoryClient;
+	}
+
+
+	public void setFactoryClient(IFactory<Client> factoryClient) {
+		this.factoryClient = factoryClient;
+	}
+
+
+	public IFactory<OrderSuppliedProduct> getFactoryOrder() {
+		return factoryOrder;
+	}
+
+
+	public void setFactoryOrder(IFactory<OrderSuppliedProduct> factoryOrder) {
+		this.factoryOrder = factoryOrder;
+	}
+
+
+	public IFactory<SuppliedProduct> getFactorySuppliedProduct() {
+		return factorySuppliedProduct;
+	}
+
+
+	public void setFactorySuppliedProduct(IFactory<SuppliedProduct> factorySuppliedProduct) {
+		this.factorySuppliedProduct = factorySuppliedProduct;
+	}
+
+
+	public IFactory<SoldProduct> getFactorySoldProduct() {
+		return factorySoldProduct;
+	}
+
+
+	public void setFactorySoldProduct(IFactory<SoldProduct> factorySoldProduct) {
+		this.factorySoldProduct = factorySoldProduct;
+	}
+
+
+	public IFactory<Transaction> getFactoryTransaction() {
+		return factoryTransaction;
+	}
+
+
+	public void setFactoryTransaction(IFactory<Transaction> factoryTransaction) {
+		this.factoryTransaction = factoryTransaction;
+	}
+
+
+	public IRepository<Supplier> getRepositorySupplier() {
+		return repositorySupplier;
+	}
+
+
+	public void setRepositorySupplier(IRepository<Supplier> repositorySupplier) {
+		this.repositorySupplier = repositorySupplier;
+	}
+
+
+	public IRepository<Client> getRepositoryClient() {
+		return repositoryClient;
+	}
+
+
+	public void setRepositoryClient(IRepository<Client> repositoryClient) {
+		this.repositoryClient = repositoryClient;
+	}
+
+
+	public IRepository<ShopOwner> getRepositoryShopOwner() {
+		return repositoryShopOwner;
+	}
+
+
+	public void setRepositoryShopOwner(IRepository<ShopOwner> repositoryShopOwner) {
+		this.repositoryShopOwner = repositoryShopOwner;
+	}
+
+
+	public IRepository<OrderSuppliedProduct> getRepositoryOrder() {
+		return repositoryOrder;
+	}
+
+
+	public void setRepositoryOrder(IRepository<OrderSuppliedProduct> repositoryOrder) {
+		this.repositoryOrder = repositoryOrder;
+	}
+
+
+	public IRepository<SoldProduct> getRepositorySoldProduct() {
+		return repositorySoldProduct;
+	}
+
+
+	public void setRepositorySoldProduct(IRepository<SoldProduct> repositorySoldProduct) {
+		this.repositorySoldProduct = repositorySoldProduct;
+	}
+
+
+	public IRepository<Transaction> getRepositoryTransaction() {
+		return repositoryTransaction;
+	}
+
+
+	public void setRepositoryTransaction(IRepository<Transaction> repositoryTransaction) {
+		this.repositoryTransaction = repositoryTransaction;
 	}
 	
 	

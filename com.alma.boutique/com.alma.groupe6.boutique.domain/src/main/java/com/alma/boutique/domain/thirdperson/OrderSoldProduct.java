@@ -28,8 +28,7 @@ public class OrderSoldProduct extends Order {
 		try {
 			prod = (SoldProduct) factoryProd.create();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			log.error(e.getMessage(),e);
 		}
 		products.add(prod);
 		return prod;

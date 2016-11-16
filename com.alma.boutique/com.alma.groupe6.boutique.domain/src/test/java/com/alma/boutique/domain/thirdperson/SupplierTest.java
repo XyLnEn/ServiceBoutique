@@ -1,79 +1,76 @@
 package com.alma.boutique.domain.thirdperson;
 
 import com.alma.boutique.domain.exceptions.OrderNotFoundException;
-import com.alma.boutique.domain.factories.FactorySupplier;
+import com.alma.boutique.domain.mocks.factories.OrderSuppliedProductMockFactory;
+import com.alma.boutique.domain.mocks.factories.SupplierMockFactory;
+
 import org.junit.Test;
 import pl.pojo.tester.api.assertion.Method;
 
 import static org.assertj.core.api.Assertions.*;
 import static pl.pojo.tester.api.assertion.Assertions.assertPojoMethodsFor;
 
+import java.io.IOException;
+
 public class SupplierTest {
 
 	@Test
-	public void testCreateOrder() {
-		FactorySupplier factory = new FactorySupplier();
-		Supplier supp = factory.make("Google", "Somewhere over the rainbow", "555-5555");
+	public void testCreateOrder() throws IOException, OrderNotFoundException {
+		SupplierMockFactory factorySupplier = new SupplierMockFactory("Google", "Somewhere over the rainbow", "555-5555");
+		Supplier supp = factorySupplier.create();
 		assertThat(supp.getOrderHistory()).as("Check if the Supplier is created with an empty order list").isEmpty();
-		Order ord = supp.createOrder("USP");
-		try {
-			assertThat(supp.getOrder(ord)).as("check if the order was created correctly").isEqualTo(ord);
-		} catch (OrderNotFoundException e) {
-			fail(e.getMessage());
-			e.printStackTrace();
-		}
+		
+		OrderSuppliedProductMockFactory factoOrdSup = new OrderSuppliedProductMockFactory("USP");
+		Order ord = supp.createOrder(factoOrdSup);
+		assertThat(supp.getOrder(ord)).as("check if the order was created correctly").isEqualTo(ord);
 		
 	}
 
 	@Test
-	public void testGetOrder() {
-		FactorySupplier factory = new FactorySupplier();
-		Supplier supp = factory.make("Google", "Somewhere over the rainbow", "555-5555");
-		Order ord = supp.createOrder("USP");
-		try {
-			assertThat(supp.getOrder(ord)).as("Check if %s has the order", supp.getSupplierName()).isEqualTo(ord);
-		} catch (OrderNotFoundException e) {
-			fail(e.getMessage());
-		}
-		Order notExistingOrd = supp.getFactoryOrd().make("jesus", supp.getFactoryProd());
+	public void testGetOrder() throws IOException, OrderNotFoundException {
+		SupplierMockFactory factorySupplier = new SupplierMockFactory("Google", "Somewhere over the rainbow", "555-5555");
+		Supplier supp = factorySupplier.create();
+		assertThat(supp.getOrderHistory()).as("Check if the Supplier is created with an empty order list").isEmpty();
+		
+		OrderSuppliedProductMockFactory factoOrdSup = new OrderSuppliedProductMockFactory("USP");
+		Order ord = supp.createOrder(factoOrdSup);
+		assertThat(supp.getOrder(ord)).as("Check if %s has the order", supp.getSupplierName()).isEqualTo(ord);
+
+		factoOrdSup = new OrderSuppliedProductMockFactory("jesus");
+		Order notExistingOrd = factoOrdSup.create();
 		assertThatExceptionOfType(OrderNotFoundException.class).isThrownBy(() -> supp.getOrder(notExistingOrd))
 			.as("check if %s %s can react when he is asked to provide an order he doesn't have", supp.getSupplierName());
 	}
 
 	@Test
-	public void testUpdateOrder() {
-		FactorySupplier factory = new FactorySupplier();
-		Supplier supp = factory.make("Google", "Somewhere over the rainbow", "555-5555");
-		Order oldOrder = supp.createOrder("VERT");
-		try {
-			assertThat(supp.getOrder(oldOrder).getDeliverer()).as("check that the initial order has the right deliverer").isEqualTo("VERT");
+	public void testUpdateOrder() throws OrderNotFoundException, IOException {
+		SupplierMockFactory factorySupplier = new SupplierMockFactory("Google", "Somewhere over the rainbow", "555-5555");
+		Supplier supp = factorySupplier.create();
+		OrderSuppliedProductMockFactory factoOrdSup = new OrderSuppliedProductMockFactory("VERT");
+		Order oldOrder = supp.createOrder(factoOrdSup);
+		assertThat(supp.getOrder(oldOrder).getDeliverer()).as("check that the initial order has the right deliverer").isEqualTo("VERT");
 
-			Order newOrd = supp.getFactoryOrd().make("JAUNE", supp.getFactoryProd());
-			supp.updateOrder(oldOrder, newOrd);
-			
-			assertThat(supp.getOrder(oldOrder).getDeliverer()).as("check that the initial order has the right deliverer").isEqualTo("JAUNE");
-		} catch (OrderNotFoundException e) {
-			fail(e.getMessage());
-			e.printStackTrace();
-		}
-		Order notExistingOrd = supp.getFactoryOrd().make("jesus", supp.getFactoryProd());
-		Order notLaicOrd = supp.getFactoryOrd().make("CHRIST", supp.getFactoryProd());
+		factoOrdSup = new OrderSuppliedProductMockFactory("JAUNE");
+		Order newOrd = supp.createOrder(factoOrdSup);
+		supp.updateOrder(oldOrder, newOrd);
+		assertThat(supp.getOrder(oldOrder).getDeliverer()).as("check that the initial order has the right deliverer").isEqualTo("JAUNE");
+		
+		factoOrdSup = new OrderSuppliedProductMockFactory("jesus");
+		Order notExistingOrd = factoOrdSup.create();
+		factoOrdSup = new OrderSuppliedProductMockFactory("CHRIST");
+		Order notLaicOrd = factoOrdSup.create();
 		assertThatExceptionOfType(OrderNotFoundException.class).isThrownBy(() -> supp.updateOrder(notExistingOrd, notLaicOrd))
 			.as("check if %s %s can react when he is asked to provide an order he doesn't have", supp.getSupplierName());
 		
 	}
 
 	@Test
-	public void testDeleteOrder() {
-		FactorySupplier factory = new FactorySupplier();
-		Supplier supp = factory.make("Google", "Somewhere over the rainbow", "555-5555");
-		Order oldOrder = supp.createOrder("VERT");
-		try {
-			assertThat(supp.getOrder(oldOrder).getDeliverer()).as("check the presence of the initial order").isEqualTo("VERT");
-		} catch (OrderNotFoundException e) {
-			fail(e.getMessage());
-			e.printStackTrace();
-		}
+	public void testDeleteOrder() throws IOException, OrderNotFoundException {
+		SupplierMockFactory factorySupplier = new SupplierMockFactory("Google", "Somewhere over the rainbow", "555-5555");
+		Supplier supp = factorySupplier.create();
+		OrderSuppliedProductMockFactory factoOrdSup = new OrderSuppliedProductMockFactory("VERT");
+		Order oldOrder = supp.createOrder(factoOrdSup);
+		assertThat(supp.getOrder(oldOrder).getDeliverer()).as("check the presence of the initial order").isEqualTo("VERT");
 		supp.deleteOrder(oldOrder);
 		assertThat(supp.getOrderHistory()).as("check that the history list is empty").isEmpty();
 	}

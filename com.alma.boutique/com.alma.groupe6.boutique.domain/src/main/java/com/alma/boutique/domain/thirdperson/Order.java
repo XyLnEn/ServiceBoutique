@@ -1,6 +1,5 @@
 package com.alma.boutique.domain.thirdperson;
 
-import java.io.IOException;
 import java.util.List;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
@@ -9,7 +8,6 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 import com.alma.boutique.api.IFactory;
 import com.alma.boutique.domain.exceptions.ProductNotFoundException;
 import com.alma.boutique.domain.product.Product;
-import com.alma.boutique.domain.product.SuppliedProduct;
 import com.alma.boutique.domain.shared.Entity;
 
 public abstract class Order extends Entity {

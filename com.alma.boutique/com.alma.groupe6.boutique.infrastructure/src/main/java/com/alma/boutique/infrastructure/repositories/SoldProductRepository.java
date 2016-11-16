@@ -23,22 +23,22 @@ public class SoldProductRepository implements IRepository<SoldProduct> {
     }
 
     @Override
-    public SoldProduct read(ID id) {
-        return database.retrieve(id.getId(), SoldProduct.class);
+    public SoldProduct read(int id) {
+        return database.retrieve(id, SoldProduct.class);
     }
 
     @Override
-    public void edit(ID id, SoldProduct entity) {
-        database.update(id.getId(), entity);
+    public void edit(int id, SoldProduct entity) {
+        database.update(id, entity);
     }
 
     @Override
-    public void delete(ID id) {
-        database.delete(id.getId(), SoldProduct.class);
+    public void delete(int id) {
+        database.delete(id, SoldProduct.class);
     }
 
     @Override
-    public void add(ID id, SoldProduct value) {
-        database.create(id.getId(), value);
+    public void add(int id, SoldProduct value) {
+        database.create(id, value);
     }
 }

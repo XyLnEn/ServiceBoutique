@@ -35,8 +35,7 @@ public class Supplier extends ThirdParty {
 		try {
 			newOrd = (OrderSuppliedProduct) factoryOrd.create();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			log.error(e.getMessage(),e);
 		}
 		this.getOrderHistory().add(newOrd);
 		return newOrd;

@@ -24,22 +24,22 @@ public class TransactionRepository implements IRepository<Transaction> {
     }
 
     @Override
-    public Transaction read(ID id) {
-        return database.retrieve(id.getId(), Transaction.class);
+    public Transaction read(int id) {
+        return database.retrieve(id, Transaction.class);
     }
 
     @Override
-    public void edit(ID id, Transaction entity) {
-        database.update(id.getId(), entity);
+    public void edit(int id, Transaction entity) {
+        database.update(id, entity);
     }
 
     @Override
-    public void delete(ID id) {
-        database.delete(id.getId(), Client.class);
+    public void delete(int id) {
+        database.delete(id, Client.class);
     }
 
     @Override
-    public void add(ID id, Transaction value) {
-        database.create(id.getId(), value);
+    public void add(int id, Transaction value) {
+        database.create(id, value);
     }
 }

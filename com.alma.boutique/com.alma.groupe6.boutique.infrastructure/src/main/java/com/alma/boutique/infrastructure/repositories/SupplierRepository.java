@@ -24,22 +24,22 @@ public class SupplierRepository implements IRepository<Supplier> {
     }
 
     @Override
-    public Supplier read(ID id) {
-        return database.retrieve(id.getId(), Supplier.class);
+    public Supplier read(int id) {
+        return database.retrieve(id, Supplier.class);
     }
 
     @Override
-    public void edit(ID id, Supplier entity) {
-        database.update(id.getId(), entity);
+    public void edit(int id, Supplier entity) {
+        database.update(id, entity);
     }
 
     @Override
-    public void delete(ID id) {
-        database.delete(id.getId(), Supplier.class);
+    public void delete(int id) {
+        database.delete(id, Supplier.class);
     }
 
     @Override
-    public void add(ID id, Supplier value) {
-        database.create(id.getId(), value);
+    public void add(int id, Supplier value) {
+        database.create(id, value);
     }
 }

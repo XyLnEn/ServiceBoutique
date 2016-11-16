@@ -1,6 +1,5 @@
 package com.alma.boutique.domain.thirdperson;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 

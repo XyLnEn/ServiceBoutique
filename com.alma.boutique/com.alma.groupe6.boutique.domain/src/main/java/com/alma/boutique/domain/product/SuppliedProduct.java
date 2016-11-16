@@ -28,6 +28,7 @@ public class SuppliedProduct extends Product {
     }
 
 
+
     @Override
     public boolean equals(Object obj) {
         if (obj == null) {

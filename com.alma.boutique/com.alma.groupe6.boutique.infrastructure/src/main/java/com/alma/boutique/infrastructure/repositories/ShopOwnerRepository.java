@@ -1,8 +1,6 @@
 package com.alma.boutique.infrastructure.repositories;
 
-import com.alma.boutique.api.ID;
 import com.alma.boutique.api.IRepository;
-import com.alma.boutique.domain.thirdperson.Client;
 import com.alma.boutique.domain.thirdperson.ShopOwner;
 import com.alma.boutique.infrastructure.database.Database;
 
@@ -24,22 +22,22 @@ public class ShopOwnerRepository implements IRepository<ShopOwner> {
     }
 
     @Override
-    public ShopOwner read(ID id) {
-        return database.retrieve(id.getId(), ShopOwner.class);
+    public ShopOwner read(int id) {
+        return database.retrieve(id, ShopOwner.class);
     }
 
     @Override
-    public void edit(ID id, ShopOwner entity) {
-        database.update(id.getId(), entity);
+    public void edit(int id, ShopOwner entity) {
+        database.update(id, entity);
     }
 
     @Override
-    public void delete(ID id) {
-        database.delete(id.getId(), ShopOwner.class);
+    public void delete(int id) {
+        database.delete(id, ShopOwner.class);
     }
 
     @Override
-    public void add(ID id, ShopOwner value) {
-        database.create(id.getId(), value);
+    public void add(int id, ShopOwner value) {
+        database.create(id, value);
     }
 }

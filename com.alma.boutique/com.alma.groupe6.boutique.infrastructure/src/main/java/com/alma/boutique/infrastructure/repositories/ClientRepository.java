@@ -23,22 +23,22 @@ public class ClientRepository implements IRepository<Client> {
     }
 
     @Override
-    public Client read(ID id) {
-        return database.retrieve(id.getId(), Client.class);
+    public Client read(int id) {
+        return database.retrieve(id, Client.class);
     }
 
     @Override
-    public void edit(ID id, Client entity) {
-        database.update(id.getId(), entity);
+    public void edit(int id, Client entity) {
+        database.update(id, entity);
     }
 
     @Override
-    public void delete(ID id) {
-        database.delete(id.getId(), Client.class);
+    public void delete(int id) {
+        database.delete(id, Client.class);
     }
 
     @Override
-    public void add(ID id, Client value) {
-        database.create(id.getId(), value);
+    public void add(int id, Client value) {
+        database.create(id, value);
     }
 }
