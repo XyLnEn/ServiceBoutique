@@ -16,6 +16,8 @@ import java.util.*;
 import static com.mongodb.client.model.Filters.eq;
 
 /**
+ * Classe singleton représentant une base de données MongoDB
+ * @author Lenny Lucas
  * @author Thomas Minier
  */
 public class MongoDBStore implements Database {
@@ -26,6 +28,10 @@ public class MongoDBStore implements Database {
     private MongoDatabase database;
     private ObjectMapper mapper;
 
+    /**
+     * Constructeur privé
+     * @throws IOException
+     */
     private MongoDBStore() throws IOException {
         try {
             Properties infos = new Properties();
@@ -41,6 +47,11 @@ public class MongoDBStore implements Database {
         }
     }
 
+    /**
+     * Accesseur permettant de récupérer l'instance de la base de données
+     * @return L'instance de la base de données MongoDB
+     * @throws IOException
+     */
     public static MongoDBStore getInstance() throws IOException {
         if(instance == null) {
             synchronized (MongoDBStore.class) {
@@ -52,6 +63,11 @@ public class MongoDBStore implements Database {
         return instance;
     }
 
+    /**
+     * Méthode privée qui permet d'accéder à une collection de documents, et de la créer si elle n'existe pas encore
+     * @param dataClass La classe des objets correspondant à la collection désirée
+     * @return La collection de documents correspondant à la classe passée en paramètre
+     */
     private MongoCollection<Document> getCollection(Class dataClass) {
         String collectionName = dataClass.getSimpleName() + "Collection";
         MongoCollection<Document> collection = database.getCollection(collectionName);
@@ -64,6 +80,11 @@ public class MongoDBStore implements Database {
         return collection;
     }
 
+    /**
+     * Méthode enregistrant un objet dans la base de données
+     * @param id L'id unique de l'objet
+     * @param entity L'objet à sauvegarder
+     */
     @Override
     public void create(int id, Object entity) {
         try {
@@ -77,6 +98,12 @@ public class MongoDBStore implements Database {
         }
     }
 
+    /**
+     * Méthode récupérant un objet dans la base de données
+     * @param id L'id unique de l'objet
+     * @param entityType La classe de l'objet recherché
+     * @return L'objet correspondant à l'id passé en paramètre
+     */
     @Override
     public <C> C retrieve(int id, Class<C> entityType) {
         Object entity = null;
@@ -91,6 +118,11 @@ public class MongoDBStore implements Database {
         return (C) entity;
     }
 
+    /**
+     * Méthode permettant de récupérer tous les objets dans la base qui correspondent à une classe donnée
+     * @param entityType La classe des objets que l'on veut récupérer
+     * @return La liste de tous les objets stockés dans la base de données correspondant à la classe passée en paramètre
+     */
     @Override
     public <C> List<C> retrieveAll(Class<C> entityType) {
         List<C> results = new ArrayList<>();
@@ -107,12 +139,22 @@ public class MongoDBStore implements Database {
         return results;
     }
 
+    /**
+     * Méthode mettant à jour un objet déjà présent dans la base de donnée
+     * @param id L'id unique de l'objet à mettre à jour
+     * @param entity La nouvelle version de l'objet
+     */
     @Override
     public void update(int id, Object entity) {
         delete(id, entity.getClass());
         create(id, entity);
     }
 
+    /**
+     * Méthode supprimant un objet de la base de données
+     * @param id l'id unique de l'objet à supprimer
+     * @param entityType La classe correspodant à l'objet que l'on veut supprimer
+     */
     @Override
     public void delete(int id, Class entityType) {
         // read the collection corresponding to the object, then apply deletion

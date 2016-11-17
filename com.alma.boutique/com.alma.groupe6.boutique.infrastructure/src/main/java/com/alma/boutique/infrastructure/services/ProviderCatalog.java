@@ -12,17 +12,28 @@ import java.util.List;
 import org.slf4j.LoggerFactory;
 
 /**
+ * Classe implémentant le service permettant de consulter le catalogue d'un fournisseur
+ * @author Lenny Lucas
  * @author Thomas Minier
  */
 public class ProviderCatalog implements BrowseSuppliesService<SuppliedProduct> {
     private String browseURL;
     private WebService<SuppliedProduct> webService;
 
+    /**
+     * Constructeur
+     * @param browseURL L'url du fournisseur pour accéder à son catalogue
+     * @param webService Le web service utilisé pour consommer les services du fournisseur
+     */
     public ProviderCatalog(String browseURL, WebService<SuppliedProduct> webService) {
         this.browseURL = browseURL;
         this.webService = webService;
     }
 
+    /**
+     * Méthode permettant de récupérer le catalgue du fournisseur
+     * @return La liste des objets fournis par le fournisseur
+     */
     @Override
     public List<SuppliedProduct> browse() {
         List<SuppliedProduct> catalog = new ArrayList<>();

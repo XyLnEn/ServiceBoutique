@@ -12,6 +12,7 @@ import java.util.List;
 
 /**
  * JSONWebservice représente un WebService utilisant du JSON
+ * @author Lenny Lucas
  * @author Thomas Minier
  */
 public class JSONWebservice<T> implements WebService<T> {
@@ -21,6 +22,11 @@ public class JSONWebservice<T> implements WebService<T> {
     private ObjectMapper mapper;
     private Class<T> referenceClass;
 
+    /**
+     * Constructeur
+     * @param baseURL L'url de base du webservice JSON
+     * @param referenceClass La classe des objets fournis par le web service
+     */
     public JSONWebservice(String baseURL, Class<T> referenceClass) {
         this.baseURL = baseURL;
         mapper = new ObjectMapper();
@@ -40,6 +46,12 @@ public class JSONWebservice<T> implements WebService<T> {
         return httpCon;
     }
 
+    /**
+     * Méthode qui renvoie un objet récupéré depuis une url d'un service offert par le webservice
+     * @param url L'url vers laquelle on souhaite faire un appel GET
+     * @return L'objet servie par l'urtl passée en paramètre
+     * @throws IOException
+     */
     @Override
     public T read(String url) throws IOException {
         T value = null;
@@ -52,6 +64,12 @@ public class JSONWebservice<T> implements WebService<T> {
         return value;
     }
 
+    /**
+     * Méthode qui renvoie une liste d'objets récupérée depuis une url d'un service offert par le webservice
+     * @param url L'url vers laquelle on souhaite faire un appel GET
+     * @return La liste d'objets servie par l'url passée en paramètre
+     * @throws IOException
+     */
     @Override
     public List<T> browse(String url) throws IOException {
         List<T> elements = new ArrayList<>();

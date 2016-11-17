@@ -5,6 +5,7 @@ import java.util.Map;
 
 /**
  * JavaBean servant de conteneur pour les taux d'échanges venant de fixer.io
+ * @author Lenny Lucas
  * @author Thomas Minier
  */
 public class FixerExchangeRates {
@@ -12,6 +13,9 @@ public class FixerExchangeRates {
     private String date;
     private Map<String, String> rates;
 
+    /**
+     * Constructeur
+     */
     public FixerExchangeRates() {
         rates = new HashMap<>();
     }

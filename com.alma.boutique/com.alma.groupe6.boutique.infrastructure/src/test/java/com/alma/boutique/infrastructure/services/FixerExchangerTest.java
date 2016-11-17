@@ -12,13 +12,12 @@ import static org.assertj.core.api.Assertions.assertThat;
  */
 public class FixerExchangerTest {
 
-    private WebService<FixerExchangeRates> webService;
     private FixerExchanger fixerExchanger;
 
     @Before
     public void setUp() throws Exception {
-        webService = new JSONWebservice<>("http://api.fixer.io", FixerExchangeRates.class);
-        fixerExchanger = new FixerExchanger(webService);
+        WebService<FixerExchangeRates> webService = new JSONWebservice<>("http://api.fixer.io", FixerExchangeRates.class);
+        fixerExchanger = new FixerExchanger("/2016-11-16", webService);
     }
 
     @Test

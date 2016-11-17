@@ -4,6 +4,7 @@ import java.util.List;
 
 /**
  * Interface représentant une facade pour une base de données quelconque, en respectant le modèle CRUD
+ * @author Lenny Lucas
  * @author Thomas Minier
  */
 public interface Database {
