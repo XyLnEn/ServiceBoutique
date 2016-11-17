@@ -22,7 +22,7 @@ public class SupplierTest {
 		
 		OrderSuppliedProductMockFactory factoOrdSup = new OrderSuppliedProductMockFactory("USP");
 		Order ord = supp.createOrder(factoOrdSup);
-		assertThat(supp.getOrder(ord)).as("check if the order was created correctly").isEqualTo(ord);
+		assertThat(supp.getOrder(ord.getID())).as("check if the order was created correctly").isEqualTo(ord);
 		
 	}
 
@@ -34,11 +34,11 @@ public class SupplierTest {
 		
 		OrderSuppliedProductMockFactory factoOrdSup = new OrderSuppliedProductMockFactory("USP");
 		Order ord = supp.createOrder(factoOrdSup);
-		assertThat(supp.getOrder(ord)).as("Check if %s has the order", supp.getSupplierName()).isEqualTo(ord);
+		assertThat(supp.getOrder(ord.getID())).as("Check if %s has the order", supp.getSupplierName()).isEqualTo(ord);
 
 		factoOrdSup = new OrderSuppliedProductMockFactory("jesus");
 		Order notExistingOrd = factoOrdSup.create();
-		assertThatExceptionOfType(OrderNotFoundException.class).isThrownBy(() -> supp.getOrder(notExistingOrd))
+		assertThatExceptionOfType(OrderNotFoundException.class).isThrownBy(() -> supp.getOrder(notExistingOrd.getID()))
 			.as("check if %s %s can react when he is asked to provide an order he doesn't have", supp.getSupplierName());
 	}
 
@@ -48,18 +48,18 @@ public class SupplierTest {
 		Supplier supp = factorySupplier.create();
 		OrderSuppliedProductMockFactory factoOrdSup = new OrderSuppliedProductMockFactory("VERT");
 		Order oldOrder = supp.createOrder(factoOrdSup);
-		assertThat(supp.getOrder(oldOrder).getDeliverer()).as("check that the initial order has the right deliverer").isEqualTo("VERT");
+		assertThat(supp.getOrder(oldOrder.getID()).getDeliverer()).as("check that the initial order has the right deliverer").isEqualTo("VERT");
 
 		factoOrdSup = new OrderSuppliedProductMockFactory("JAUNE");
 		Order newOrd = supp.createOrder(factoOrdSup);
-		supp.updateOrder(oldOrder, newOrd);
-		assertThat(supp.getOrder(oldOrder).getDeliverer()).as("check that the initial order has the right deliverer").isEqualTo("JAUNE");
+		supp.updateOrder(oldOrder.getID(), newOrd);
+		assertThat(supp.getOrder(oldOrder.getID()).getDeliverer()).as("check that the initial order has the right deliverer").isEqualTo("JAUNE");
 		
 		factoOrdSup = new OrderSuppliedProductMockFactory("jesus");
 		Order notExistingOrd = factoOrdSup.create();
 		factoOrdSup = new OrderSuppliedProductMockFactory("CHRIST");
 		Order notLaicOrd = factoOrdSup.create();
-		assertThatExceptionOfType(OrderNotFoundException.class).isThrownBy(() -> supp.updateOrder(notExistingOrd, notLaicOrd))
+		assertThatExceptionOfType(OrderNotFoundException.class).isThrownBy(() -> supp.updateOrder(notExistingOrd.getID(), notLaicOrd))
 			.as("check if %s %s can react when he is asked to provide an order he doesn't have", supp.getSupplierName());
 		
 	}
@@ -70,7 +70,7 @@ public class SupplierTest {
 		Supplier supp = factorySupplier.create();
 		OrderSuppliedProductMockFactory factoOrdSup = new OrderSuppliedProductMockFactory("VERT");
 		Order oldOrder = supp.createOrder(factoOrdSup);
-		assertThat(supp.getOrder(oldOrder).getDeliverer()).as("check the presence of the initial order").isEqualTo("VERT");
+		assertThat(supp.getOrder(oldOrder.getID()).getDeliverer()).as("check the presence of the initial order").isEqualTo("VERT");
 		supp.deleteOrder(oldOrder);
 		assertThat(supp.getOrderHistory()).as("check that the history list is empty").isEmpty();
 	}

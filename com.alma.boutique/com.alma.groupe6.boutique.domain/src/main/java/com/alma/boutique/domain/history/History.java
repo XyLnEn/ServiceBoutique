@@ -37,9 +37,9 @@ public class History extends Entity {
 		return trans;
 	}
 	
-	public Transaction getTransaction(Transaction trans, IRepository<Transaction> transactionHistory) throws TransactionNotFoundException {
+	public Transaction getTransaction(int transId, IRepository<Transaction> transactionHistory) throws TransactionNotFoundException {
 		for (Transaction transaction : transactionHistory.browse()) {
-			if (transaction.sameIdentityAs(trans)) {
+			if (transaction.getID() == transId) {
 				return transaction;
 			}
 		}

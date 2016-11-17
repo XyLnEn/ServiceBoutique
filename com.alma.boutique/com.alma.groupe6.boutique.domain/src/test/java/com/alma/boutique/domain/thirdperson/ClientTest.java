@@ -29,7 +29,7 @@ public class ClientTest {
 		assertThat(cli.getOrderHistory()).as("Check if the client is created with an empty order list").isEmpty();
 		Order ord = cli.createOrder(new OrderSoldProductMockFactory("USP"));
 		try {
-			assertThat(cli.getOrder(ord)).as("check if the order was created correctly").isEqualTo(ord);
+			assertThat(cli.getOrder(ord.getID())).as("check if the order was created correctly").isEqualTo(ord);
 		} catch (OrderNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -44,10 +44,10 @@ public class ClientTest {
 		assertThat(cli.getOrderHistory()).as("Check if the client is created with an empty order list").isEmpty();
 		
 		Order ord = cli.createOrder(new OrderSoldProductMockFactory("USP"));
-		assertThat(cli.getOrder(ord)).as("Check if %s %s has the order", cli.getFirstName(), cli.getLastName()).isEqualTo(ord);
+		assertThat(cli.getOrder(ord.getID())).as("Check if %s %s has the order", cli.getFirstName(), cli.getLastName()).isEqualTo(ord);
 		
 		Order notExistingOrd = new OrderSoldProductMockFactory("jesus").create();
-		assertThatExceptionOfType(OrderNotFoundException.class).isThrownBy(() -> cli.getOrder(notExistingOrd))
+		assertThatExceptionOfType(OrderNotFoundException.class).isThrownBy(() -> cli.getOrder(notExistingOrd.getID()))
 			.as("check if %s %s can react when he is asked to provide an order he doesn't have", cli.getFirstName(), cli.getLastName());
 	}
 
@@ -56,15 +56,15 @@ public class ClientTest {
 		ClientMockFactory factory = new ClientMockFactory("bob", "lemon", "Somewhere over the rainbow", "555-5555");
 		Client cli = factory.create();
 		Order oldOrder = cli.createOrder(new OrderSoldProductMockFactory("VERT"));
-		assertThat(cli.getOrder(oldOrder).getDeliverer()).as("check that the initial order has the right deliverer").isEqualTo("VERT");
+		assertThat(cli.getOrder(oldOrder.getID()).getDeliverer()).as("check that the initial order has the right deliverer").isEqualTo("VERT");
 		
 		Order newOrd = cli.createOrder(new OrderSoldProductMockFactory("JAUNE"));
-		cli.updateOrder(oldOrder, newOrd);
-		assertThat(cli.getOrder(oldOrder).getDeliverer()).as("check that the initial order has the right deliverer").isEqualTo("JAUNE");
+		cli.updateOrder(oldOrder.getID(), newOrd);
+		assertThat(cli.getOrder(oldOrder.getID()).getDeliverer()).as("check that the initial order has the right deliverer").isEqualTo("JAUNE");
 		
 		Order notExistingOrd = new OrderSoldProductMockFactory("jesus").create();
 		Order notPossibleOrder = new OrderSoldProductMockFactory("crust").create();
-		assertThatExceptionOfType(OrderNotFoundException.class).isThrownBy(() -> cli.updateOrder(notExistingOrd, notPossibleOrder))
+		assertThatExceptionOfType(OrderNotFoundException.class).isThrownBy(() -> cli.updateOrder(notExistingOrd.getID(), notPossibleOrder))
 		.as("check if %s %s can react when he is asked to update an order he doesn't have", cli.getFirstName(), cli.getLastName());
 		
 	}
@@ -74,7 +74,7 @@ public class ClientTest {
 		ClientMockFactory factory = new ClientMockFactory("bob", "lemon", "Somewhere over the rainbow", "555-5555");
 		Client cli = factory.create();
 		Order oldOrder = cli.createOrder(new OrderSoldProductMockFactory("VERT"));
-		assertThat(cli.getOrder(oldOrder).getDeliverer()).as("check that the initial order has the right deliverer").isEqualTo("VERT");
+		assertThat(cli.getOrder(oldOrder.getID()).getDeliverer()).as("check that the initial order has the right deliverer").isEqualTo("VERT");
 		
 		cli.deleteOrder(oldOrder);
 		assertThat(cli.getOrderHistory()).as("check that the history list is empty").isEmpty();

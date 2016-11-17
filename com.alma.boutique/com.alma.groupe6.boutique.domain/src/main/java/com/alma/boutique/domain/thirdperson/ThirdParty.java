@@ -25,18 +25,18 @@ public abstract class ThirdParty extends Entity {
 	public abstract Order createOrder(IFactory factoryOrd);
 
 	
-	public Order getOrder(Order ord) throws OrderNotFoundException {
+	public Order getOrder(int ordId) throws OrderNotFoundException {
 		for (Order order : orderHistory) {
-			if (order.sameIdentityAs(ord)){
+			if (order.getID() == ordId){
 				return order;
 			}
 		}
 		throw new OrderNotFoundException("Order not found");//in case the order doesn't exist
 	}
 	
-	public void updateOrder(Order ordBase, Order newOrd) throws OrderNotFoundException {
+	public void updateOrder(int oldOrdId, Order newOrd) throws OrderNotFoundException {
 		for (Order order : orderHistory) {
-			if (order.sameIdentityAs(ordBase)){
+			if (order.getID() == oldOrdId){
 				order.updateOrder(newOrd);
 				return ;
 			}

@@ -23,18 +23,18 @@ public abstract class Order extends Entity {
 
 	public abstract Product createProduct(IFactory factoryProduct);
 	
-	public Product getProduct(Product prod) throws ProductNotFoundException {
+	public Product getProduct(int prodId) throws ProductNotFoundException {
 		for (Product product : products) {
-			if (product.sameIdentityAs(prod)){
+			if (product.getID() == prodId){
 				return product;
 			}
 		}
 		throw new ProductNotFoundException("Product not found");//in case the order doesn't exist
 	}
 
-	public void updateProduct(Product oldProd, Product newProd) throws ProductNotFoundException {
+	public void updateProduct(int oldProdId, Product newProd) throws ProductNotFoundException {
 		for (Product product : products) {
-			if (product.sameIdentityAs(oldProd)){
+			if (product.getID() == oldProdId){
 				product.updateProduct(newProd);
 				return;
 			}

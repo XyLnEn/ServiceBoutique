@@ -73,9 +73,9 @@ public class OrderTest {
 		SoldProductMockFactory factoProd = new SoldProductMockFactory("duck", 1, "EUR", "a very charismatic duck", "weapon");
 		Product prod = ord.createProduct(factoProd);
 		Product prodNotAdded = new SoldProductMockFactory("gun", 1, "EUR", "a very charismatic gun", "food").create();
-		assertThat(ord.getProduct(prod)).as("check that the order return the right product").isEqualTo(prod);
+		assertThat(ord.getProduct(prod.getID())).as("check that the order return the right product").isEqualTo(prod);
 		
-		assertThatExceptionOfType(ProductNotFoundException.class).isThrownBy(() -> ord.getProduct(prodNotAdded))
+		assertThatExceptionOfType(ProductNotFoundException.class).isThrownBy(() -> ord.getProduct(prodNotAdded.getID()))
 		.as("check if the order can react when he is asked to get an order he doesn't have");
 		
 	}
@@ -88,16 +88,16 @@ public class OrderTest {
 		Product prod = ord.createProduct(factoProd);
 		factoProd = new SoldProductMockFactory("gun", 2, "EUR", "I could use this", "food");
 		Product prodNew = factoProd.create();
-		ord.updateProduct(prod, prodNew);
-		assertThat(ord.getProduct(prod).getName()).as("check that the order's name was updated successfully").isEqualTo(prodNew.getName());
+		ord.updateProduct(prod.getID(), prodNew);
+		assertThat(ord.getProduct(prod.getID()).getName()).as("check that the order's name was updated successfully").isEqualTo(prodNew.getName());
 		
-		assertThat(ord.getProduct(prod).getPrice()).as("check that the order's price was updated successfully").isEqualTo(prodNew.getPrice());
+		assertThat(ord.getProduct(prod.getID()).getPrice()).as("check that the order's price was updated successfully").isEqualTo(prodNew.getPrice());
 		
-		assertThat(ord.getProduct(prod).getDescription()).as("check that the order's description was updated successfully").isEqualTo(prodNew.getDescription());
+		assertThat(ord.getProduct(prod.getID()).getDescription()).as("check that the order's description was updated successfully").isEqualTo(prodNew.getDescription());
 		
-		assertThat(ord.getProduct(prod).getCategory().getName()).as("check that the order's category was updated successfully").isEqualTo(prodNew.getCategory().getName());
+		assertThat(ord.getProduct(prod.getID()).getCategory().getName()).as("check that the order's category was updated successfully").isEqualTo(prodNew.getCategory().getName());
 		
-		assertThatExceptionOfType(ProductNotFoundException.class).isThrownBy(() -> ord.getProduct(new SoldProductMockFactory("NAN", 10000, "EUR", "Not a number", "number").create()))
+		assertThatExceptionOfType(ProductNotFoundException.class).isThrownBy(() -> ord.getProduct(new SoldProductMockFactory("NAN", 10000, "EUR", "Not a number", "number").create().getID()))
 		.as("check if the order can react when he is asked to update an order he doesn't have");
 	}
 	
@@ -109,10 +109,10 @@ public class OrderTest {
 		SoldProductMockFactory factoProd = new SoldProductMockFactory("duck", 1, "EUR", "a very charismatic duck", "weapon");
 		Product prod = ord.createProduct(factoProd);
 		
-		assertThat(ord.getProduct(prod)).as("check that the order is not empty").isEqualTo(prod);
+		assertThat(ord.getProduct(prod.getID())).as("check that the order is not empty").isEqualTo(prod);
 		
 		ord.deleteProduct(prod);
-		assertThatExceptionOfType(ProductNotFoundException.class).isThrownBy(() -> ord.getProduct(prod))
+		assertThatExceptionOfType(ProductNotFoundException.class).isThrownBy(() -> ord.getProduct(prod.getID()))
 		.as("check if the order has indeed deleted the product");
 	}
 	

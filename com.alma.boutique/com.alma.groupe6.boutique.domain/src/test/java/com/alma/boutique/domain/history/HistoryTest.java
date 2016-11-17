@@ -81,7 +81,7 @@ public class HistoryTest {
 		
 		TransactionMockFactory transFacto = new TransactionMockFactory(ord, supp1, shop);
 		Transaction trans = hist.createTransaction(transFacto, repoTrans);
-		assertThat(hist.getTransaction(trans, repoTrans)).as("assert that the transaction was added successfully").isEqualTo(trans);
+		assertThat(hist.getTransaction(trans.getID(), repoTrans)).as("assert that the transaction was added successfully").isEqualTo(trans);
 		
 		
 		
@@ -93,7 +93,7 @@ public class HistoryTest {
 		
 		transFacto = new TransactionMockFactory(ord, shop, cli2);
 		Transaction nonExistentTransaction = transFacto.create();
-		assertThatExceptionOfType(TransactionNotFoundException.class).isThrownBy(() -> hist.getTransaction(nonExistentTransaction, repoTrans))
+		assertThatExceptionOfType(TransactionNotFoundException.class).isThrownBy(() -> hist.getTransaction(nonExistentTransaction.getID(), repoTrans))
 		.as("check if the history can react when he is asked to get a Transaction he doesn't have");
 	}
 	
