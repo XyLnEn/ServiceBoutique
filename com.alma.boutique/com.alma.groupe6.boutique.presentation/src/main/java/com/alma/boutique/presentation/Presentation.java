@@ -1,14 +1,15 @@
 package com.alma.boutique.presentation;
 
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
+import static spark.Spark.*;
 
 /**
- * Created by thomas on 25/10/16.
+ * Simple controlleur servant simplement les fichiers de la webapp, réalisée en javascript avec Vue.js
+ * @author Lenny Lucas
+ * @author Thomas Minier
  */
-@SpringBootApplication
 public class Presentation {
 	public static void main(String args[]) {
-		SpringApplication.run(Presentation.class);
+        staticFileLocation("/public");
+        init();
 	}
 }
