@@ -15,6 +15,10 @@ public class SoldProduct extends Product {
 	public SoldProduct(String name, Price price, String description, Category category) {
 		super(name, price, description, category);
 	}
+	
+	public SoldProduct(SuppliedProduct productToStock) {
+		super(productToStock.getName(), productToStock.getPrice(), productToStock.getDescription(), productToStock.getCategory());
+	}
 
 	public SoldProduct(Product reference) {
 		super(reference.getName(), reference.getPrice(), reference.getDescription(), reference.getCategory());

@@ -1,9 +1,12 @@
 package com.alma.boutique.domain.thirdperson;
 
+import com.alma.boutique.domain.exceptions.IllegalDiscountException;
 import com.alma.boutique.domain.exceptions.ProductNotFoundException;
 import com.alma.boutique.domain.mocks.factories.OrderSoldProductMockFactory;
 import com.alma.boutique.domain.mocks.factories.SoldProductMockFactory;
 import com.alma.boutique.domain.product.Product;
+import com.alma.boutique.domain.product.SoldProduct;
+
 import org.junit.Test;
 import pl.pojo.tester.api.assertion.Method;
 
@@ -42,7 +45,7 @@ public class OrderTest {
 	}
 
 	@Test
-	public void testGetTotalPrice() throws IOException {
+	public void testGetTotalPrice() throws Exception {
 		
 		OrderSoldProductMockFactory factoryOrd = new OrderSoldProductMockFactory("DPS");
 		
@@ -50,8 +53,12 @@ public class OrderTest {
 		assertThat(ord.getTotalPrice()).as("test with the initial price").isEqualTo(0);
 		
 		SoldProductMockFactory factoProd = new SoldProductMockFactory("DAB", 5, "EUR", "On 'em", "lol");
-		ord.createProduct(factoProd);
+		Product prod = ord.createProduct(factoProd);
 		assertThat(ord.getTotalPrice()).as("test with a non-empty Product list").isEqualTo(5);
+		
+		ord.getProduct(prod.getID()).addDiscount(25);
+		assertThatExceptionOfType(IllegalDiscountException.class).isThrownBy(() -> ord.getTotalPrice())
+		.as("check if the order can react when he is asked to get an order with a product that has a discount too high");
 		
 	}
 	

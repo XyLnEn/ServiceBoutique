@@ -6,6 +6,7 @@ import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 import com.alma.boutique.api.IFactory;
+import com.alma.boutique.domain.exceptions.IllegalDiscountException;
 import com.alma.boutique.domain.exceptions.ProductNotFoundException;
 import com.alma.boutique.domain.product.Product;
 import com.alma.boutique.domain.shared.Entity;
@@ -94,11 +95,12 @@ public abstract class Order extends Entity {
 	/**
 	 * method that calculate the total price of the order
 	 * @return the total price of the order
+	 * @throws IllegalDiscountException 
 	 */
-	public float getTotalPrice() {//calculated
+	public float getTotalPrice() throws IllegalDiscountException {
 		float calculatedPrice = 0;
 		for (Product stockProduct : products) {
-			calculatedPrice += stockProduct.getPrice().getValue();
+			calculatedPrice += stockProduct.calculatePrice();
 		}
 		return calculatedPrice;
 	}

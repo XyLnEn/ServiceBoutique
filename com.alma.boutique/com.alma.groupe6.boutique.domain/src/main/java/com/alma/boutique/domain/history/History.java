@@ -5,8 +5,11 @@ import java.util.List;
 
 import com.alma.boutique.api.IFactory;
 import com.alma.boutique.api.IRepository;
+import com.alma.boutique.domain.exceptions.IllegalDiscountException;
+import com.alma.boutique.domain.exceptions.OrderNotFoundException;
 import com.alma.boutique.domain.exceptions.TransactionNotFoundException;
 import com.alma.boutique.domain.shared.Entity;
+import com.alma.boutique.domain.thirdperson.Order;
 
 public class History extends Entity {
 
@@ -51,7 +54,7 @@ public class History extends Entity {
 	}
 	
 	
-	public float getBalance(IRepository<Transaction> transactionHistory) {
+	public float getBalance(IRepository<Transaction> transactionHistory) throws IllegalDiscountException {
 		if(this.changedbalance) {
 			int balance = 0;
 			for (Transaction transaction : transactionHistory.browse()) {
@@ -65,6 +68,16 @@ public class History extends Entity {
 			this.getAccount().setCurrentBalance(balance);
 		}
 		return account.getCurrentBalance();
+	}
+	
+	public void AdvanceOrder(int ordId, IRepository<Transaction> repositoryTrans) throws OrderNotFoundException {
+		for (Transaction transaction : repositoryTrans.browse()) {
+			if(transaction.getOrder().getID() == ordId) {
+				transaction.getOrder().advanceState();
+				return;
+			}
+		}
+		throw new OrderNotFoundException("order not found");
 	}
 	
 	public Account getAccount() {

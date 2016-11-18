@@ -1,5 +1,6 @@
 package com.alma.boutique.domain.history;
 
+import com.alma.boutique.domain.exceptions.IllegalDiscountException;
 import com.alma.boutique.domain.exceptions.TransactionNotFoundException;
 import com.alma.boutique.domain.mocks.factories.ClientMockFactory;
 import com.alma.boutique.domain.mocks.factories.OrderSoldProductMockFactory;
@@ -119,7 +120,7 @@ public class HistoryTest {
 	}
 
 	@Test
-	public void testGetBalance() throws IOException {
+	public void testGetBalance() throws IOException, IllegalDiscountException {
 		Account account = new Account(this.shop);
 		History hist = new History(account);
 		

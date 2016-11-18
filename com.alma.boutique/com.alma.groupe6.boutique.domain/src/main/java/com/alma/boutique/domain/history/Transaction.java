@@ -1,5 +1,6 @@
 package com.alma.boutique.domain.history;
 
+import com.alma.boutique.domain.exceptions.IllegalDiscountException;
 import com.alma.boutique.domain.shared.Entity;
 import com.alma.boutique.domain.thirdperson.Order;
 import com.alma.boutique.domain.thirdperson.OrderSuppliedProduct;
@@ -25,7 +26,7 @@ public class Transaction extends Entity {
 		this.to = to;
 	}
 
-	public float getAmount() {
+	public float getAmount() throws IllegalDiscountException {
 		return this.order.getTotalPrice();
 	}
 
