@@ -1,13 +1,11 @@
 package com.alma.boutique.domain;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import com.alma.boutique.api.IFactory;
 import com.alma.boutique.api.IRepository;
-import com.alma.boutique.api.services.BrowseSuppliesService;
 import com.alma.boutique.api.services.ExchangeRateService;
 import com.alma.boutique.domain.exceptions.IllegalDiscountException;
 import com.alma.boutique.domain.exceptions.OrderNotFoundException;
@@ -74,37 +72,45 @@ public class Shop extends Entity{
 	}
 	
 	
-	public void buyProductFromSupplier(OrderSuppliedProduct totalOrder, IFactory<SuppliedProduct> productToBuy) throws IOException {
-		totalOrder.createProduct(productToBuy);
+	public SoldProduct buyProductFromSupplier(OrderSuppliedProduct totalOrder, IFactory<SuppliedProduct> productToBuy) throws IOException {
+		Product prod = totalOrder.createProduct(productToBuy);
+		return new SoldProduct(prod);
 	}
 	
 	public Order restock(IRepository<SoldProduct> stock, List<IFactory<SuppliedProduct>> productList, 
 			IFactory<OrderSuppliedProduct> orderCreator, String deviseUsed, ExchangeRateService currentRate) throws IOException {
 		OrderSuppliedProduct restockOrder = orderCreator.create();
 		for (IFactory<SuppliedProduct> product : productList) {
-			buyProductFromSupplier(restockOrder, product);
+			SoldProduct newProd = buyProductFromSupplier(restockOrder, product);
+			stock.add(newProd.getID(), newProd);
 		}
+		
 		return restockOrder;
 	}
 	
-	public void advanceOrder(int ordId, History history, IRepository<Transaction> transactionHistory, ThirdParty person) throws OrderNotFoundException {
+	public void advanceOrder( History history, IRepository<Transaction> transactionHistory, int ordId) throws OrderNotFoundException {
 		history.AdvanceOrder(ordId, transactionHistory);
-		person.getOrder(ordId).advanceState();
 	}
 	
-	public void addProductPromotion(int prodId, IRepository<SoldProduct> stock, float discount) {
+	public void applyProductPromotion(IRepository<SoldProduct> stock,int prodId, float discount) {
 		SoldProduct prod = stock.read(prodId);
 		prod.addDiscount(discount);
 		stock.edit(prodId, prod);
 	}
-
-	public void supProductPromotion(int prodId, IRepository<SoldProduct> stock, float discount) {
-		SoldProduct prod = stock.read(prodId);
-		prod.addDiscount(-discount);
-		stock.edit(prodId, prod);
+	
+	public void applyPromotionOnProducts(IRepository<SoldProduct> stock, float promo, List<Integer> productIds) {
+		for (Integer productId : productIds) {
+			applyProductPromotion(stock, productId, promo);
+		}
 	}
 	
-	//TODO ProductPromotion on multiple products
+	public float getCurrentSold(History hist, IRepository<Transaction> transactionHistory) throws IllegalDiscountException {
+		return hist.getBalance(transactionHistory);
+	}
+	
+	public List<Transaction> getHistory(History hist, IRepository<Transaction> transactionHistory) {
+		return hist.getHistory(transactionHistory);
+	}
 	
 	public History getShopHistory() {
 		return shopHistory;
