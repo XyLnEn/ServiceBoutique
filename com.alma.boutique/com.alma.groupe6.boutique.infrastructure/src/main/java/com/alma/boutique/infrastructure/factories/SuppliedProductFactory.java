@@ -11,21 +11,19 @@ import java.io.IOException;
  * @author Thomas Minier
  */
 public class SuppliedProductFactory implements IFactory<SuppliedProduct> {
-    private String name;
+    private int id;
     private String getProductURL;
-    private String browseProductsURL;
     private WebService<SuppliedProduct> webService;
 
-    public SuppliedProductFactory(String name, String getProductURL, String browseProductsURL, WebService<SuppliedProduct> webService) {
-        this.name = name;
+    public SuppliedProductFactory(int id, String getProductURL, WebService<SuppliedProduct> webService) {
+        this.id = id;
         this.getProductURL = getProductURL;
-        this.browseProductsURL = browseProductsURL;
         this.webService = webService;
     }
 
     @Override
     public SuppliedProduct create() throws IOException {
-        String[] parameters = { name };
+        String[] parameters = { String.valueOf(id) };
         return webService.read(URLFormatter.appendParameters(getProductURL, parameters));
     }
 }

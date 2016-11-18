@@ -3,6 +3,7 @@ package com.alma.boutique.domain;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import com.alma.boutique.api.IFactory;
 import com.alma.boutique.api.IRepository;
@@ -20,8 +21,6 @@ public class Shop extends Entity{
 
 	private History shopHistory;
 	private ThirdParty shopOwner;
-	
-	
 	
 	public Shop() {
 		super();
@@ -44,10 +43,7 @@ public class Shop extends Entity{
 	
 	public Order buyProduct(IRepository<SoldProduct> stock, IFactory<OrderSoldProduct> orderCreator, List<Integer> productIdList) throws IOException {
 		Order ord = orderCreator.create();
-		List<Product> orderList = new ArrayList<>();
-		for (Integer productId : productIdList) {
-			orderList.add(stock.read(productId));
-		}
+		List<Product> orderList = productIdList.stream().map(stock::read).collect(Collectors.toList());
 		ord.setProducts(orderList);
 		return ord;
 	}
@@ -56,10 +52,7 @@ public class Shop extends Entity{
 		return history.createTransaction(newTransaction, transactionHistory);
 	}
 	
-	
-	
 //	public void buy(ExchangeRateService currentRate, )
-
 
 	public History getShopHistory() {
 		return shopHistory;
