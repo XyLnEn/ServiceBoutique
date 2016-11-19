@@ -23,6 +23,7 @@ import static com.mongodb.client.model.Filters.eq;
 public class MongoDBStore implements Database {
     private static final Logger logger = Logger.getLogger(MongoDBStore.class);
 
+    private static String configFile = "src/main/resources/mongodb.properties";
     private static MongoDBStore instance = null;
     private MongoClient client;
     private MongoDatabase database;
@@ -35,7 +36,7 @@ public class MongoDBStore implements Database {
     private MongoDBStore() throws IOException {
         try {
             Properties infos = new Properties();
-            infos.load(new FileInputStream("src/main/resources/mongodb.properties"));
+            infos.load(new FileInputStream(configFile));
             String mongodbURL = String.format("mongodb://%s:%s@%s/%s", infos.getProperty("database.username"), infos.getProperty("database.password"),
                     infos.getProperty("database.url"), infos.getProperty("database.name"));
             client = new MongoClient(new MongoClientURI(mongodbURL));
@@ -61,6 +62,14 @@ public class MongoDBStore implements Database {
             }
         }
         return instance;
+    }
+
+    /**
+     * Mutateur statique utilisé pour changer le fichier de configuration utilisé par la base de données
+     * @param path Le chemin vers le fichier de configuration (au format .properties)
+     */
+    public static void setConfigFile(String path) {
+        configFile = path;
     }
 
     /**
