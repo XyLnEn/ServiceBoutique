@@ -31,18 +31,28 @@
                     <ul class="nav navbar-nav">
                         <li><router-link to="/home">Accueil</router-link></li>
                         <li><router-link to="/shop">Boutique</router-link></li>
-                        <li><router-link to="/provider">Fournisseurs</router-link></li>
+                        <li><router-link to="/supplier">Fournisseurs</router-link></li>
                     </ul>
                 </div>
             </div>
         </nav>
 
-        <p>{{ message }}</p>
+				<div class="row">
+					<div class="col-md-8">
+						<router-view></router-view>
+					</div>
 
-        <router-view></router-view>
+					<div class="col-md-4 well">
+						<h2><span class="glyphicon glyphicon-shopping-cart" aria-hidden="true"></span> Mon panier</h2>
+						<basket></basket>
+					</div>
+				</div>
     </div>
     <!-- Load the Vue.js web application -->
+		<script src="js/eventBus.js"></script>
     <script src="js/shop.js"></script>
+		<script src="js/provider.js"></script>
+		<script src="js/basket.js"></script>
     <script src="js/app.js"></script>
 </body>
 </html>

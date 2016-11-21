@@ -1,0 +1,143 @@
+# this is an example of the Uber API
+# as a demonstration of an API spec in YAML
+swagger: '2.0'
+info:
+  title: Lenny Tommy API
+  description: API Boutique
+  version: "1.0.0"
+# the domain of the service
+host: api.example.org
+# array of all schemes that your API supports
+schemes:
+  - http
+# will be prefixed to all paths
+basePath: /v1
+produces:
+  - application/json
+paths:
+  /products:
+    get:
+      summary: Get all products
+      description: Returns all the products
+      tags:
+        - Product
+      responses:
+        200:
+          description: An array of products
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Product'
+        #default:
+        #  description: Unexpected error
+        #  schema:
+          #  $ref: '#/definitions/Error'
+  /product:
+    get:
+      summary: Get a specific product
+      description: Get a specific product
+      parameters:
+        - name: id
+          in: query
+          description: The identifier of the product
+          required: true
+          type: number
+          format: int
+      tags:
+        - Product
+      responses:
+        200:
+          description: An array of products
+          schema:
+            $ref: '#/definitions/Product'
+  /orders:
+    get:
+      summary: Get all the orders
+      description: Gett al the orders
+      tags:
+        - Order
+      responses:
+        200:
+          description: An array of Orders
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Order'
+  /order:
+    get:
+      summary: Get a specific order
+      description: Get a specific order
+      parameters:
+        - name: id
+          in: query
+          description: The identifier of the order
+          required: true
+          type: number
+          format: int
+      tags:
+        - Order
+      responses:
+        200:
+          description: An array of products
+          schema:
+            $ref: '#/definitions/Order'
+  /order/new:
+    post:
+      summary: Create a new Order
+      description: Create a new Order
+      parameters:
+        - name: products
+          in: body
+          description: The identifiers of the products in the order
+          required: true
+          schema:
+            type: array
+            items:
+              type : number
+        - name: deliverer
+          in: query
+          description: The deliverer of the order
+          required: true
+          type: string
+      tags:
+        - Order
+      responses:
+        200:
+          description: response code
+          schema:
+            type: string
+
+definitions:
+  Product:
+    type: object
+    properties:
+      id:
+        type: number
+        description: A unique identifier
+      name:
+        type: string
+        description: The name of the product
+      description:
+        type: string
+        description: Description of product.
+      price:
+        type: number
+        description: The price of the product
+  Order:
+    type: object
+    properties:
+      id:
+        type: number
+        description: A unique identifier
+      products:
+        type: array
+        items:
+          $ref: '#/definitions/Product'
+        description: the list of associated products
+      status:
+        type: string
+        description: the status of the order
+      deliverer:
+        type: string
+        description: the deliverer
+      
