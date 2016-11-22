@@ -2,8 +2,8 @@
 # as a demonstration of an API spec in YAML
 swagger: '2.0'
 info:
-  title: Lenny Tommy API
-  description: API Boutique
+  title: Lenny & Tommy - API de la boutique
+  description: API publique de la boutique Lenny & Tommy
   version: "1.0.0"
 # the domain of the service
 host: api.example.org
@@ -15,10 +15,9 @@ basePath: /v1
 produces:
   - application/json
 paths:
-  /products:
+  /product/all:
     get:
       summary: Get all products
-      description: Returns all the products
       tags:
         - Product
       responses:
@@ -28,17 +27,16 @@ paths:
             type: array
             items:
               $ref: '#/definitions/Product'
-        #default:
-        #  description: Unexpected error
-        #  schema:
-          #  $ref: '#/definitions/Error'
-  /product:
+        default:
+          description: Unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+  /product/{id}:
     get:
       summary: Get a specific product
-      description: Get a specific product
       parameters:
         - name: id
-          in: query
+          in: path
           description: The identifier of the product
           required: true
           type: number
@@ -47,13 +45,58 @@ paths:
         - Product
       responses:
         200:
-          description: An array of products
+          description: A specific product
           schema:
             $ref: '#/definitions/Product'
-  /orders:
+        default:
+          description: Unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+  /product/new:
+    post:
+      summary: Create a new product
+      parameters:
+        - name: product
+          in: body
+          description: The product to create
+          schema:
+            $ref: '#/definitions/Product'
+          required: true
+      tags:
+        - Product
+      responses:
+        200:
+          description: The newly created product
+          schema:
+            $ref: '#/definitions/Product'
+        default:
+          description: Unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+  /product/delete/{id}:
+    delete:
+      summary: delete a specific product
+      parameters:
+        - name: id
+          in: path
+          description: The identifier of the product to delete
+          required: true
+          type: number
+          format: int
+      tags:
+        - Product
+      responses:
+        200:
+          description: The deleted product
+          schema:
+            $ref: '#/definitions/Product'
+        default:
+          description: Unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+  /order/all:
     get:
       summary: Get all the orders
-      description: Gett al the orders
       tags:
         - Order
       responses:
@@ -63,13 +106,16 @@ paths:
             type: array
             items:
               $ref: '#/definitions/Order'
-  /order:
+        default:
+          description: Unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+  /order/{id}:
     get:
       summary: Get a specific order
-      description: Get a specific order
       parameters:
         - name: id
-          in: query
+          in: path
           description: The identifier of the order
           required: true
           type: number
@@ -78,13 +124,16 @@ paths:
         - Order
       responses:
         200:
-          description: An array of products
+          description: A specific order
           schema:
             $ref: '#/definitions/Order'
+        default:
+          description: Unexpected error
+          schema:
+            $ref: '#/definitions/Error'
   /order/new:
     post:
       summary: Create a new Order
-      description: Create a new Order
       parameters:
         - name: products
           in: body
@@ -103,11 +152,118 @@ paths:
         - Order
       responses:
         200:
-          description: response code
+          description: The newly created order
           schema:
-            type: string
-
+            $ref: '#/definitions/Order'
+        default:
+          description: Unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+  /order/delete/{id}:
+    delete:
+      summary: delete a specific order
+      parameters:
+        - name: id
+          in: path
+          description: The identifier of the order to delete
+          required: true
+          type: number
+          format: int
+      tags:
+        - Order
+      responses:
+        200:
+          description: The deleted order
+          schema:
+            $ref: '#/definitions/Order'
+        default:
+          description: Unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+  /transaction/all:
+    get:
+      summary: Get all the transactions
+      tags:
+        - Transaction
+      responses:
+        200:
+          description: An array of Transaction
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Transaction'
+        default:
+          description: Unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+  /transaction/{user_id}:
+    get:
+      summary: Get a specific transaction
+      parameters:
+        - name: user_id
+          in: path
+          description: The identifier of the user who created the transaction
+          required: true
+          type: number
+          format: int
+      tags:
+        - Transaction
+      responses:
+        200:
+          description: A specific transaction
+          schema:
+            $ref: '#/definitions/Transaction'
+        default:
+          description: Unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+  /person/all:
+    get:
+      summary: Get all the persons
+      tags:
+        - Person
+      responses:
+        200:
+          description: An array of persons
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Person'
+        default:
+          description: Unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+  /person/{id}:
+    get:
+      summary: Get a specific transaction
+      parameters:
+        - name: id
+          in: path
+          description: The identifier of the person
+          required: true
+          type: number
+          format: int
+      tags:
+        - Person
+      responses:
+        200:
+          description: A specific person
+          schema:
+            $ref: '#/definitions/Person'
+        default:
+          description: Unexpected error
+          schema:
+            $ref: '#/definitions/Error'
 definitions:
+  Error:
+    type: object
+    properties:
+      name:
+        type: string
+        description: The name of the error
+      description:
+        type: string
+        description: The description of the error
   Product:
     type: object
     properties:
@@ -140,4 +296,19 @@ definitions:
       deliverer:
         type: string
         description: the deliverer
+  Person:
+    type: object
+    properties:
+      id:
+        type: number
+        description: an unique identifier
+  Transaction:
+    type: object
+    properties:
+      order:
+        $ref: '#/definitions/Order'
+      from:
+        $ref: '#/definitions/Person'
+      to:
+        $ref: '#/definitions/Person'
       
