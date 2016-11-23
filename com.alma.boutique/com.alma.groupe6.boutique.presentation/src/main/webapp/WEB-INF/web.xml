@@ -6,7 +6,7 @@
         <filter-class>spark.servlet.SparkFilter</filter-class>
         <init-param>
             <param-name>applicationClass</param-name>
-            <param-value>com.alma.boutique.presentation.Presentation</param-value>
+            <param-value>com.alma.boutique.presentation.PresentationServlet</param-value>
         </init-param>
     </filter>
 
