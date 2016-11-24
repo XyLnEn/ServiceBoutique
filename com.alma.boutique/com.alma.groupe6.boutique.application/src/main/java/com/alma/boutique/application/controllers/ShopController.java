@@ -1,8 +1,18 @@
 package com.alma.boutique.application.controllers;
 
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
+
+import com.alma.boutique.application.data.Purchase;
 import com.alma.boutique.domain.Shop;
+import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+
+import spark.Request;
 
 /**
  * Classe abstraite représentant un controlleur quelconque offrant une partie des services d'une boutique
@@ -12,7 +22,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
  */
 public abstract class ShopController {
     protected Shop shop;
-    private ObjectMapper mapper;
+    protected ObjectMapper mapper;
 
     /**
      * Constructeur
@@ -36,4 +46,10 @@ public abstract class ShopController {
     protected String toJson(Object entity) throws JsonProcessingException {
         return mapper.writeValueAsString(entity);
     }
+
+		public ObjectMapper getMapper() {
+			return mapper;
+		}
+    
+    
 }

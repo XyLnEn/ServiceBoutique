@@ -20,6 +20,8 @@ public class CatalogController extends ShopController {
     @Override
     public void init() {
         // route used to see all the products
-        get("/products/all", (req, resp) -> soldProducts.browse(), this::toJson);
+      get("/products/all", (req, resp) -> soldProducts.browse(), this::toJson);
+      
+      get("/products/:id", (req, resp) -> soldProducts.read(Integer.parseInt(req.params(":id"))), this::toJson);
     }
 }
