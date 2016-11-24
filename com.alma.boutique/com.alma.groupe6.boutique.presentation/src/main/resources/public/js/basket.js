@@ -1,8 +1,9 @@
 // Component Basket : display the user's basket
 const BasketComponent = Vue.component('basket', {
-	template: `<ul>
-	<li v-for="p in content"><product v-bind:product="p"></product><buy-product v-bind:id="p.id"></buy-product></li>
-	</ul>`,
+	template: `<div><ul>
+	<li v-for="p in content"><product v-bind:product="p"></product></li></ul>
+	<div v-if="content.length > 0"><buy-products v-bind:products="content"></buy-products></div>
+	</div>`,
 	data: function() {
 		return {
 			content: []
@@ -20,15 +21,18 @@ const BasketComponent = Vue.component('basket', {
 	}
 })
 
-// Component BuyProduct : a button to buy a product
-const BuyProductComponent = Vue.component('buy-product', {
-	props: ['id'],
-	template: `<button class="btn btn-primary" v-on:click="buyProduct(id)">
+// Component BuyProduct : a button to buy a list of products
+const BuyProductsComponent = Vue.component('buy-products', {
+	props: ['products'],
+	template: `<button class="btn btn-primary" v-on:click="buyProduct(products)">
 		Acheter <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
 		</button>`,
 	methods: {
-		buyProduct: function(id) {
-			console.log("make a GET call to API here to buy product with id = " + id + " ;)");
+		buyProduct: function(products) {
+			const ids = products.map(function(product) {
+				return product.id;
+			})
+			console.log("make a GET call to API here to buy products " + ids + " ;)");
 			eventBus.$emit('basket-cleared')
 		}
 	}
