@@ -2,7 +2,7 @@ package com.alma.boutique.infrastructure.repositories;
 
 import com.alma.boutique.api.IRepository;
 import com.alma.boutique.domain.history.Transaction;
-import com.alma.boutique.domain.thirdperson.Client;
+import com.alma.boutique.domain.thirdperson.ThirdParty;
 import com.alma.boutique.infrastructure.database.Database;
 
 import java.util.List;
@@ -34,7 +34,7 @@ public class TransactionRepository implements IRepository<Transaction> {
 
     @Override
     public void delete(int id) {
-        database.delete(id, Client.class);
+        database.delete(id, ThirdParty.class);
     }
 
     @Override

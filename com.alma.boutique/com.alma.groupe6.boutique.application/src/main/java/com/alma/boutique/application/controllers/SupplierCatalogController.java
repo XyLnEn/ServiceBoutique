@@ -1,9 +1,7 @@
 package com.alma.boutique.application.controllers;
 
 import com.alma.boutique.domain.Shop;
-import com.alma.boutique.domain.product.SuppliedProduct;
 import com.alma.boutique.infrastructure.services.ProviderCatalog;
-import com.alma.boutique.infrastructure.webservice.JSONWebservice;
 
 import static spark.Spark.*;
 

@@ -9,22 +9,15 @@ import java.util.List;
 
 import com.alma.boutique.api.IFactory;
 import com.alma.boutique.api.IRepository;
-import com.alma.boutique.api.services.ExchangeRateService;
 import com.alma.boutique.application.data.Purchase;
 import com.alma.boutique.domain.Shop;
 import com.alma.boutique.domain.exceptions.IllegalDiscountException;
 import com.alma.boutique.domain.history.Transaction;
-import com.alma.boutique.domain.product.SoldProduct;
-import com.alma.boutique.domain.product.SuppliedProduct;
-import com.alma.boutique.domain.thirdperson.Client;
+import com.alma.boutique.domain.product.Product;
 import com.alma.boutique.domain.thirdperson.Order;
-import com.alma.boutique.domain.thirdperson.OrderSoldProduct;
-import com.alma.boutique.domain.thirdperson.OrderSuppliedProduct;
-import com.alma.boutique.domain.thirdperson.Supplier;
 import com.alma.boutique.domain.thirdperson.ThirdParty;
-import com.alma.boutique.infrastructure.factories.OrderSoldProductFactory;
-import com.alma.boutique.infrastructure.factories.OrderSuppliedProductFactory;
-import com.alma.boutique.infrastructure.factories.SuppliedProductFactory;
+import com.alma.boutique.infrastructure.factories.OrderFactory;
+import com.alma.boutique.infrastructure.factories.ProductFactory;
 import com.alma.boutique.infrastructure.factories.TransactionFactory;
 import com.alma.boutique.infrastructure.services.FixerExchanger;
 import com.alma.boutique.infrastructure.services.ProviderCatalog;
@@ -35,23 +28,23 @@ import spark.Request;
 public class TransactionController extends ShopController {
 
 	private IRepository<Transaction> transactions;
-	private IRepository<SoldProduct> stock;
+	private IRepository<Order> orderHistory;
+	private IRepository<Product> stock;
 	private ProviderCatalog supply;
-	private IRepository<Client> persons;
-	private IRepository<Supplier> suppliers;
+	private IRepository<ThirdParty> persons;
 	private FixerExchanger fixer;
 	
 	
 	
-	public TransactionController(Shop shop, IRepository<Transaction> transactions, 
-			IRepository<SoldProduct> stock, ProviderCatalog supply, IRepository<Client> persons, IRepository<Supplier> suppliers, FixerExchanger fixer) {
+	public TransactionController(Shop shop, IRepository<Transaction> transactions, IRepository<Order> orderHistory,
+			IRepository<Product> stock, ProviderCatalog supply, IRepository<ThirdParty> persons, FixerExchanger fixer) {
 		super(shop);
+		this.orderHistory = orderHistory;
 		this.transactions = transactions;
 		this.stock = stock;
 		this.supply = supply;
 		this.fixer = fixer;
 		this.persons = persons;
-		this.suppliers = suppliers;
 	}
 	
   protected Purchase getResults(Request req) throws JsonMappingException, IOException {
@@ -62,13 +55,13 @@ public class TransactionController extends ShopController {
 		Purchase purchase = this.getResults(req);
 		String deliverer = purchase.getDeliverer();
   	String devise = purchase.getDevise();
-  	IFactory<OrderSoldProduct> factOrd = new OrderSoldProductFactory(deliverer);
+  	IFactory<Order> factOrd = new OrderFactory(deliverer);
   	List<Integer> idList = new ArrayList<>(purchase.getIdList());
-  	Order ord = shop.buyProduct(this.stock, factOrd , idList, devise, fixer);
-  	System.out.println("ok");
-  	ThirdParty client = persons.read(purchase.getPerson());
-  	Transaction t = shop.saveTransaction(shop.getShopHistory(), this.transactions, new TransactionFactory(ord, shop.getShopOwner(), client));
-  	System.out.println(t.getOrder().getDeliverer());
+  	ThirdParty client = persons.read(purchase.getPersonId());
+		Order ord = shop.buyProduct(this.stock, persons, factOrd , idList, purchase.getPersonId(), devise, fixer);
+  	
+  	shop.saveTransaction(shop.getShopHistory(), this.transactions, new TransactionFactory(ord.getID(), shop.getShopOwner().getID(), client.getID()));
+	
 	}
 	
 
@@ -77,30 +70,35 @@ public class TransactionController extends ShopController {
 		
 		String deliverer = purchase.getDeliverer();
   	String devise = purchase.getDevise();
-  	IFactory<OrderSuppliedProduct> factOrd = new OrderSuppliedProductFactory(deliverer);
+  	IFactory<Order> factOrd = new OrderFactory(deliverer);
   	List<Integer> idList = new ArrayList<>(purchase.getIdList());
-  	List<IFactory<SuppliedProduct>> productList = new ArrayList<>();
+  	List<IFactory<Product>> productList = new ArrayList<>();
+  	
   	for (Integer id : idList) {
-			productList.add(new SuppliedProductFactory(id, null, null));
+  		for (Product product : supply.browse()) {
+				if(product.getID() == id) {
+					productList.add(new ProductFactory(product.getName(), product.getPrice().getValue(), product.getPrice().getCurrency(), product.getDescription(), product.getCategory().getName()));
+				}
+			}
 		}
   	Order ord = shop.restock(this.stock, productList, factOrd, devise, fixer);
   	
   	System.out.println("ok");
-  	ThirdParty supplier = persons.read(purchase.getPerson());
-  	Transaction t = shop.saveTransaction(shop.getShopHistory(), this.transactions, new TransactionFactory(ord, supplier, shop.getShopOwner()));
-  	System.out.println(t.getOrder().getDeliverer());
+  	ThirdParty supplier = persons.read(purchase.getPersonId());
+  	Transaction t = shop.saveTransaction(shop.getShopHistory(), this.transactions, new TransactionFactory(ord.getID(), shop.getShopOwner().getID(), supplier.getID()));
+  	System.out.println(orderHistory.read(t.getOrderId()).getDeliverer());
 	}
 	
 	@Override
 	public void init() {
 //			shop.buyProduct(stock, orderCreator, productIdList, deviseUsed, currentRate)
-    get("/Transaction/all", (req, resp) -> transactions.browse(), this::toJson);
-    get("/Transaction/:id", (req, resp) -> transactions.read(Integer.parseInt(req.params(":id"))), this::toJson);
-    post("/Transaction/new/sale", (req, resp) -> {
+    get("/transaction/all", (req, resp) -> transactions.browse(), this::toJson);
+    get("/transaction/:id", (req, resp) -> transactions.read(Integer.parseInt(req.params(":id"))), this::toJson);
+    post("/transaction/new/sale", (req, resp) -> {
     	this.buy(req);
     	return req.body();
     }, this::toJson);
-    post("/Transaction/new/resupply", (req, resp) -> {
+    post("/transaction/new/resupply", (req, resp) -> {
     	this.resupply(req);
     	return req.body();
     }, this::toJson);

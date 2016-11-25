@@ -13,11 +13,11 @@ import java.io.IOException;
  */
 public class TransactionFactory implements IFactory<Transaction> {
 
-	private Order ord;
-    private ThirdParty from;
-    private ThirdParty to;
+	private int ord;
+    private int from;
+    private int to;
 
-    public TransactionFactory(Order ord, ThirdParty from, ThirdParty to) {
+    public TransactionFactory(int ord, int from, int to) {
         this.ord = ord;
         this.from = from;
         this.to = to;

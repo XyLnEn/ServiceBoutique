@@ -12,8 +12,6 @@ import org.junit.Before;
 import org.junit.Test;
 
 import com.alma.boutique.api.IFactory;
-import com.alma.boutique.api.IRepository;
-import com.alma.boutique.api.services.ExchangeRateService;
 import com.alma.boutique.domain.exceptions.IllegalDiscountException;
 import com.alma.boutique.domain.exceptions.OrderNotFoundException;
 import com.alma.boutique.domain.exceptions.ProductNotFoundException;
@@ -42,6 +40,8 @@ import pl.pojo.tester.api.assertion.Method;
 public class ShopTest {
 
 	private Shop shop;
+	private ThirdParty client;
+	private ThirdPartyMockRepository personRepo;
 	
 	@Before
 	public void setUp() throws Exception {
@@ -49,6 +49,10 @@ public class ShopTest {
 		ShopOwner shopOwner = new ShopOwner("bob",new Identity("house", "11111111"));
 		ownerRepo.add(shopOwner.getID(), shopOwner);
 		this.shop = new Shop(ownerRepo);
+		this.client = new ThirdParty("client", new Identity("some adress", "a number"), false);
+		this.personRepo = new ThirdPartyMockRepository();
+		this.personRepo.add(this.client.getID(), this.client);
+		
 	}
 	
 	@Test
@@ -73,7 +77,7 @@ public class ShopTest {
 		
 		OrderMockFactory soldOrder = new OrderMockFactory("bob");
 		List<Integer> listeAchat = new ArrayList<>();
-		Order emptyOrder = shop.buyProduct(soldRepo, soldOrder, listeAchat, "EUR", new ExchangeRateServiceMock());
+		Order emptyOrder = shop.buyProduct(soldRepo, this.personRepo, soldOrder, listeAchat, this.client.getID(), "EUR", new ExchangeRateServiceMock());
 		
 		assertThat(emptyOrder.getProducts()).as("test that the order created from the purchase is correct for an empty purchase").isEmpty();
 
@@ -81,7 +85,7 @@ public class ShopTest {
 		soldRepo.add(prod2.getID(), prod2);
 		listeAchat.add(prod1.getID());
 		listeAchat.add(prod2.getID());
-		Order realOrder = shop.buyProduct(soldRepo, soldOrder, listeAchat, "EUR", new ExchangeRateServiceMock());
+		Order realOrder = shop.buyProduct(soldRepo, this.personRepo, soldOrder, listeAchat, this.client.getID(), "EUR", new ExchangeRateServiceMock());
 		assertThat(realOrder.getProduct(prod1.getID())).as("test that the order is bought successfully").isEqualTo(prod1);
 	}
 	
@@ -97,7 +101,7 @@ public class ShopTest {
 		
 		OrderMockFactory soldOrder = new OrderMockFactory("bob");
 		List<Integer> listeAchat = new ArrayList<>();
-		Order emptyOrder = shop.buyProduct(soldRepo, soldOrder, listeAchat, "EUR", new ExchangeRateServiceMock());
+		Order emptyOrder = shop.buyProduct(soldRepo, this.personRepo, soldOrder, listeAchat, this.client.getID(), "EUR", new ExchangeRateServiceMock());
 		
 		assertThat(emptyOrder.getProducts()).as("test that the order created from the purchase is correct for an empty purchase").isEmpty();
 		
@@ -105,7 +109,7 @@ public class ShopTest {
 		soldRepo.add(prod2.getID(), prod2);
 		listeAchat.add(prod1.getID());
 		listeAchat.add(prod2.getID());
-		Order ordToSave = shop.buyProduct(soldRepo, soldOrder, listeAchat, "EUR", new ExchangeRateServiceMock());
+		Order ordToSave = shop.buyProduct(soldRepo, this.personRepo, soldOrder, listeAchat, this.client.getID(), "EUR", new ExchangeRateServiceMock());
 		
 		ThirdPartyMockFactory clientFacto = new ThirdPartyMockFactory("Remi", "somewhere", "888888", false);
 		ThirdParty mockClient = clientFacto.create();

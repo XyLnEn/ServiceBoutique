@@ -42,11 +42,12 @@ public class Shop extends Entity{
 		return stock.browse();
 	}
 	
-	public Order buyProduct(IRepository<Product> stock, 
-			IFactory<Order> orderCreator, List<Integer> productIdList, 
+	public Order buyProduct(IRepository<Product> stock, IRepository<ThirdParty> personList,
+			IFactory<Order> orderCreator, List<Integer> productIdList, int personId,
 			String deviseUsed, ExchangeRateService currentRate ) throws IOException, IllegalDiscountException {
-		
-		Order ord = orderCreator.create();
+		ThirdParty pers = personList.read(personId);
+		Order ord = pers.createOrder(orderCreator);
+//		personList.edit(personId, pers);
 		List<Product> orderList = productIdList.stream().map(stock::read).collect(Collectors.toList());
 		for (Product product : orderList) {
 			Price convertedPrice = new Price();
@@ -69,8 +70,7 @@ public class Shop extends Entity{
 	
 	
 	public Product buyProductFromSupplier(Order totalOrder, IFactory<Product> productToBuy) throws IOException {
-		Product prod = totalOrder.createProduct(productToBuy);
-		return prod;
+		return totalOrder.createProduct(productToBuy);
 	}
 	
 	public Order restock(IRepository<Product> stock, List<IFactory<Product>> productList, 

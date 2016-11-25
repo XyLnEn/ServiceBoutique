@@ -2,7 +2,7 @@ package com.alma.boutique.application.controllers;
 
 import com.alma.boutique.api.IRepository;
 import com.alma.boutique.domain.Shop;
-import com.alma.boutique.domain.product.SoldProduct;
+import com.alma.boutique.domain.product.Product;
 
 import static spark.Spark.*;
 
@@ -10,9 +10,9 @@ import static spark.Spark.*;
  * @author Thomas Minier
  */
 public class CatalogController extends ShopController {
-    private IRepository<SoldProduct> soldProducts;
+    private IRepository<Product> soldProducts;
 
-    public CatalogController(Shop shop, IRepository<SoldProduct> soldProducts) {
+    public CatalogController(Shop shop, IRepository<Product> soldProducts) {
         super(shop);
         this.soldProducts = soldProducts;
     }

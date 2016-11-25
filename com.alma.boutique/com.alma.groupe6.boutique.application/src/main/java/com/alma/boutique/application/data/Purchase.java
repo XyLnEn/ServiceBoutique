@@ -1,12 +1,7 @@
 package com.alma.boutique.application.data;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-
-import com.alma.boutique.domain.thirdperson.Client;
-import com.alma.boutique.domain.thirdperson.ThirdParty;
 
 public class Purchase {
 
@@ -20,7 +15,7 @@ public class Purchase {
 		
 	}
 
-	public Purchase(String deliverer, ArrayList<Integer> idList, String devise, int personId) {
+	public Purchase(String deliverer, List<Integer> idList, String devise, int personId) {
 		this.deliverer = deliverer;
 		this.idList = idList;
 		this.devise = devise;
@@ -51,11 +46,11 @@ public class Purchase {
 		this.idList = idList;
 	}
 
-	public int getPerson() {
+	public int getPersonId() {
 		return personId;
 	}
 
-	public void setPerson(int personId) {
+	public void setPersonId(int personId) {
 		this.personId = personId;
 	}
 	
