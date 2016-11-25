@@ -1,57 +1,57 @@
 package com.alma.boutique.domain.history;
 
+import com.alma.boutique.api.IRepository;
 import com.alma.boutique.domain.exceptions.IllegalDiscountException;
 import com.alma.boutique.domain.shared.Entity;
 import com.alma.boutique.domain.thirdperson.Order;
-import com.alma.boutique.domain.thirdperson.OrderSuppliedProduct;
-import com.alma.boutique.domain.thirdperson.ThirdParty;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 public class Transaction extends Entity {
 	
-	private Order order;
-	private ThirdParty from;
-	private ThirdParty to;
+	private int orderId;
+	private int shopOwnerId;
+	private int partyId;
 	
 	public Transaction() {
 		super();
-		this.order = new OrderSuppliedProduct();
 	}
 	
-	public Transaction(Order order, ThirdParty from, ThirdParty to) {
+	public Transaction(int orderId, int shopOwnerId, int partyId) {
 		super();
-		this.order = order;
-		this.from = from;
-		this.to = to;
+		this.orderId = orderId;
+		this.shopOwnerId = shopOwnerId;
+		this.partyId = partyId;
 	}
 
-	public float getAmount() throws IllegalDiscountException {
-		return this.order.getTotalPrice();
+	public float getAmount(IRepository<Order> orderRepo) throws IllegalDiscountException {
+		return orderRepo.read(this.orderId).getTotalPrice();
 	}
 
-	public Order getOrder() {
-		return order;
+	
+
+	public int getOrderId() {
+		return orderId;
 	}
 
-	public void setOrder(Order order) {
-		this.order = order;
+	public void setOrderId(int orderId) {
+		this.orderId = orderId;
 	}
 
-	public ThirdParty getFrom() {
-		return from;
+	public int getShopOwnerId() {
+		return shopOwnerId;
 	}
 
-	public void setFrom(ThirdParty from) {
-		this.from = from;
+	public void setShopOwnerId(int shopOwnerId) {
+		this.shopOwnerId = shopOwnerId;
 	}
 
-	public ThirdParty getTo() {
-		return to;
+	public int getPartyId() {
+		return partyId;
 	}
 
-	public void setTo(ThirdParty to) {
-		this.to = to;
+	public void setPartyId(int partyId) {
+		this.partyId = partyId;
 	}
 
 	@Override
@@ -67,18 +67,18 @@ public class Transaction extends Entity {
 		}
 		Transaction rhs = (Transaction) obj;
 		return new EqualsBuilder()
-				.append(this.order, rhs.order)
-				.append(this.from, rhs.from)
-				.append(this.to, rhs.to)
+				.append(this.orderId, rhs.orderId)
+				.append(this.shopOwnerId, rhs.shopOwnerId)
+				.append(this.partyId, rhs.partyId)
 				.isEquals();
 	}
 
 	@Override
 	public int hashCode() {
 		return new HashCodeBuilder()
-				.append(order)
-				.append(from)
-				.append(to)
+				.append(orderId)
+				.append(shopOwnerId)
+				.append(partyId)
 				.toHashCode();
 	}
 }

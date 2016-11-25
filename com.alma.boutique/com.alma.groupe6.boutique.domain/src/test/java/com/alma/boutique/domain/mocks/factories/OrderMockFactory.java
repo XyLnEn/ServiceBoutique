@@ -6,10 +6,10 @@ import java.util.List;
 
 import com.alma.boutique.api.IFactory;
 import com.alma.boutique.domain.product.Product;
-import com.alma.boutique.domain.thirdperson.OrderSoldProduct;
+import com.alma.boutique.domain.thirdperson.Order;
 import com.alma.boutique.domain.thirdperson.OrderStatus;
 
-public class OrderSoldProductMockFactory implements IFactory<OrderSoldProduct> {
+public class OrderMockFactory implements IFactory<Order> {
 
 	protected List<Product> products;
 	protected OrderStatus orderStatus;
@@ -17,7 +17,7 @@ public class OrderSoldProductMockFactory implements IFactory<OrderSoldProduct> {
 
 	
 
-  public OrderSoldProductMockFactory(String deliverer) {
+  public OrderMockFactory(String deliverer) {
 		this.products = new ArrayList<>();
 		this.orderStatus = OrderStatus.ORDERED;
 		this.deliverer = deliverer;
@@ -26,8 +26,8 @@ public class OrderSoldProductMockFactory implements IFactory<OrderSoldProduct> {
 
 
 	@Override
-  public OrderSoldProduct create() throws IOException {
+  public Order create() throws IOException {
 		
-      return new OrderSoldProduct(orderStatus, deliverer);
+      return new Order(orderStatus, deliverer);
   }
 }

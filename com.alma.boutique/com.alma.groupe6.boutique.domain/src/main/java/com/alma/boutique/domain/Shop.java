@@ -13,12 +13,8 @@ import com.alma.boutique.domain.history.History;
 import com.alma.boutique.domain.history.Transaction;
 import com.alma.boutique.domain.product.Price;
 import com.alma.boutique.domain.product.Product;
-import com.alma.boutique.domain.product.SoldProduct;
-import com.alma.boutique.domain.product.SuppliedProduct;
 import com.alma.boutique.domain.shared.Entity;
 import com.alma.boutique.domain.thirdperson.Order;
-import com.alma.boutique.domain.thirdperson.OrderSoldProduct;
-import com.alma.boutique.domain.thirdperson.OrderSuppliedProduct;
 import com.alma.boutique.domain.thirdperson.ShopOwner;
 import com.alma.boutique.domain.thirdperson.ThirdParty;
 
@@ -42,12 +38,12 @@ public class Shop extends Entity{
 		this.shopHistory.setChangedbalance(true);
 	}
 	
-	public List<SoldProduct> browseStock(IRepository<SoldProduct> stock) {
+	public List<Product> browseStock(IRepository<Product> stock) {
 		return stock.browse();
 	}
 	
-	public Order buyProduct(IRepository<SoldProduct> stock, 
-			IFactory<OrderSoldProduct> orderCreator, List<Integer> productIdList, 
+	public Order buyProduct(IRepository<Product> stock, 
+			IFactory<Order> orderCreator, List<Integer> productIdList, 
 			String deviseUsed, ExchangeRateService currentRate ) throws IOException, IllegalDiscountException {
 		
 		Order ord = orderCreator.create();
@@ -72,40 +68,41 @@ public class Shop extends Entity{
 	}
 	
 	
-	public SoldProduct buyProductFromSupplier(OrderSuppliedProduct totalOrder, IFactory<SuppliedProduct> productToBuy) throws IOException {
+	public Product buyProductFromSupplier(Order totalOrder, IFactory<Product> productToBuy) throws IOException {
 		Product prod = totalOrder.createProduct(productToBuy);
-		return new SoldProduct(prod);
+		return prod;
 	}
 	
-	public Order restock(IRepository<SoldProduct> stock, List<IFactory<SuppliedProduct>> productList, 
-			IFactory<OrderSuppliedProduct> orderCreator, String deviseUsed, ExchangeRateService currentRate) throws IOException {
-		OrderSuppliedProduct restockOrder = orderCreator.create();
-		for (IFactory<SuppliedProduct> product : productList) {
-			SoldProduct newProd = buyProductFromSupplier(restockOrder, product);
+	public Order restock(IRepository<Product> stock, List<IFactory<Product>> productList, 
+			IFactory<Order> orderCreator, String deviseUsed, ExchangeRateService currentRate) throws IOException {
+		Order restockOrder = orderCreator.create();
+		for (IFactory<Product> product : productList) {
+			Product newProd = buyProductFromSupplier(restockOrder, product);
 			stock.add(newProd.getID(), newProd);
 		}
 		
 		return restockOrder;
 	}
 	
-	public void advanceOrder( History history, IRepository<Transaction> transactionHistory, int ordId) throws OrderNotFoundException {
-		history.AdvanceOrder(ordId, transactionHistory);
+	public void advanceOrder( History history, IRepository<Transaction> transactionHistory, IRepository<Order> orderList,  int ordId) throws OrderNotFoundException {
+		history.AdvanceOrder(ordId, transactionHistory, orderList);
 	}
 	
-	public void applyProductPromotion(IRepository<SoldProduct> stock,int prodId, float discount) {
-		SoldProduct prod = stock.read(prodId);
+	public void applyProductPromotion(IRepository<Product> stock,int prodId, float discount) {
+		Product prod = stock.read(prodId);
 		prod.addDiscount(discount);
 		stock.edit(prodId, prod);
 	}
 	
-	public void applyPromotionOnProducts(IRepository<SoldProduct> stock, float promo, List<Integer> productIds) {
+	public void applyPromotionOnProducts(IRepository<Product> stock, float promo, List<Integer> productIds) {
 		for (Integer productId : productIds) {
 			applyProductPromotion(stock, productId, promo);
 		}
 	}
 	
-	public float getCurrentSold(History hist, IRepository<Transaction> transactionHistory) throws IllegalDiscountException {
-		return hist.getBalance(transactionHistory);
+	public float getCurrentSold(History hist, IRepository<Transaction> transactionHistory, 
+			IRepository<Order> orderList, IRepository<ThirdParty> personList) throws IllegalDiscountException {
+		return hist.getBalance(transactionHistory, orderList, personList);
 	}
 	
 	public List<Transaction> getHistory(History hist, IRepository<Transaction> transactionHistory) {

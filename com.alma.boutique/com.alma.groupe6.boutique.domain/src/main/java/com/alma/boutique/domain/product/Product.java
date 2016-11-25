@@ -8,7 +8,7 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 /**
  * @author Thomas Minier
  */
-public abstract class Product extends Entity {
+public class Product extends Entity {
     private String name;
     private Price price;
     private String description;

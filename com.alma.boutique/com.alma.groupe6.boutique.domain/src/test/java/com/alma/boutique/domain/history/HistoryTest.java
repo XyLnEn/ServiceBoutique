@@ -2,19 +2,16 @@ package com.alma.boutique.domain.history;
 
 import com.alma.boutique.domain.exceptions.IllegalDiscountException;
 import com.alma.boutique.domain.exceptions.TransactionNotFoundException;
-import com.alma.boutique.domain.mocks.factories.ClientMockFactory;
-import com.alma.boutique.domain.mocks.factories.OrderSoldProductMockFactory;
-import com.alma.boutique.domain.mocks.factories.OrderSuppliedProductMockFactory;
-import com.alma.boutique.domain.mocks.factories.ShopMockFactory;
-import com.alma.boutique.domain.mocks.factories.SoldProductMockFactory;
-import com.alma.boutique.domain.mocks.factories.SuppliedProductMockFactory;
-import com.alma.boutique.domain.mocks.factories.SupplierMockFactory;
+import com.alma.boutique.domain.mocks.factories.OrderMockFactory;
+import com.alma.boutique.domain.mocks.factories.ProductMockFactory;
+import com.alma.boutique.domain.mocks.factories.ThirdPartyMockFactory;
 import com.alma.boutique.domain.mocks.factories.TransactionMockFactory;
+import com.alma.boutique.domain.mocks.repositories.OrderMockRepository;
+import com.alma.boutique.domain.mocks.repositories.ThirdPartyMockRepository;
 import com.alma.boutique.domain.mocks.repositories.TransactionMockRepository;
-import com.alma.boutique.domain.thirdperson.Client;
 import com.alma.boutique.domain.thirdperson.Order;
-import com.alma.boutique.domain.thirdperson.ShopOwner;
-import com.alma.boutique.domain.thirdperson.Supplier;
+import com.alma.boutique.domain.thirdperson.ThirdParty;
+
 import org.junit.Before;
 import org.junit.Test;
 import pl.pojo.tester.api.assertion.Method;
@@ -26,38 +23,48 @@ import static pl.pojo.tester.api.assertion.Assertions.assertPojoMethodsFor;
 
 public class HistoryTest {
 
+	private TransactionMockRepository repoTrans;
+	private ThirdPartyMockRepository repoThirdParty;
+	private OrderMockRepository repoOrder;
+
+	private OrderMockFactory supProdFac;
 	
-	private ClientMockFactory factClient;
-	private SupplierMockFactory factSupp;
-	private ShopMockFactory factShop;
-	private Client cli1;
-	private Client cli2;
-	private Supplier supp1;
-	private ShopOwner shop;
+	private ThirdParty cli1;
+	private ThirdParty cli2;
+	private ThirdParty supp1;
+	private ThirdParty shop;
 
 	@Before
 	public void setUp() throws Exception {
-		factClient = new ClientMockFactory("a", "client", "somewhere", "555-5555");
-		factSupp = new SupplierMockFactory("fo", "mar", "123-4567");
-		factShop = new ShopMockFactory("fo", "mar", "123-4567");
-		cli1 = factClient.create();
-		factClient = new ClientMockFactory("another", "client", "nowhere", "555-5557");
-		cli2 = factClient.create();
-		supp1 = factSupp.create();
-		shop = factShop.create();
+		repoThirdParty = new ThirdPartyMockRepository();
+		ThirdPartyMockFactory factPerson = new ThirdPartyMockFactory("client", "somewhere", "555-5555", false);
+		cli1 = factPerson.create();
+		repoThirdParty.add(cli1.getID(), cli1);
+		
+		factPerson = new ThirdPartyMockFactory("Supplier", "there", "123-4567", true);
+		supp1 = factPerson.create();
+		repoThirdParty.add(supp1.getID(), supp1);
+		
+		factPerson = new ThirdPartyMockFactory("shop", "here", "123-4567", false);
+		shop = factPerson.create();
+		repoThirdParty.add(shop.getID(), shop);
+		
+		factPerson = new ThirdPartyMockFactory("client2", "rue de la soif", "555-5557", false);
+		cli2 = factPerson.create();
+		repoThirdParty.add(cli2.getID(), cli2);
 	}
 	
 	@Test
 	public void testCreateTransaction() throws IOException {
 		Account account = new Account(this.shop);
 		History hist = new History(account);
-		TransactionMockRepository repoTrans = new TransactionMockRepository();
+		repoTrans = new TransactionMockRepository();
 		assertThat(hist.getHistory(repoTrans)).as("assert that the history is created empty").isEmpty();
 		
-		OrderSuppliedProductMockFactory supProdFac = new OrderSuppliedProductMockFactory("Bob");
+		supProdFac = new OrderMockFactory("Bob");
 		Order ord = shop.createOrder(supProdFac);
 		
-		TransactionMockFactory transFacto = new TransactionMockFactory(ord, supp1, shop);
+		TransactionMockFactory transFacto = new TransactionMockFactory(ord.getID(), shop.getID(), supp1.getID());
 		Transaction transSupBou = transFacto.create();
 		
 		repoTrans.add(transSupBou.getID(), transSupBou);
@@ -70,29 +77,28 @@ public class HistoryTest {
 		Account account = new Account(this.shop);
 		History hist = new History(account);
 		
-		TransactionMockRepository repoTrans = new TransactionMockRepository();
+		repoTrans = new TransactionMockRepository();
 		
 		assertThat(hist.getHistory(repoTrans)).as("assert that the history is created empty").isEmpty();
 		
-		OrderSuppliedProductMockFactory supProdFac = new OrderSuppliedProductMockFactory("Bob");
+		supProdFac = new OrderMockFactory("Bob");
 		Order ord = shop.createOrder(supProdFac);
 		
-		SuppliedProductMockFactory prod = new SuppliedProductMockFactory("duck", 1000000, "EUR", "A realy charismatic duck", "weapon");
+		ProductMockFactory prod = new ProductMockFactory("duck", 1000000, "EUR", "A realy charismatic duck", "weapon");
 		ord.createProduct(prod);
 		
-		TransactionMockFactory transFacto = new TransactionMockFactory(ord, supp1, shop);
+		TransactionMockFactory transFacto = new TransactionMockFactory(ord.getID(), shop.getID(), supp1.getID());
 		Transaction trans = hist.createTransaction(transFacto, repoTrans);
 		assertThat(hist.getTransaction(trans.getID(), repoTrans)).as("assert that the transaction was added successfully").isEqualTo(trans);
 		
 		
+		supProdFac = new OrderMockFactory("Remi");
+		ord = cli2.createOrder(supProdFac);
 		
-		OrderSoldProductMockFactory soldProdFac = new OrderSoldProductMockFactory("Remi");
-		ord = cli2.createOrder(soldProdFac);
-		
-		SoldProductMockFactory prodSold = new SoldProductMockFactory("duck", 1000000, "EUR", "A realy charismatic duck", "weapon");
+		ProductMockFactory prodSold = new ProductMockFactory("duck", 1000000, "EUR", "A realy charismatic duck", "weapon");
 		ord.createProduct(prodSold);
 		
-		transFacto = new TransactionMockFactory(ord, shop, cli2);
+		transFacto = new TransactionMockFactory(ord.getID(), shop.getID(), cli2.getID());
 		Transaction nonExistentTransaction = transFacto.create();
 		assertThatExceptionOfType(TransactionNotFoundException.class).isThrownBy(() -> hist.getTransaction(nonExistentTransaction.getID(), repoTrans))
 		.as("check if the history can react when he is asked to get a Transaction he doesn't have");
@@ -104,13 +110,13 @@ public class HistoryTest {
 	public void testDeleteTransaction() throws IOException {
 		Account account = new Account(this.shop);
 		History hist = new History(account);
-		TransactionMockRepository repoTrans = new TransactionMockRepository();
+		repoTrans = new TransactionMockRepository();
 		assertThat(hist.getHistory(repoTrans)).as("assert that the history is created empty").isEmpty();
 		
-		OrderSuppliedProductMockFactory supProdFac = new OrderSuppliedProductMockFactory("Bob");
+		supProdFac = new OrderMockFactory("Bob");
 		Order ord = shop.createOrder(supProdFac);
 		
-		TransactionMockFactory transFacto = new TransactionMockFactory(ord, supp1, shop);
+		TransactionMockFactory transFacto = new TransactionMockFactory(ord.getID(), shop.getID(), supp1.getID());
 		Transaction transSupBou = transFacto.create();
 		
 		repoTrans.add(transSupBou.getID(), transSupBou);
@@ -124,33 +130,38 @@ public class HistoryTest {
 		Account account = new Account(this.shop);
 		History hist = new History(account);
 		
-		TransactionMockRepository repoTrans = new TransactionMockRepository();
+		repoTrans = new TransactionMockRepository();
 		assertThat(hist.getHistory(repoTrans)).as("assert that the history is created empty").isEmpty();
 		
-		OrderSuppliedProductMockFactory supProdFac = new OrderSuppliedProductMockFactory("Bob");
+		repoOrder = new OrderMockRepository();
+		supProdFac = new OrderMockFactory("Bob");
 		Order ord = shop.createOrder(supProdFac);
 		
-		SuppliedProductMockFactory prod = new SuppliedProductMockFactory("duck", 5, "EUR", "A realy charismatic duck", "weapon");
+		ProductMockFactory prod = new ProductMockFactory("duck", 5, "EUR", "A realy charismatic duck", "weapon");
 		ord.createProduct(prod);
+
+		repoOrder.add(ord.getID(), ord);
 		
-		TransactionMockFactory transFacto = new TransactionMockFactory(ord, supp1, shop);
+		TransactionMockFactory transFacto = new TransactionMockFactory(ord.getID(),shop.getID(), supp1.getID());
 		
 		Transaction transSupBou = hist.createTransaction(transFacto, repoTrans);
 		assertThat(hist.getHistory(repoTrans)).as("assert that the Transaction was added successfully").contains(transSupBou);
 		
-		assertThat(hist.getBalance(repoTrans)).as("assert that the current balance is correct").isEqualTo(-5);
+		assertThat(hist.getBalance(repoTrans,repoOrder,repoThirdParty)).as("assert that the current balance is correct").isEqualTo(-5);
 		
-		OrderSoldProductMockFactory soldProdFac = new OrderSoldProductMockFactory("Opal");
-		ord = cli1.createOrder(soldProdFac);
+		supProdFac = new OrderMockFactory("Opal");
+		ord = cli1.createOrder(supProdFac);
 		
-		SoldProductMockFactory soldProd = new SoldProductMockFactory("duck", 5, "EUR", "A realy charismatic duck", "weapon");
+		ProductMockFactory soldProd = new ProductMockFactory("duck", 5, "EUR", "A realy charismatic duck", "weapon");
 		ord.createProduct(soldProd);
+
+		repoOrder.add(ord.getID(), ord);
 		
-		transFacto = new TransactionMockFactory(ord, shop, cli1);
+		transFacto = new TransactionMockFactory(ord.getID(), shop.getID(), cli1.getID());
 		hist.createTransaction(transFacto, repoTrans);
 		
-		assertThat(hist.getBalance(repoTrans)).as("assert that the current balance is correct").isEqualTo(0);
-		assertThat(hist.getBalance(repoTrans)).as("assert that the current balance is not changed").isEqualTo(0);
+		assertThat(hist.getBalance(repoTrans,repoOrder,repoThirdParty)).as("assert that the current balance is correct").isEqualTo(0);
+		assertThat(hist.getBalance(repoTrans,repoOrder,repoThirdParty)).as("assert that the current balance is not changed").isEqualTo(0);
 		
 	}
 

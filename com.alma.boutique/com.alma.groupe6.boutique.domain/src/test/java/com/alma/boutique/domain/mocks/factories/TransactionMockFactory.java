@@ -11,11 +11,11 @@ import java.io.IOException;
  * @author Thomas Minier
  */
 public class TransactionMockFactory implements IFactory<Transaction> {
-    private Order ord;
-    private ThirdParty from;
-    private ThirdParty to;
+    private int ord;
+    private int from;
+    private int to;
 
-    public TransactionMockFactory(Order ord, ThirdParty from, ThirdParty to) {
+    public TransactionMockFactory(int ord, int from, int to) {
         this.ord = ord;
         this.from = from;
         this.to = to;

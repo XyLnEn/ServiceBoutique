@@ -10,6 +10,7 @@ import com.alma.boutique.domain.exceptions.OrderNotFoundException;
 import com.alma.boutique.domain.exceptions.TransactionNotFoundException;
 import com.alma.boutique.domain.shared.Entity;
 import com.alma.boutique.domain.thirdperson.Order;
+import com.alma.boutique.domain.thirdperson.ThirdParty;
 
 public class History extends Entity {
 
@@ -54,14 +55,14 @@ public class History extends Entity {
 	}
 	
 	
-	public float getBalance(IRepository<Transaction> transactionHistory) throws IllegalDiscountException {
+	public float getBalance(IRepository<Transaction> transactionHistory, IRepository<Order> orderList, IRepository<ThirdParty> personList) throws IllegalDiscountException {
 		if(this.changedbalance) {
 			int balance = 0;
 			for (Transaction transaction : transactionHistory.browse()) {
-				if(transaction.getTo().sameIdentityAs(this.getAccount().getOwner())) {//expense for the shop, count negatively
-					balance -= transaction.getAmount();
+				if(personList.read(transaction.getPartyId()).isSupplier()) {//expense for the shop, count negatively
+					balance -= transaction.getAmount(orderList);
 				} else {
-					balance += transaction.getAmount();
+					balance += transaction.getAmount(orderList);
 				}
 			}
 			this.changedbalance = false;
@@ -70,10 +71,10 @@ public class History extends Entity {
 		return account.getCurrentBalance();
 	}
 	
-	public void AdvanceOrder(int ordId, IRepository<Transaction> repositoryTrans) throws OrderNotFoundException {
+	public void AdvanceOrder(int ordId, IRepository<Transaction> repositoryTrans, IRepository<Order> orderList) throws OrderNotFoundException {
 		for (Transaction transaction : repositoryTrans.browse()) {
-			if(transaction.getOrder().getID() == ordId) {
-				transaction.getOrder().advanceState();
+			if(transaction.getOrderId() == ordId) {
+				orderList.read(transaction.getOrderId()).advanceState();
 				return;
 			}
 		}

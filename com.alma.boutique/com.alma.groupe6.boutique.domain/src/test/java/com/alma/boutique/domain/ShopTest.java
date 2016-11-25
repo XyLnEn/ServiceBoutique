@@ -21,24 +21,19 @@ import com.alma.boutique.domain.exceptions.TransactionNotFoundException;
 import com.alma.boutique.domain.history.History;
 import com.alma.boutique.domain.history.Transaction;
 import com.alma.boutique.domain.mocks.ExchangeRateServiceMock;
-import com.alma.boutique.domain.mocks.factories.ClientMockFactory;
-import com.alma.boutique.domain.mocks.factories.OrderSoldProductMockFactory;
-import com.alma.boutique.domain.mocks.factories.OrderSuppliedProductMockFactory;
-import com.alma.boutique.domain.mocks.factories.SoldProductMockFactory;
-import com.alma.boutique.domain.mocks.factories.SuppliedProductMockFactory;
-import com.alma.boutique.domain.mocks.factories.SupplierMockFactory;
+import com.alma.boutique.domain.mocks.factories.OrderMockFactory;
+import com.alma.boutique.domain.mocks.factories.ProductMockFactory;
+import com.alma.boutique.domain.mocks.factories.ThirdPartyMockFactory;
 import com.alma.boutique.domain.mocks.factories.TransactionMockFactory;
 import com.alma.boutique.domain.mocks.repositories.ShopOwnerMockRepository;
-import com.alma.boutique.domain.mocks.repositories.SoldProductMockRepository;
+import com.alma.boutique.domain.mocks.repositories.ThirdPartyMockRepository;
+import com.alma.boutique.domain.mocks.repositories.OrderMockRepository;
+import com.alma.boutique.domain.mocks.repositories.ProductMockRepository;
 import com.alma.boutique.domain.mocks.repositories.TransactionMockRepository;
 import com.alma.boutique.domain.product.Product;
-import com.alma.boutique.domain.product.SoldProduct;
-import com.alma.boutique.domain.product.SuppliedProduct;
-import com.alma.boutique.domain.thirdperson.Client;
 import com.alma.boutique.domain.thirdperson.Identity;
 import com.alma.boutique.domain.thirdperson.Order;
 import com.alma.boutique.domain.thirdperson.OrderStatus;
-import com.alma.boutique.domain.thirdperson.OrderSuppliedProduct;
 import com.alma.boutique.domain.thirdperson.ShopOwner;
 import com.alma.boutique.domain.thirdperson.ThirdParty;
 
@@ -58,25 +53,25 @@ public class ShopTest {
 	
 	@Test
 	public void testBrowseStock() throws IOException {
-		SoldProductMockRepository soldRepo = new SoldProductMockRepository();
+		ProductMockRepository soldRepo = new ProductMockRepository();
 		assertThat(shop.browseStock(soldRepo)).as("assert that the shop can browse an empty stock").isEmpty();
-		SoldProductMockFactory soldFacto = new SoldProductMockFactory("lemon", 5, "EUR", "bitter", "fruit");
-		SoldProduct prod = soldFacto.create();
+		ProductMockFactory soldFacto = new ProductMockFactory("lemon", 5, "EUR", "bitter", "fruit");
+		Product prod = soldFacto.create();
 		soldRepo.add(prod.getID(), prod);
 		assertThat(shop.browseStock(soldRepo)).as("assert that the shop return the correct product").contains(prod);
 	}
 	
 	@Test
 	public void testBuyProduct() throws IOException, ProductNotFoundException, IllegalDiscountException {
-		SoldProductMockRepository soldRepo = new SoldProductMockRepository();
+		ProductMockRepository soldRepo = new ProductMockRepository();
 		
-		SoldProductMockFactory soldFacto = new SoldProductMockFactory("lemon", 5, "EUR", "bitter", "fruit");
-		SoldProduct prod1 = soldFacto.create();
+		ProductMockFactory soldFacto = new ProductMockFactory("lemon", 5, "EUR", "bitter", "fruit");
+		Product prod1 = soldFacto.create();
 
-		soldFacto = new SoldProductMockFactory("apple", 7, "EUR", "sweet", "fruit");
-		SoldProduct prod2 = soldFacto.create();
+		soldFacto = new ProductMockFactory("apple", 7, "EUR", "sweet", "fruit");
+		Product prod2 = soldFacto.create();
 		
-		OrderSoldProductMockFactory soldOrder = new OrderSoldProductMockFactory("bob");
+		OrderMockFactory soldOrder = new OrderMockFactory("bob");
 		List<Integer> listeAchat = new ArrayList<>();
 		Order emptyOrder = shop.buyProduct(soldRepo, soldOrder, listeAchat, "EUR", new ExchangeRateServiceMock());
 		
@@ -92,15 +87,15 @@ public class ShopTest {
 	
 	@Test
 	public void testSaveTransaction() throws IOException, TransactionNotFoundException, IllegalDiscountException {
-		SoldProductMockRepository soldRepo = new SoldProductMockRepository();
+		ProductMockRepository soldRepo = new ProductMockRepository();
 		
-		SoldProductMockFactory soldFacto = new SoldProductMockFactory("lemon", 5, "EUR", "bitter", "fruit");
-		SoldProduct prod1 = soldFacto.create();
+		ProductMockFactory soldFacto = new ProductMockFactory("lemon", 5, "EUR", "bitter", "fruit");
+		Product prod1 = soldFacto.create();
 
-		soldFacto = new SoldProductMockFactory("apple", 7, "EUR", "sweet", "fruit");
-		SoldProduct prod2 = soldFacto.create();
+		soldFacto = new ProductMockFactory("apple", 7, "EUR", "sweet", "fruit");
+		Product prod2 = soldFacto.create();
 		
-		OrderSoldProductMockFactory soldOrder = new OrderSoldProductMockFactory("bob");
+		OrderMockFactory soldOrder = new OrderMockFactory("bob");
 		List<Integer> listeAchat = new ArrayList<>();
 		Order emptyOrder = shop.buyProduct(soldRepo, soldOrder, listeAchat, "EUR", new ExchangeRateServiceMock());
 		
@@ -112,12 +107,12 @@ public class ShopTest {
 		listeAchat.add(prod2.getID());
 		Order ordToSave = shop.buyProduct(soldRepo, soldOrder, listeAchat, "EUR", new ExchangeRateServiceMock());
 		
-		ClientMockFactory clientFacto = new ClientMockFactory("Remi", "grep", "somewhere", "888888");
-		Client mockClient = clientFacto.create();
+		ThirdPartyMockFactory clientFacto = new ThirdPartyMockFactory("Remi", "somewhere", "888888", false);
+		ThirdParty mockClient = clientFacto.create();
 		
 		TransactionMockRepository transRepo = new TransactionMockRepository();
 		
-		TransactionMockFactory transToSave = new TransactionMockFactory(ordToSave, shop.getShopOwner(), mockClient);
+		TransactionMockFactory transToSave = new TransactionMockFactory(ordToSave.getID(), shop.getShopOwner().getID(), mockClient.getID());
 		Transaction generatedTrans = shop.saveTransaction(shop.getShopHistory(), transRepo, transToSave);
 		assertThat(shop.getShopHistory().getTransaction(generatedTrans.getID(), transRepo)).as("check that the transaction was added successfully").isEqualTo(generatedTrans);
 		
@@ -125,19 +120,19 @@ public class ShopTest {
 	
 	@Test
 	public void testRestock() throws IOException {
-		SoldProductMockRepository soldRepo = new SoldProductMockRepository();
+		ProductMockRepository soldRepo = new ProductMockRepository();
 		
-		SuppliedProductMockFactory suppProd1 = new SuppliedProductMockFactory("duck", 1, "EUR", "motherducker", "food");
-		SuppliedProductMockFactory suppProd2 = new SuppliedProductMockFactory("canari", 1, "EUR", "cute", "food");
+		ProductMockFactory suppProd1 = new ProductMockFactory("duck", 1, "EUR", "motherducker", "food");
+		ProductMockFactory suppProd2 = new ProductMockFactory("canari", 1, "EUR", "cute", "food");
 		
-		OrderSuppliedProductMockFactory ordSupp = new OrderSuppliedProductMockFactory("the poste");
+		OrderMockFactory ordSupp = new OrderMockFactory("the poste");
 		
-		List<IFactory<SuppliedProduct>> testList = new ArrayList<>();
+		List<IFactory<Product>> testList = new ArrayList<>();
 		
 		Order ord = shop.restock(soldRepo, testList, ordSupp, "EUR", new ExchangeRateServiceMock());
 		assertThat(ord.getDeliverer()).as("test that we can restock 0 items").isEqualTo("the poste");
 		
-		ordSupp = new OrderSuppliedProductMockFactory("the true poste");
+		ordSupp = new OrderMockFactory("the true poste");
 		
 		testList.add(suppProd1);
 		testList.add(suppProd2);
@@ -151,33 +146,37 @@ public class ShopTest {
 	public void testAdvanceOrder() throws IOException, OrderNotFoundException {
 		History history = new History();
 		TransactionMockRepository transHist = new TransactionMockRepository();
-		SuppliedProductMockFactory suppProd1 = new SuppliedProductMockFactory("duck", 1, "EUR", "motherducker", "food");
-		SuppliedProductMockFactory suppProd2 = new SuppliedProductMockFactory("canari", 1, "EUR", "cute", "food");
+		ProductMockFactory suppProd1 = new ProductMockFactory("duck", 1, "EUR", "motherducker", "food");
+		ProductMockFactory suppProd2 = new ProductMockFactory("canari", 1, "EUR", "cute", "food");
 		
-		OrderSuppliedProductMockFactory ordSupp = new OrderSuppliedProductMockFactory("the poste");
+		OrderMockFactory ordSupp = new OrderMockFactory("the poste");
 		Order ord = shop.getShopOwner().createOrder(ordSupp);
 		ord.createProduct(suppProd1);
 		ord.createProduct(suppProd2);
 		
-		SupplierMockFactory factoSupp = new SupplierMockFactory("LIDL", "somewhere", "00000000");
-		TransactionMockFactory transFact = new TransactionMockFactory(ord, factoSupp.create(), shop.getShopOwner());
+		OrderMockRepository ordRepo = new OrderMockRepository();
+		ordRepo.add(ord.getID(), ord);
+		
+		ThirdPartyMockFactory factoSupp = new ThirdPartyMockFactory("LIDL", "somewhere", "00000000", true);
+		TransactionMockFactory transFact = new TransactionMockFactory(ord.getID(), shop.getShopOwner().getID(), factoSupp.create().getID());
 		
 		Transaction t = history.createTransaction(transFact, transHist);
 		assertThat(ord.getOrderStatus()).as("assert that the order is created is the base state").isEqualTo(OrderStatus.ORDERED);
 		
-		shop.advanceOrder(history, transHist, ord.getID());
-		assertThat(transHist.read(t.getID()).getOrder().getOrderStatus()).as("assert that the order was advanced sucessfully in the transaction history").isEqualTo(OrderStatus.TRAVELING);
+		
+		shop.advanceOrder(history, transHist,ordRepo, ord.getID());
+		assertThat(ordRepo.read(transHist.read(t.getID()).getOrderId()).getOrderStatus()).as("assert that the order was advanced sucessfully in the transaction history").isEqualTo(OrderStatus.TRAVELING);
 		assertThat(shop.getShopOwner().getOrder(ord.getID()).getOrderStatus()).as("assert that the order was advanced sucessfully in the transaction history").isEqualTo(OrderStatus.TRAVELING);
-		
-		shop.advanceOrder(history, transHist, ord.getID());
-		assertThat(transHist.read(t.getID()).getOrder().getOrderStatus()).as("assert that the order was advanced sucessfully in the transaction history the second time").isEqualTo(OrderStatus.ARRIVED);
+
+		shop.advanceOrder(history, transHist,ordRepo, ord.getID());
+		assertThat(ordRepo.read(transHist.read(t.getID()).getOrderId()).getOrderStatus()).as("assert that the order was advanced sucessfully in the transaction history the second time").isEqualTo(OrderStatus.ARRIVED);
 		assertThat(shop.getShopOwner().getOrder(ord.getID()).getOrderStatus()).as("assert that the order was advanced sucessfully in the transaction history the second time").isEqualTo(OrderStatus.ARRIVED);
-		
-		shop.advanceOrder(history, transHist, ord.getID());
-		assertThat(transHist.read(t.getID()).getOrder().getOrderStatus()).as("assert that the order was advanced sucessfully in the transaction history").isEqualTo(OrderStatus.DELIVERED);
+
+		shop.advanceOrder(history, transHist,ordRepo, ord.getID());
+		assertThat(ordRepo.read(transHist.read(t.getID()).getOrderId()).getOrderStatus()).as("assert that the order was advanced sucessfully in the transaction history").isEqualTo(OrderStatus.DELIVERED);
 		assertThat(shop.getShopOwner().getOrder(ord.getID()).getOrderStatus()).as("assert that the order was advanced sucessfully in the transaction history").isEqualTo(OrderStatus.DELIVERED);
 		
-		assertThatExceptionOfType(OrderNotFoundException.class).isThrownBy(() -> shop.advanceOrder(history, transHist, 8))
+		assertThatExceptionOfType(OrderNotFoundException.class).isThrownBy(() -> shop.advanceOrder(history, transHist,ordRepo, -1))
 		.as("check if it is possible to advance a non-existing order");
 		
 		
@@ -185,15 +184,15 @@ public class ShopTest {
 	
 	@Test
 	public void testApplyPromotionOnProducts() throws IOException, IllegalDiscountException {
-		SoldProductMockRepository soldRepo = new SoldProductMockRepository();
+		ProductMockRepository soldRepo = new ProductMockRepository();
 		List<Integer> productIds = new ArrayList<>();
 		shop.applyPromotionOnProducts(soldRepo, 0, productIds);
 		
-		SoldProductMockFactory soldProd1 = new SoldProductMockFactory("duck", 50, "EUR", "motherducker", "food");
-		SoldProductMockFactory soldProd2 = new SoldProductMockFactory("canari", 50, "EUR", "cute", "food");
+		ProductMockFactory soldProd1 = new ProductMockFactory("duck", 50, "EUR", "motherducker", "food");
+		ProductMockFactory soldProd2 = new ProductMockFactory("canari", 50, "EUR", "cute", "food");
 		
-		SoldProduct p1 = soldProd1.create();
-		SoldProduct p2 = soldProd2.create();
+		Product p1 = soldProd1.create();
+		Product p2 = soldProd2.create();
 
 		soldRepo.add(p1.getID(), p1);
 		soldRepo.add(p2.getID(), p2);
@@ -219,23 +218,26 @@ public class ShopTest {
 		History history = new History();
 		TransactionMockRepository transHist = new TransactionMockRepository();
 		
-
-		assertThat(shop.getCurrentSold(history, transHist)).as("assert that the shop has gained 0 euros").isEqualTo(0);
+		ThirdPartyMockRepository personRepo = new ThirdPartyMockRepository();
+		ThirdPartyMockFactory cl = new ThirdPartyMockFactory("bob", "everywhere", "777777777", false);
+		ThirdParty c = cl.create();
+		personRepo.add(c.getID(), c);
 		
-		ClientMockFactory cl = new ClientMockFactory("bob", "dilan", "everywhere", "777777777");
-		Client c = cl.create();
+		OrderMockRepository orderRepo = new OrderMockRepository();
 		
-		SoldProductMockFactory prod = new SoldProductMockFactory("duck", 50, "EUR", "motherducker", "food");
-		OrderSoldProductMockFactory ord = new OrderSoldProductMockFactory("jasus");
+		assertThat(shop.getCurrentSold(history, transHist, orderRepo, personRepo)).as("assert that the shop has gained 0 euros").isEqualTo(0);
+		
+		ProductMockFactory prod = new ProductMockFactory("duck", 50, "EUR", "motherducker", "food");
+		OrderMockFactory ord = new OrderMockFactory("jasus");
 		
 		Order trueOrd = c.createOrder(ord);
 		trueOrd.createProduct(prod);
+		orderRepo.add(trueOrd.getID(), trueOrd);
 		
-		
-		TransactionMockFactory trans = new TransactionMockFactory(trueOrd, shop.getShopOwner(), c);
+		TransactionMockFactory trans = new TransactionMockFactory(trueOrd.getID(), shop.getShopOwner().getID(), c.getID());
 		history.createTransaction(trans, transHist);
 		
-		assertThat(shop.getCurrentSold(history, transHist)).as("assert that the shop has gained 50 Euros").isEqualTo(50);
+		assertThat(shop.getCurrentSold(history, transHist, orderRepo, personRepo)).as("assert that the shop has gained 50 Euros").isEqualTo(50);
 	}
 	
 	@Test
@@ -246,17 +248,17 @@ public class ShopTest {
 
 		assertThat(shop.getHistory(history, transHist)).as("assert that the shop has an empty history").isEmpty();
 		
-		ClientMockFactory cl = new ClientMockFactory("bob", "dilan", "everywhere", "777777777");
-		Client c = cl.create();
+		ThirdPartyMockFactory cl = new ThirdPartyMockFactory("bob", "everywhere", "777777777", false);
+		ThirdParty c = cl.create();
 		
-		SoldProductMockFactory prod = new SoldProductMockFactory("duck", 50, "EUR", "motherducker", "food");
-		OrderSoldProductMockFactory ord = new OrderSoldProductMockFactory("jasus");
+		ProductMockFactory prod = new ProductMockFactory("duck", 50, "EUR", "motherducker", "food");
+		OrderMockFactory ord = new OrderMockFactory("jasus");
 		
 		Order trueOrd = c.createOrder(ord);
 		trueOrd.createProduct(prod);
 		
 		
-		TransactionMockFactory trans = new TransactionMockFactory(trueOrd, shop.getShopOwner(), c);
+		TransactionMockFactory trans = new TransactionMockFactory(trueOrd.getID(), shop.getShopOwner().getID(), c.getID());
 		Transaction t = history.createTransaction(trans, transHist);
 		
 		assertThat(shop.getHistory(history, transHist)).as("assert that the shop now has the correct transaction").contains(t);

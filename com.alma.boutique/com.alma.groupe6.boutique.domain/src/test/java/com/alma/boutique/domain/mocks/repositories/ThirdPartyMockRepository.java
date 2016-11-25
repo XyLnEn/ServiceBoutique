@@ -1,7 +1,7 @@
 package com.alma.boutique.domain.mocks.repositories;
 
 import com.alma.boutique.api.IRepository;
-import com.alma.boutique.domain.thirdperson.Client;
+import com.alma.boutique.domain.thirdperson.ThirdParty;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -11,21 +11,21 @@ import java.util.Map;
 /**
  * @author Thomas Minier
  */
-public class ClientMockRepository implements IRepository<Client> {
-    private Map<Integer, Client> elements = new HashMap<>();
+public class ThirdPartyMockRepository implements IRepository<ThirdParty> {
+    private Map<Integer, ThirdParty> elements = new HashMap<>();
 
     @Override
-    public List<Client> browse() {
+    public List<ThirdParty> browse() {
         return new ArrayList<>(elements.values());
     }
 
     @Override
-    public Client read(int id) {
+    public ThirdParty read(int id) {
         return elements.get(id);
     }
 
     @Override
-    public void edit(int id, Client entity) {
+    public void edit(int id, ThirdParty entity) {
         if(elements.containsKey(id)) {
             elements.put(id, entity);
         }
@@ -37,7 +37,7 @@ public class ClientMockRepository implements IRepository<Client> {
     }
 
     @Override
-    public void add(int id, Client value) {
+    public void add(int id, ThirdParty value) {
         elements.put(id, value);
     }
 }

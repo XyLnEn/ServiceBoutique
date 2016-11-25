@@ -1,5 +1,7 @@
 package com.alma.boutique.domain.thirdperson;
 
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
@@ -11,7 +13,7 @@ import com.alma.boutique.domain.exceptions.ProductNotFoundException;
 import com.alma.boutique.domain.product.Product;
 import com.alma.boutique.domain.shared.Entity;
 
-public abstract class Order extends Entity {
+public class Order extends Entity {
 
 	protected List<Product> products;
 	protected OrderStatus orderStatus;
@@ -19,10 +21,28 @@ public abstract class Order extends Entity {
 
 	public Order() {
 		super();
+		this.products = new ArrayList<>();
 	}
 	
-
-	public abstract Product createProduct(IFactory factoryProduct);
+	public Order(OrderStatus orderStatus, String deliverer) {
+		super();
+		this.products = new ArrayList<>();
+		this.orderStatus = orderStatus;
+		this.deliverer = deliverer;
+	}
+	
+	
+	
+	public Product createProduct(IFactory<Product> factoryProd) {
+		Product prod = null;
+		try {
+			prod = factoryProd.create();
+		} catch (IOException e) {
+			log.error(e.getMessage(),e);
+		}
+		products.add(prod);
+		return prod;
+	}
 	
 	public Product getProduct(int prodId) throws ProductNotFoundException {
 		for (Product product : products) {
@@ -47,6 +67,8 @@ public abstract class Order extends Entity {
 		products.remove(prod);
 	}
 
+	
+	
 	/**
 	 * update the order with new values
 	 * @param ord the new value
@@ -75,6 +97,8 @@ public abstract class Order extends Entity {
 			break;
 		}
 	}
+	
+	
 
 	public List<Product> getProducts() {
 		return products;
@@ -124,7 +148,7 @@ public abstract class Order extends Entity {
 		if (obj.getClass() != getClass()) {
 			return false;
 		}
-		OrderSuppliedProduct rhs = (OrderSuppliedProduct) obj;
+		Order rhs = (Order) obj;
 		return new EqualsBuilder()
 				.append(this.products, rhs.products)
 				.append(this.orderStatus, rhs.orderStatus)
