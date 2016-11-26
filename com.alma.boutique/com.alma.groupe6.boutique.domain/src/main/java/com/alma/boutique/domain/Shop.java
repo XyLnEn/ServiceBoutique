@@ -65,7 +65,7 @@ public class Shop extends Entity{
 	 */
 	public Order buyProduct(IRepository<Product> stock, IRepository<ThirdParty> personList,
 			IFactory<Order> orderCreator, List<Integer> productIdList, int personId,
-			String deviseUsed, ExchangeRateService currentRate ) throws IOException, OrderNotFoundException, IllegalDiscountException {
+			String deviseUsed, ExchangeRateService currentRate ) throws Exception {
 		ThirdParty pers = personList.read(personId);
 		Order ord = pers.createOrder(orderCreator);
 		List<Product> orderList = productIdList.stream().map(stock::read).collect(Collectors.toList());
@@ -77,11 +77,11 @@ public class Shop extends Entity{
 			convertedPrice.setValue(newValue);
 			
 			product.setPrice(convertedPrice);
-			stock.delete(product.getID());
+			stock.delete(product.getId());
 		}
 		ord.setProducts(orderList);
-		pers.updateOrder(ord.getID(), ord);
-		personList.edit(pers.getID(), pers);
+		pers.updateOrder(ord.getId(), ord);
+		personList.edit(pers.getId(), pers);
 		return ord;
 	}
 	
@@ -109,6 +109,22 @@ public class Shop extends Entity{
 	}
 	
 	/**
+	 * Method that update a Product with a recalculated price
+	 * @param restockOrder the order which will contain the product
+	 * @param product the product to update
+	 * @param currentRate the service to recalculate the price of the product using the currency
+	 * @return the updated product
+	 * @throws IOException
+	 */
+	public Product updatePrice(Order restockOrder, IFactory<Product> product, ExchangeRateService currentRate, String currency) throws IOException {
+		Product newProd = buyProductFromSupplier(restockOrder, product);
+		float priceConverted = currentRate.exchange(newProd.getPrice().getValue(), newProd.getPrice().getCurrency());
+		Price newPrice = new Price(priceConverted, currency);
+		newProd.setPrice(newPrice);
+		return newProd;
+	}
+	
+	/**
 	 * Method to buy products from a supplier and put them into the shop's stock. The supplier is updated 
 	 * @param stock where to put the bought products
 	 * @param personList the list of persons containing the supplier
@@ -128,13 +144,13 @@ public class Shop extends Entity{
 		Order restockOrder = supplier.createOrder(orderCreator);
 		List<Product> orderList = new ArrayList<>();
 		for (IFactory<Product> product : productList) {
-			Product newProd = buyProductFromSupplier(restockOrder, product);
+			Product newProd = updatePrice(restockOrder, product, currentRate, "EUR");
 			orderList.add(newProd);
-			stock.add(newProd.getID(), newProd);
+			stock.add(newProd.getId(), newProd);
 		}
 		restockOrder.setProducts(orderList);
-		supplier.updateOrder(restockOrder.getID(), restockOrder);
-		personList.edit(supplier.getID(), supplier);
+		supplier.updateOrder(restockOrder.getId(), restockOrder);
+		personList.edit(supplier.getId(), supplier);
 		return restockOrder;
 	}
 	

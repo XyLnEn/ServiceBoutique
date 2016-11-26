@@ -39,19 +39,19 @@ public class HistoryTest {
 		repoThirdParty = new ThirdPartyMockRepository();
 		ThirdPartyMockFactory factPerson = new ThirdPartyMockFactory("client", "somewhere", "555-5555", false);
 		cli1 = factPerson.create();
-		repoThirdParty.add(cli1.getID(), cli1);
+		repoThirdParty.add(cli1.getId(), cli1);
 		
 		factPerson = new ThirdPartyMockFactory("Supplier", "there", "123-4567", true);
 		supp1 = factPerson.create();
-		repoThirdParty.add(supp1.getID(), supp1);
+		repoThirdParty.add(supp1.getId(), supp1);
 		
 		factPerson = new ThirdPartyMockFactory("shop", "here", "123-4567", false);
 		shop = factPerson.create();
-		repoThirdParty.add(shop.getID(), shop);
+		repoThirdParty.add(shop.getId(), shop);
 		
 		factPerson = new ThirdPartyMockFactory("client2", "rue de la soif", "555-5557", false);
 		cli2 = factPerson.create();
-		repoThirdParty.add(cli2.getID(), cli2);
+		repoThirdParty.add(cli2.getId(), cli2);
 	}
 	
 	@Test
@@ -64,10 +64,10 @@ public class HistoryTest {
 		supProdFac = new OrderMockFactory("Bob");
 		Order ord = shop.createOrder(supProdFac);
 		
-		TransactionMockFactory transFacto = new TransactionMockFactory(ord.getID(), shop.getID(), supp1.getID());
+		TransactionMockFactory transFacto = new TransactionMockFactory(ord.getId(), shop.getId(), supp1.getId());
 		Transaction transSupBou = transFacto.create();
 		
-		repoTrans.add(transSupBou.getID(), transSupBou);
+		repoTrans.add(transSupBou.getId(), transSupBou);
 		assertThat(hist.getHistory(repoTrans)).as("assert that the Transaction was added successfully").contains(transSupBou);
 		
 	}
@@ -87,9 +87,9 @@ public class HistoryTest {
 		ProductMockFactory prod = new ProductMockFactory("duck", 1000000, "EUR", "A realy charismatic duck", "weapon");
 		ord.createProduct(prod);
 		
-		TransactionMockFactory transFacto = new TransactionMockFactory(ord.getID(), shop.getID(), supp1.getID());
+		TransactionMockFactory transFacto = new TransactionMockFactory(ord.getId(), shop.getId(), supp1.getId());
 		Transaction trans = hist.createTransaction(transFacto, repoTrans);
-		assertThat(hist.getTransaction(trans.getID(), repoTrans)).as("assert that the transaction was added successfully").isEqualTo(trans);
+		assertThat(hist.getTransaction(trans.getId(), repoTrans)).as("assert that the transaction was added successfully").isEqualTo(trans);
 		
 		
 		supProdFac = new OrderMockFactory("Remi");
@@ -98,9 +98,9 @@ public class HistoryTest {
 		ProductMockFactory prodSold = new ProductMockFactory("duck", 1000000, "EUR", "A realy charismatic duck", "weapon");
 		ord.createProduct(prodSold);
 		
-		transFacto = new TransactionMockFactory(ord.getID(), shop.getID(), cli2.getID());
+		transFacto = new TransactionMockFactory(ord.getId(), shop.getId(), cli2.getId());
 		Transaction nonExistentTransaction = transFacto.create();
-		assertThatExceptionOfType(TransactionNotFoundException.class).isThrownBy(() -> hist.getTransaction(nonExistentTransaction.getID(), repoTrans))
+		assertThatExceptionOfType(TransactionNotFoundException.class).isThrownBy(() -> hist.getTransaction(nonExistentTransaction.getId(), repoTrans))
 		.as("check if the history can react when he is asked to get a Transaction he doesn't have");
 	}
 	
@@ -116,10 +116,10 @@ public class HistoryTest {
 		supProdFac = new OrderMockFactory("Bob");
 		Order ord = shop.createOrder(supProdFac);
 		
-		TransactionMockFactory transFacto = new TransactionMockFactory(ord.getID(), shop.getID(), supp1.getID());
+		TransactionMockFactory transFacto = new TransactionMockFactory(ord.getId(), shop.getId(), supp1.getId());
 		Transaction transSupBou = transFacto.create();
 		
-		repoTrans.add(transSupBou.getID(), transSupBou);
+		repoTrans.add(transSupBou.getId(), transSupBou);
 		assertThat(hist.getHistory(repoTrans)).as("assert that the Transaction was added successfully").contains(transSupBou);
 		hist.deleteTransaction(transSupBou, repoTrans);
 		assertThat(hist.getHistory(repoTrans)).as("assert that the transaction was removed successfully").doesNotContain(transSupBou);
@@ -140,9 +140,9 @@ public class HistoryTest {
 		ProductMockFactory prod = new ProductMockFactory("duck", 5, "EUR", "A realy charismatic duck", "weapon");
 		ord.createProduct(prod);
 
-		repoOrder.add(ord.getID(), ord);
+		repoOrder.add(ord.getId(), ord);
 		
-		TransactionMockFactory transFacto = new TransactionMockFactory(ord.getID(),shop.getID(), supp1.getID());
+		TransactionMockFactory transFacto = new TransactionMockFactory(ord.getId(),shop.getId(), supp1.getId());
 		
 		Transaction transSupBou = hist.createTransaction(transFacto, repoTrans);
 		assertThat(hist.getHistory(repoTrans)).as("assert that the Transaction was added successfully").contains(transSupBou);
@@ -155,9 +155,9 @@ public class HistoryTest {
 		ProductMockFactory soldProd = new ProductMockFactory("duck", 5, "EUR", "A realy charismatic duck", "weapon");
 		ord.createProduct(soldProd);
 
-		repoOrder.add(ord.getID(), ord);
+		repoOrder.add(ord.getId(), ord);
 		
-		transFacto = new TransactionMockFactory(ord.getID(), shop.getID(), cli1.getID());
+		transFacto = new TransactionMockFactory(ord.getId(), shop.getId(), cli1.getId());
 		hist.createTransaction(transFacto, repoTrans);
 		
 		assertThat(hist.getBalance(repoTrans,repoOrder,repoThirdParty)).as("assert that the current balance is correct").isEqualTo(0);

@@ -59,5 +59,16 @@ public class ProductTest {
         Product anotherProduct = new StubProduct("another stub", price, "another description", category);
         assertThat(product.sameCategoryAs(anotherProduct)).as("sameCategoryAs should work for two products with the same category").isTrue();
     }
+    
+    @Test
+    public void sameEntity() {
+        Category category = new Category("stub products");
+        Price price = new Price(10, "EUR");
+        Product product = new StubProduct("stub", price, "description", category);
+        assertThat(product.sameIdentityAs(product)).as("sameIdentityAs should work for the same product").isTrue();
+        product.setId(1);
+        assertThat(product.getId()).as("the Id should be settable").isEqualTo(1);
+        
+    }
 
 }

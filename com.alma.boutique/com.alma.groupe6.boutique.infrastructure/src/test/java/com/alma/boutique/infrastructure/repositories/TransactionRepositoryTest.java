@@ -44,33 +44,33 @@ public class TransactionRepositoryTest {
         Order order = orderFactory.create();
 
         IRepository<Transaction> repository = new TransactionRepository(db);
-        IFactory<Transaction> factory = new TransactionFactory(order.getID(), firstSupplier.getID(), client.getID());
+        IFactory<Transaction> factory = new TransactionFactory(order.getId(), firstSupplier.getId(), client.getId());
         Transaction firstElement = factory.create();
 
-        factory = new TransactionFactory(order.getID(), secondSupplier.getID(), client.getID());
+        factory = new TransactionFactory(order.getId(), secondSupplier.getId(), client.getId());
         Transaction secondElement = factory.create();
 
         // insert an element into the repository
-        repository.add(firstElement.getID(), firstElement);
+        repository.add(firstElement.getId(), firstElement);
 
         // check if the element has been inserted in the base
-        Transaction retrieved = repository.read(firstElement.getID());
+        Transaction retrieved = repository.read(firstElement.getId());
         assertThat(retrieved).as("the element should be have been added to the repository").isEqualTo(firstElement);
 
         // test the browse method
-        repository.add(secondElement.getID(), secondElement);
+        repository.add(secondElement.getId(), secondElement);
         List<Transaction> allElements = repository.browse();
         assertThat(allElements).as("all elements should be browsable").contains(firstElement, secondElement);
 
         // test the edit method
         firstElement.setPartyId(12);
-        repository.edit(firstElement.getID(), firstElement);
-        retrieved = repository.read(firstElement.getID());
+        repository.edit(firstElement.getId(), firstElement);
+        retrieved = repository.read(firstElement.getId());
         assertThat(retrieved).as("the element should have been updated after the edition in the repository").isEqualTo(firstElement);
 
         // test the delete method
-        repository.delete(firstElement.getID());
-        repository.delete(secondElement.getID());
+        repository.delete(firstElement.getId());
+        repository.delete(secondElement.getId());
         allElements = repository.browse();
         assertThat(allElements).as("the repository should be empty after the deletion").isEmpty();
     }

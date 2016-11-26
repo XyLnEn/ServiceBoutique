@@ -46,7 +46,7 @@ public class History extends Entity {
 		} catch (IOException e) {
 			log.error(e.getMessage(),e);
 		}
-		transactionHistory.add(trans.getID(), trans);
+		transactionHistory.add(trans.getId(), trans);
 		this.changedbalance = true;
 		return trans;
 	}
@@ -60,7 +60,7 @@ public class History extends Entity {
 	 */
 	public Transaction getTransaction(int transId, IRepository<Transaction> transactionHistory) throws TransactionNotFoundException {
 		for (Transaction transaction : transactionHistory.browse()) {
-			if (transaction.getID() == transId) {
+			if (transaction.getId() == transId) {
 				return transaction;
 			}
 		}
@@ -73,7 +73,7 @@ public class History extends Entity {
 	 * @param transactionHistory the repository where this method will delete
 	 */
 	public void deleteTransaction(Transaction trans, IRepository<Transaction> transactionHistory) {
-		transactionHistory.delete(trans.getID());
+		transactionHistory.delete(trans.getId());
 	}
 	
 	/**

@@ -60,7 +60,7 @@ public class ThirdParty extends Entity {
 	 */
 	public Order getOrder(int ordId) throws OrderNotFoundException {
 		for (Order order : orderHistory) {
-			if (order.getID() == ordId){
+			if (order.getId() == ordId){
 				return order;
 			}
 		}
@@ -75,7 +75,7 @@ public class ThirdParty extends Entity {
 	 */
 	public void updateOrder(int oldOrdId, Order newOrd) throws OrderNotFoundException {
 		for (Order order : orderHistory) {
-			if (order.getID() == oldOrdId){
+			if (order.getId() == oldOrdId){
 				order.updateOrder(newOrd);
 				return ;
 			}

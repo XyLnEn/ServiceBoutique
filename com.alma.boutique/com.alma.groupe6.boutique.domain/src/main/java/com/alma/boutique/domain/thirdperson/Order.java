@@ -60,7 +60,7 @@ public class Order extends Entity {
 	 */
 	public Product getProduct(int prodId) throws ProductNotFoundException {
 		for (Product product : products) {
-			if (product.getID() == prodId){
+			if (product.getId() == prodId){
 				return product;
 			}
 		}
@@ -75,7 +75,7 @@ public class Order extends Entity {
 	 */
 	public void updateProduct(int oldProdId, Product newProd) throws ProductNotFoundException {
 		for (Product product : products) {
-			if (product.getID() == oldProdId){
+			if (product.getId() == oldProdId){
 				product.updateProduct(newProd);
 				return;
 			}
@@ -127,7 +127,7 @@ public class Order extends Entity {
 	 * @return the total price of the order
 	 * @throws IllegalDiscountException 
 	 */
-	public float TotalPrice() throws IllegalDiscountException {
+	public float totalPrice() throws IllegalDiscountException {
 		float calculatedPrice = 0;
 		for (Product stockProduct : products) {
 			calculatedPrice += stockProduct.calculatePrice();

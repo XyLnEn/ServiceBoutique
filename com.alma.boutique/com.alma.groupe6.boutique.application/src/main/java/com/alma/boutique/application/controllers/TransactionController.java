@@ -90,12 +90,9 @@ public class TransactionController extends ShopController {
    * 
    * @param req the request
    * @return the completed transaction
-   * @throws IOException
-   * @throws IllegalDiscountException
-   * @throws OrderNotFoundException
-   * @throws JsonMappingException 
+   * @throws Exception 
    */
-	public Transaction buy(Request req) throws JsonMappingException, IOException, IllegalDiscountException, OrderNotFoundException {
+	public Transaction buy(Request req) throws Exception {
 		Purchase purchase = this.getResults(req);
 		String deliverer = purchase.getDeliverer();
   	String devise = purchase.getDevise();
@@ -103,9 +100,9 @@ public class TransactionController extends ShopController {
   	List<Integer> idList = new ArrayList<>(purchase.getIdList());
   	ThirdParty client = persons.read(purchase.getPersonId());
 		Order ord = shop.buyProduct(this.stock, persons, factOrd , idList, purchase.getPersonId(), devise, fixer);
-		orderHistory.add(ord.getID(), ord);
+		orderHistory.add(ord.getId(), ord);
 		
-		return shop.saveTransaction(shop.getShopHistory(), this.transactions, new TransactionFactory(ord.getID(), shop.getShopHistory().getAccount().getOwner().getID(), client.getID()));
+		return shop.saveTransaction(shop.getShopHistory(), this.transactions, new TransactionFactory(ord.getId(), shop.getShopHistory().getAccount().getOwner().getId(), client.getId()));
 	}
 	
 	/**
@@ -123,7 +120,7 @@ public class TransactionController extends ShopController {
 	 * @throws JsonMappingException
 	 * @throws IOException
 	 */
-	public Transaction resupply(Request req) throws JsonMappingException, IOException, IllegalDiscountException, OrderNotFoundException {
+	public Transaction resupply(Request req) throws Exception {
 		Purchase purchase = this.getResults(req);
 		String deliverer = purchase.getDeliverer();
         String devise = purchase.getDevise();
@@ -132,12 +129,12 @@ public class TransactionController extends ShopController {
         List<IFactory<Product>> productList = new ArrayList<>();
 
         for (Integer id : idList) {
-            productList.addAll(supply.browse().stream().filter(product -> product.getID() == id).map(product -> new ProductFactory(product.getName(), product.getPrice().getValue(), product.getPrice().getCurrency(), product.getDescription(), product.getCategory().getName())).collect(Collectors.toList()));
+            productList.addAll(supply.browse().stream().filter(product -> product.getId() == id).map(product -> new ProductFactory(product.getName(), product.getPrice().getValue(), product.getPrice().getCurrency(), product.getDescription(), product.getCategory().getName())).collect(Collectors.toList()));
         }
         Order ord = shop.restock(this.stock, persons, productList, factOrd, purchase.getPersonId(), devise, fixer);
 
         ThirdParty supplier = persons.read(purchase.getPersonId());
-        return shop.saveTransaction(shop.getShopHistory(), this.transactions, new TransactionFactory(ord.getID(), shop.getShopHistory().getAccount().getOwner().getID(), supplier.getID()));
+        return shop.saveTransaction(shop.getShopHistory(), this.transactions, new TransactionFactory(ord.getId(), shop.getShopHistory().getAccount().getOwner().getId(), supplier.getId()));
 	}
 	
 	@Override

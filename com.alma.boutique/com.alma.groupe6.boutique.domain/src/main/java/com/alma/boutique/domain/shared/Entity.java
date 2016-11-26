@@ -17,7 +17,7 @@ public abstract class Entity {
       this.id = UUID.randomUUID().hashCode();
   }
 
-  public int getID() {
+  public int getId() {
       return this.id;
   }
 

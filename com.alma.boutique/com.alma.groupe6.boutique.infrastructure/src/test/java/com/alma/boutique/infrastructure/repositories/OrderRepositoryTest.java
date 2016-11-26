@@ -35,26 +35,26 @@ public class OrderRepositoryTest {
         Order secondElement = factory.create();
 
         // insert an element into the repository
-        repository.add(firstElement.getID(), firstElement);
+        repository.add(firstElement.getId(), firstElement);
 
         // check if the element has been inserted in the base
-        Order retrieved = repository.read(firstElement.getID());
+        Order retrieved = repository.read(firstElement.getId());
         assertThat(retrieved).as("the element should be have been added to the repository").isEqualTo(firstElement);
 
         // test the browse method
-        repository.add(secondElement.getID(), secondElement);
+        repository.add(secondElement.getId(), secondElement);
         List<Order> allElements = repository.browse();
         assertThat(allElements).as("all elements should be browsable").contains(firstElement, secondElement);
 
         // test the edit method
         firstElement.setDeliverer("PZK");
-        repository.edit(firstElement.getID(), firstElement);
-        retrieved = repository.read(firstElement.getID());
+        repository.edit(firstElement.getId(), firstElement);
+        retrieved = repository.read(firstElement.getId());
         assertThat(retrieved).as("the element should have been updated after the edition in the repository").isEqualTo(firstElement);
 
         // test the delete method
-        repository.delete(firstElement.getID());
-        repository.delete(secondElement.getID());
+        repository.delete(firstElement.getId());
+        repository.delete(secondElement.getId());
         allElements = repository.browse();
         assertThat(allElements).as("the repository should be empty after the deletion").isEmpty();
     }

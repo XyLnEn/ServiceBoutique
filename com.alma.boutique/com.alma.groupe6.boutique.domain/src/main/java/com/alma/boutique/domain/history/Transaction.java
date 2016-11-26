@@ -30,7 +30,7 @@ public class Transaction extends Entity {
 	}
 
 	public float getAmount(IRepository<Order> orderRepo) throws IllegalDiscountException {
-		return orderRepo.read(this.orderId).TotalPrice();
+		return orderRepo.read(this.orderId).totalPrice();
 	}
 
 	
