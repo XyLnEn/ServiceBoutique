@@ -6,12 +6,6 @@ import com.alma.boutique.application.injection.Injector;
 import com.alma.boutique.domain.Shop;
 import com.alma.boutique.domain.history.Account;
 import com.alma.boutique.domain.history.History;
-import com.alma.boutique.domain.history.Transaction;
-import com.alma.boutique.domain.product.Category;
-import com.alma.boutique.domain.product.Price;
-import com.alma.boutique.domain.product.Product;
-import com.alma.boutique.domain.thirdperson.Identity;
-import com.alma.boutique.domain.thirdperson.Order;
 import com.alma.boutique.domain.thirdperson.ThirdParty;
 import com.alma.boutique.infrastructure.database.MongoDBStore;
 import com.alma.boutique.infrastructure.repositories.ThirdPartyRepository;
@@ -24,13 +18,16 @@ import java.util.List;
 import static spark.Spark.*;
 
 /**
- * Classe principale pour lancer le layer application
+ * Principal class to launch the application layer
  * @author Lenny Lucas
  * @author Thomas Minier
  */
 public class Application {
     private static final Logger logger = Logger.getLogger(Application.class.getName());
 
+    private Application() {
+    	
+    }
     /**
      *
      * @param origin
@@ -77,15 +74,14 @@ public class Application {
 
         List<ShopController> controllers = new ArrayList<>();
         Shop shop = new Shop();
-        shop.setShopOwner(new ThirdParty());
-        History shopHistory = new History(new Account(shop.getShopOwner()));
+        History shopHistory = new History(new Account(new ThirdParty()));
         shop.setShopHistory(shopHistory);
 
         MongoDBStore.setConfigFile(args[0]);
         IRepository<ThirdParty> clientRepo = null;
         try {
 	        clientRepo = new ThirdPartyRepository(MongoDBStore.getInstance());
-	        shop.setShopOwner(clientRepo.read(-1114086729));
+	        shop.getShopHistory().getAccount().setOwner(clientRepo.read(-1114086729));
         } catch (IOException e) {
             logger.error(e);
         }

@@ -12,7 +12,11 @@ import com.alma.boutique.domain.exceptions.IllegalDiscountException;
 import com.alma.boutique.domain.exceptions.ProductNotFoundException;
 import com.alma.boutique.domain.product.Product;
 import com.alma.boutique.domain.shared.Entity;
-
+/**
+ * Class that represent am order: it contains the name of the deliverer, the list of products bought and the state of the order
+ * @author Lenny Lucas
+ *
+ */
 public class Order extends Entity {
 
 	protected List<Product> products;
@@ -32,7 +36,11 @@ public class Order extends Entity {
 	}
 	
 	
-	
+	/**
+	 * create a product
+	 * @param factoryProd the factory that will supply the product
+	 * @return the created product
+	 */
 	public Product createProduct(IFactory<Product> factoryProd) {
 		Product prod = null;
 		try {
@@ -44,6 +52,12 @@ public class Order extends Entity {
 		return prod;
 	}
 	
+	/**
+	 * get the product if it is in the order
+	 * @param prodId the unique Id of the product
+	 * @return the product 
+	 * @throws ProductNotFoundException
+	 */
 	public Product getProduct(int prodId) throws ProductNotFoundException {
 		for (Product product : products) {
 			if (product.getID() == prodId){
@@ -53,6 +67,12 @@ public class Order extends Entity {
 		throw new ProductNotFoundException("Product not found");//in case the order doesn't exist
 	}
 
+	/**
+	 * update an existing product 
+	 * @param oldProdId the ID of the product to update
+	 * @param newProd the patron that will be used to update
+	 * @throws ProductNotFoundException
+	 */
 	public void updateProduct(int oldProdId, Product newProd) throws ProductNotFoundException {
 		for (Product product : products) {
 			if (product.getID() == oldProdId){
@@ -63,6 +83,10 @@ public class Order extends Entity {
 		throw new ProductNotFoundException("Product not found");//in case the order doesn't exist
 	}
 
+	/**
+	 * delete a product 
+	 * @param prod the product to delete
+	 */
 	public void deleteProduct(Product prod) {
 		products.remove(prod);
 	}
@@ -98,6 +122,19 @@ public class Order extends Entity {
 		}
 	}
 	
+	/**
+	 * method that calculate the total price of the order
+	 * @return the total price of the order
+	 * @throws IllegalDiscountException 
+	 */
+	public float TotalPrice() throws IllegalDiscountException {
+		float calculatedPrice = 0;
+		for (Product stockProduct : products) {
+			calculatedPrice += stockProduct.calculatePrice();
+		}
+		return calculatedPrice;
+	}
+	
 	
 
 	public List<Product> getProducts() {
@@ -114,19 +151,6 @@ public class Order extends Entity {
 
 	public void setOrderStatus(OrderStatus orderStatus) {
 		this.orderStatus = orderStatus;
-	}
-
-	/**
-	 * method that calculate the total price of the order
-	 * @return the total price of the order
-	 * @throws IllegalDiscountException 
-	 */
-	public float TotalPrice() throws IllegalDiscountException {
-		float calculatedPrice = 0;
-		for (Product stockProduct : products) {
-			calculatedPrice += stockProduct.calculatePrice();
-		}
-		return calculatedPrice;
 	}
 
 	public String getDeliverer() {

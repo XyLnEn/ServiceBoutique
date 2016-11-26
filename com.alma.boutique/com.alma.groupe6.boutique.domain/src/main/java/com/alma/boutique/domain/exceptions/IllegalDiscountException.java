@@ -1,6 +1,7 @@
 package com.alma.boutique.domain.exceptions;
 
 /**
+ * Exception thrown when a product price is lower than 0 after applying the promotion
  * @author Thomas Minier
  */
 public class IllegalDiscountException extends Exception {

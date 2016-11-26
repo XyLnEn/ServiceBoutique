@@ -18,33 +18,54 @@ import com.alma.boutique.domain.shared.Entity;
 import com.alma.boutique.domain.thirdperson.Order;
 import com.alma.boutique.domain.thirdperson.ThirdParty;
 
+/**
+ * Class that represent the Shop. It is the only class in the domain that has methods explicitely used outside of it.
+ * @author Lenny Lucas
+ *
+ */
 public class Shop extends Entity{
 
 	private History shopHistory;
-	private ThirdParty shopOwner;
 	
 	public Shop() {
 		super();
-		this.shopOwner = new ThirdParty();
 		this.shopHistory = new History();
 	}
 
 
-	public Shop(IRepository<ThirdParty> repositoryShopOwner) {
+	public Shop(ThirdParty shopOwner) {
 		super();
-		this.shopOwner = repositoryShopOwner.browse().get(0);
 		this.shopHistory = new History();
-		this.shopHistory.getAccount().setOwner(this.shopOwner);
+		this.shopHistory.getAccount().setOwner(shopOwner);
 		this.shopHistory.setChangedbalance(true);
 	}
 	
+	/**
+	 * Method that open the stock to get all Products
+	 * @param stock the repository to explore
+	 * @return
+	 */
 	public List<Product> browseStock(IRepository<Product> stock) {
 		return stock.browse();
 	}
 	
+	/**
+	 * Method that buy a product and create the order,save it and update the buyer
+	 * @param stock where the Product are stored
+	 * @param personList the list of persons containing the buyer
+	 * @param orderCreator the factory that will create the Order
+	 * @param productIdList a list containing the id of every products to buy
+	 * @param personId the id of the buyer
+	 * @param deviseUsed the devise used to buy the products
+	 * @param currentRate the service to recalculate the price of the products using the currency
+	 * @return the created order
+	 * @throws IOException
+	 * @throws OrderNotFoundException
+	 * @throws IllegalDiscountException
+	 */
 	public Order buyProduct(IRepository<Product> stock, IRepository<ThirdParty> personList,
 			IFactory<Order> orderCreator, List<Integer> productIdList, int personId,
-			String deviseUsed, ExchangeRateService currentRate ) throws IOException, IllegalDiscountException, OrderNotFoundException {
+			String deviseUsed, ExchangeRateService currentRate ) throws IOException, OrderNotFoundException, IllegalDiscountException {
 		ThirdParty pers = personList.read(personId);
 		Order ord = pers.createOrder(orderCreator);
 		List<Product> orderList = productIdList.stream().map(stock::read).collect(Collectors.toList());
@@ -64,16 +85,42 @@ public class Shop extends Entity{
 		return ord;
 	}
 	
+	/**
+	 * Method that save a transaction
+	 * @param history the shop history where to create the transaction
+	 * @param transactionHistory the repository where the transaction will be saved
+	 * @param newTransaction the factory that will create the transaction
+	 * @return the created transaction
+	 */
 	public Transaction saveTransaction(History history, IRepository<Transaction> transactionHistory, 
 			IFactory<Transaction> newTransaction) {
 		return history.createTransaction(newTransaction, transactionHistory);
 	}
 	
-	
+	/**
+	 * Method to buy a product from a supplier
+	 * @param totalOrder the order where to create the product
+	 * @param productToBuy the factory that will create the product to buy
+	 * @return the bought product
+	 * @throws IOException
+	 */
 	public Product buyProductFromSupplier(Order totalOrder, IFactory<Product> productToBuy) throws IOException {
 		return totalOrder.createProduct(productToBuy);
 	}
 	
+	/**
+	 * Method to buy products from a supplier and put them into the shop's stock. The supplier is updated 
+	 * @param stock where to put the bought products
+	 * @param personList the list of persons containing the supplier
+	 * @param productList the list of every factories needed to create the bought products
+	 * @param orderCreator the factory that will create the Order
+	 * @param supplierId the id of the supplier to update
+	 * @param deviseUsed the devise used to buy the products
+	 * @param currentRate the service to recalculate the price of the products using the currency
+	 * @return the created Order
+	 * @throws IOException
+	 * @throws OrderNotFoundException
+	 */
 	public Order restock(IRepository<Product> stock, IRepository<ThirdParty> personList, 
 			List<IFactory<Product>> productList, IFactory<Order> orderCreator, 
 			int supplierId, String deviseUsed, ExchangeRateService currentRate) throws IOException, OrderNotFoundException {
@@ -91,29 +138,62 @@ public class Shop extends Entity{
 		return restockOrder;
 	}
 	
-	public void advanceOrder( History history, IRepository<Transaction> transactionHistory, IRepository<Order> orderList,  int ordId) throws OrderNotFoundException {
-		history.AdvanceOrder(ordId, transactionHistory, orderList);
+	/**
+	 * Method that advance the state of an order
+	 * @param ordId the id of the order to advance
+	 * @param repositoryTrans the repository of transaction where to search for the order
+	 * @param orderList the repository 
+	 * @throws OrderNotFoundException
+	 */
+	public void advanceOrder(IRepository<Order> orderList, int ordId) throws OrderNotFoundException{
+		try {
+			orderList.read(ordId).advanceState();
+		} catch (NullPointerException e) {
+			log.warn(e.getMessage(), e);
+			throw new OrderNotFoundException("Order not found");
+		}
 	}
 	
+	/**
+	 * Method that apply a promotion on a product
+	 * @param stock where the products are stored
+	 * @param prodId the id of the product to update
+	 * @param discount the discount to apply
+	 */
 	public void applyProductPromotion(IRepository<Product> stock,int prodId, float discount) {
 		Product prod = stock.read(prodId);
 		prod.addDiscount(discount);
 		stock.edit(prodId, prod);
 	}
 	
+	/**
+	 * Method that apply a promotion on a list of products
+	 * @param stock where the products are stored
+	 * @param prodId the list of id of the products to update
+	 * @param discount the discount to apply
+	 */
 	public void applyPromotionOnProducts(IRepository<Product> stock, float promo, List<Integer> productIds) {
 		for (Integer productId : productIds) {
 			applyProductPromotion(stock, productId, promo);
 		}
 	}
 	
-	public float getCurrentSold(History hist, IRepository<Transaction> transactionHistory, 
+	/**
+	 * Method that calculate the turnover of the shop
+	 * @param hist the history of the shop
+	 * @param transactionHistory the list of transactions done in the shop
+	 * @param orderList the list of orders made in the shop
+	 * @param personList the list of persons 
+	 * @return the turnover of the shop
+	 * @throws IllegalDiscountException
+	 */
+	public float getCurrentSold(IRepository<Transaction> transactionHistory, 
 			IRepository<Order> orderList, IRepository<ThirdParty> personList) throws IllegalDiscountException {
-		return hist.getBalance(transactionHistory, orderList, personList);
+		return shopHistory.getBalance(transactionHistory, orderList, personList);
 	}
 	
-	public List<Transaction> getHistory(History hist, IRepository<Transaction> transactionHistory) {
-		return hist.getHistory(transactionHistory);
+	public List<Transaction> getHistory(IRepository<Transaction> transactionHistory) {
+		return shopHistory.getHistory(transactionHistory);
 	}
 	
 	public History getShopHistory() {
@@ -123,16 +203,6 @@ public class Shop extends Entity{
 
 	public void setShopHistory(History shopHistory) {
 		this.shopHistory = shopHistory;
-	}
-
-
-	public ThirdParty getShopOwner() {
-		return shopOwner;
-	}
-
-
-	public void setShopOwner(ThirdParty shopOwner) {
-		this.shopOwner = shopOwner;
 	}
 	
 }

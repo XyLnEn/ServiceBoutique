@@ -11,8 +11,8 @@ import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 /**
- * 
- * @author lenny
+ * class that represent a person with his/her order history
+ * @author Lenny Lucas
  *
  */
 public class ThirdParty extends Entity {
@@ -36,6 +36,11 @@ public class ThirdParty extends Entity {
 		this.isSupplier = isSupplier;
 	}
 
+	/**
+	 * create an order
+	 * @param factoryOrd the factory that will supply the order
+	 * @return the created order
+	 */
 	public Order createOrder(IFactory<Order> factoryOrd) {
 		Order newOrd = null;
 		try {
@@ -47,7 +52,12 @@ public class ThirdParty extends Entity {
 		return newOrd;
 	}
 
-	
+	/**
+	 * get the order if it is in the OrderHistory
+	 * @param prodId the unique Id of the order
+	 * @return the order 
+	 * @throws OrderNotFoundException
+	 */
 	public Order getOrder(int ordId) throws OrderNotFoundException {
 		for (Order order : orderHistory) {
 			if (order.getID() == ordId){
@@ -57,6 +67,12 @@ public class ThirdParty extends Entity {
 		throw new OrderNotFoundException("Order not found");//in case the order doesn't exist
 	}
 	
+	/**
+	 * Update a pre-existing order with new values
+	 * @param oldOrdId the Id of the order to update
+	 * @param newOrd the parton that will be used to update the order
+	 * @throws OrderNotFoundException
+	 */
 	public void updateOrder(int oldOrdId, Order newOrd) throws OrderNotFoundException {
 		for (Order order : orderHistory) {
 			if (order.getID() == oldOrdId){
@@ -67,6 +83,10 @@ public class ThirdParty extends Entity {
 		throw new OrderNotFoundException("Order not found");//in case the order doesn't exist
 	}
 	
+	/**
+	 * Delete an order
+	 * @param ord the order to delete
+	 */
 	public void deleteOrder(Order ord) {
 		orderHistory.remove(ord);
 	}

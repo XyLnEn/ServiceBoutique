@@ -47,7 +47,7 @@ public class ShopTest {
 		personRepo = new ThirdPartyMockRepository();
 		ThirdParty shopOwner = new ThirdParty("bob",new Identity("house", "11111111"), true);
 		personRepo.add(shopOwner.getID(), shopOwner);
-		this.shop = new Shop(personRepo);
+		this.shop = new Shop(shopOwner);
 		this.client = new ThirdParty("client", new Identity("some adress", "a number"), false);
 		this.supplier = new ThirdParty("supplier", new Identity("nearby", "555"), true);
 		this.personRepo = new ThirdPartyMockRepository();
@@ -117,7 +117,7 @@ public class ShopTest {
 		
 		TransactionMockRepository transRepo = new TransactionMockRepository();
 		
-		TransactionMockFactory transToSave = new TransactionMockFactory(ordToSave.getID(), shop.getShopOwner().getID(), mockClient.getID());
+		TransactionMockFactory transToSave = new TransactionMockFactory(ordToSave.getID(), shop.getShopHistory().getAccount().getOwner().getID(), mockClient.getID());
 		Transaction generatedTrans = shop.saveTransaction(shop.getShopHistory(), transRepo, transToSave);
 		assertThat(shop.getShopHistory().getTransaction(generatedTrans.getID(), transRepo)).as("check that the transaction was added successfully").isEqualTo(generatedTrans);
 		
@@ -155,7 +155,7 @@ public class ShopTest {
 		ProductMockFactory suppProd2 = new ProductMockFactory("canari", 1, "EUR", "cute", "food");
 		
 		OrderMockFactory ordSupp = new OrderMockFactory("the poste");
-		Order ord = shop.getShopOwner().createOrder(ordSupp);
+		Order ord = shop.getShopHistory().getAccount().getOwner().createOrder(ordSupp);
 		ord.createProduct(suppProd1);
 		ord.createProduct(suppProd2);
 		
@@ -163,25 +163,25 @@ public class ShopTest {
 		ordRepo.add(ord.getID(), ord);
 		
 		ThirdPartyMockFactory factoSupp = new ThirdPartyMockFactory("LIDL", "somewhere", "00000000", true);
-		TransactionMockFactory transFact = new TransactionMockFactory(ord.getID(), shop.getShopOwner().getID(), factoSupp.create().getID());
+		TransactionMockFactory transFact = new TransactionMockFactory(ord.getID(), shop.getShopHistory().getAccount().getOwner().getID(), factoSupp.create().getID());
 		
 		Transaction t = history.createTransaction(transFact, transHist);
 		assertThat(ord.getOrderStatus()).as("assert that the order is created is the base state").isEqualTo(OrderStatus.ORDERED);
 		
 		
-		shop.advanceOrder(history, transHist,ordRepo, ord.getID());
+		shop.advanceOrder(ordRepo, ord.getID());
 		assertThat(ordRepo.read(transHist.read(t.getID()).getOrderId()).getOrderStatus()).as("assert that the order was advanced sucessfully in the transaction history").isEqualTo(OrderStatus.TRAVELING);
-		assertThat(shop.getShopOwner().getOrder(ord.getID()).getOrderStatus()).as("assert that the order was advanced sucessfully in the transaction history").isEqualTo(OrderStatus.TRAVELING);
+		assertThat(shop.getShopHistory().getAccount().getOwner().getOrder(ord.getID()).getOrderStatus()).as("assert that the order was advanced sucessfully in the transaction history").isEqualTo(OrderStatus.TRAVELING);
 
-		shop.advanceOrder(history, transHist,ordRepo, ord.getID());
+		shop.advanceOrder(ordRepo, ord.getID());
 		assertThat(ordRepo.read(transHist.read(t.getID()).getOrderId()).getOrderStatus()).as("assert that the order was advanced sucessfully in the transaction history the second time").isEqualTo(OrderStatus.ARRIVED);
-		assertThat(shop.getShopOwner().getOrder(ord.getID()).getOrderStatus()).as("assert that the order was advanced sucessfully in the transaction history the second time").isEqualTo(OrderStatus.ARRIVED);
+		assertThat(shop.getShopHistory().getAccount().getOwner().getOrder(ord.getID()).getOrderStatus()).as("assert that the order was advanced sucessfully in the transaction history the second time").isEqualTo(OrderStatus.ARRIVED);
 
-		shop.advanceOrder(history, transHist,ordRepo, ord.getID());
+		shop.advanceOrder(ordRepo, ord.getID());
 		assertThat(ordRepo.read(transHist.read(t.getID()).getOrderId()).getOrderStatus()).as("assert that the order was advanced sucessfully in the transaction history").isEqualTo(OrderStatus.DELIVERED);
-		assertThat(shop.getShopOwner().getOrder(ord.getID()).getOrderStatus()).as("assert that the order was advanced sucessfully in the transaction history").isEqualTo(OrderStatus.DELIVERED);
+		assertThat(shop.getShopHistory().getAccount().getOwner().getOrder(ord.getID()).getOrderStatus()).as("assert that the order was advanced sucessfully in the transaction history").isEqualTo(OrderStatus.DELIVERED);
 		
-		assertThatExceptionOfType(OrderNotFoundException.class).isThrownBy(() -> shop.advanceOrder(history, transHist,ordRepo, -1))
+		assertThatExceptionOfType(OrderNotFoundException.class).isThrownBy(() -> shop.advanceOrder(ordRepo, -1))
 		.as("check if it is possible to advance a non-existing order");
 		
 		
@@ -219,8 +219,7 @@ public class ShopTest {
 	}
 	
 	@Test
-	public void testGetCurrentSold() throws IOException, IllegalDiscountException {
-		History history = new History();
+	public void testGetCurrentSold() throws IOException, IllegalDiscountException, OrderNotFoundException {
 		TransactionMockRepository transHist = new TransactionMockRepository();
 		
 		ThirdPartyMockRepository personRepo = new ThirdPartyMockRepository();
@@ -230,19 +229,25 @@ public class ShopTest {
 		
 		OrderMockRepository orderRepo = new OrderMockRepository();
 		
-		assertThat(shop.getCurrentSold(history, transHist, orderRepo, personRepo)).as("assert that the shop has gained 0 euros").isEqualTo(0);
+		assertThat(shop.getCurrentSold(transHist, orderRepo, personRepo)).as("assert that the shop has gained 0 euros").isEqualTo(0);
 		
 		ProductMockFactory prod = new ProductMockFactory("duck", 50, "EUR", "motherducker", "food");
 		OrderMockFactory ord = new OrderMockFactory("jasus");
 		
 		Order trueOrd = c.createOrder(ord);
+		
 		trueOrd.createProduct(prod);
 		orderRepo.add(trueOrd.getID(), trueOrd);
 		
-		TransactionMockFactory trans = new TransactionMockFactory(trueOrd.getID(), shop.getShopOwner().getID(), c.getID());
-		history.createTransaction(trans, transHist);
+		c.updateOrder(trueOrd.getID(), trueOrd);
 		
-		assertThat(shop.getCurrentSold(history, transHist, orderRepo, personRepo)).as("assert that the shop has gained 50 Euros").isEqualTo(50);
+		personRepo.edit(c.getID(), c);
+		
+		TransactionMockFactory trans = new TransactionMockFactory(trueOrd.getID(), shop.getShopHistory().getAccount().getOwner().getID(), c.getID());
+		Transaction t = shop.getShopHistory().createTransaction(trans, transHist);
+		transHist.add(t.getID(), t);
+		
+		assertThat(shop.getCurrentSold(transHist, orderRepo, personRepo)).as("assert that the shop has gained 50 Euros").isEqualTo(50);
 	}
 	
 	@Test
@@ -251,7 +256,7 @@ public class ShopTest {
 		TransactionMockRepository transHist = new TransactionMockRepository();
 		
 
-		assertThat(shop.getHistory(history, transHist)).as("assert that the shop has an empty history").isEmpty();
+		assertThat(shop.getHistory(transHist)).as("assert that the shop has an empty history").isEmpty();
 		
 		ThirdPartyMockFactory cl = new ThirdPartyMockFactory("bob", "everywhere", "777777777", false);
 		ThirdParty c = cl.create();
@@ -263,10 +268,10 @@ public class ShopTest {
 		trueOrd.createProduct(prod);
 		
 		
-		TransactionMockFactory trans = new TransactionMockFactory(trueOrd.getID(), shop.getShopOwner().getID(), c.getID());
+		TransactionMockFactory trans = new TransactionMockFactory(trueOrd.getID(), shop.getShopHistory().getAccount().getOwner().getID(), c.getID());
 		Transaction t = history.createTransaction(trans, transHist);
 		
-		assertThat(shop.getHistory(history, transHist)).as("assert that the shop now has the correct transaction").contains(t);
+		assertThat(shop.getHistory(transHist)).as("assert that the shop now has the correct transaction").contains(t);
 	}
 
 	@Test

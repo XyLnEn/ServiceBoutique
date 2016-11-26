@@ -1,6 +1,7 @@
 package com.alma.boutique.domain.exceptions;
 
 /**
+ * Exception thrown when there is not enough Product in stock
  * @author Thomas Minier
  */
 public class NotEnoughStockException extends Exception {

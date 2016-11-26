@@ -1,5 +1,10 @@
 package com.alma.boutique.domain.exceptions;
 
+/**
+ * Exception thrown when a Product is not found
+ * @author Lenny Lucas
+ *
+ */
 public class ProductNotFoundException extends Exception {
 
 	/**

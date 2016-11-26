@@ -6,6 +6,7 @@ import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 /**
+ * Class that represent a product
  * @author Thomas Minier
  */
 public class Product extends Entity {
@@ -37,6 +38,11 @@ public class Product extends Entity {
         this.discount += discount;
     }
 
+    /**
+     * calculate the price of a product. if the price is negative throw an exception
+     * @return the price of the product adjusted with the discount
+     * @throws IllegalDiscountException
+     */
     public float calculatePrice() throws IllegalDiscountException {
         if(price.getValue() - discount < 0) {
             throw new IllegalDiscountException("Total discounts is superior to product's prize");
@@ -44,6 +50,10 @@ public class Product extends Entity {
         return price.getValue() - discount;
     }
     
+    /**
+     * method that update the product with new values from another product
+     * @param pro a product
+     */
     public void updateProduct(Product pro){
     	this.name = pro.getName();
       this.price = pro.getPrice();

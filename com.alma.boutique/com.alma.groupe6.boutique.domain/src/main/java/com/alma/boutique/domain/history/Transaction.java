@@ -7,6 +7,11 @@ import com.alma.boutique.domain.thirdperson.Order;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
+/**
+ * method that represent a transaction between 2 persons 
+ * @author Lenny Lucas
+ *
+ */
 public class Transaction extends Entity {
 	
 	private int orderId;

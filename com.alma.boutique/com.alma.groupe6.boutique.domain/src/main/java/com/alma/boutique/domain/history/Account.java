@@ -4,6 +4,11 @@ import com.alma.boutique.domain.thirdperson.ThirdParty;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
+/**
+ * Class that represent the account of a person
+ * @author Lenny Lucas
+ *
+ */
 public class Account {
 	private float currentBalance;
 	private ThirdParty owner;

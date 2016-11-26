@@ -1,8 +1,8 @@
 package com.alma.boutique.domain.exceptions;
 
 /**
- * 
- * @author lenny
+ * Exception thrown when an Order is not found
+ * @author Lenny Lucas
  *
  */
 public class OrderNotFoundException extends Exception {

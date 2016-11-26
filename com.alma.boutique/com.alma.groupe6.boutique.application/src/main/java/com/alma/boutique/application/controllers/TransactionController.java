@@ -105,11 +105,25 @@ public class TransactionController extends ShopController {
 		Order ord = shop.buyProduct(this.stock, persons, factOrd , idList, purchase.getPersonId(), devise, fixer);
 		orderHistory.add(ord.getID(), ord);
 		
-		return shop.saveTransaction(shop.getShopHistory(), this.transactions, new TransactionFactory(ord.getID(), shop.getShopOwner().getID(), client.getID()));
+		return shop.saveTransaction(shop.getShopHistory(), this.transactions, new TransactionFactory(ord.getID(), shop.getShopHistory().getAccount().getOwner().getID(), client.getID()));
 	}
 	
-
-	public Transaction resupply(Request req) throws IllegalDiscountException, OrderNotFoundException, JsonMappingException, IOException {
+	/**
+   * method that inject the repositories from the infra into the domain to resupply the stock
+   * the request should have the following fields : 
+   * "deliverer" : the name of the deliverer,
+   * "devise" : the devise name,
+   * "idList" : [the list of all the ids of the products to buy]
+   * "personId" : the Id of the ThirdParty that is supplying the products
+   * 
+   * @param req the request
+   * @return the completed transaction
+	 * @throws IllegalDiscountException
+	 * @throws OrderNotFoundException
+	 * @throws JsonMappingException
+	 * @throws IOException
+	 */
+	public Transaction resupply(Request req) throws JsonMappingException, IOException, IllegalDiscountException, OrderNotFoundException {
 		Purchase purchase = this.getResults(req);
 		String deliverer = purchase.getDeliverer();
         String devise = purchase.getDevise();
@@ -123,7 +137,7 @@ public class TransactionController extends ShopController {
         Order ord = shop.restock(this.stock, persons, productList, factOrd, purchase.getPersonId(), devise, fixer);
 
         ThirdParty supplier = persons.read(purchase.getPersonId());
-        return shop.saveTransaction(shop.getShopHistory(), this.transactions, new TransactionFactory(ord.getID(), shop.getShopOwner().getID(), supplier.getID()));
+        return shop.saveTransaction(shop.getShopHistory(), this.transactions, new TransactionFactory(ord.getID(), shop.getShopHistory().getAccount().getOwner().getID(), supplier.getID()));
 	}
 	
 	@Override

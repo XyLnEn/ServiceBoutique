@@ -4,8 +4,8 @@ import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 /**
- * 
- * @author lenny
+ * Object value class to represent the Identity of a person
+ * @author Lenny Lucas
  *
  */
 public class Identity {

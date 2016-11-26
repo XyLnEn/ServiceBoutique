@@ -5,6 +5,7 @@ import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 /**
+ * Class that represent the category of a product
  * @author Thomas Minier
  */
 public class Category extends Entity {

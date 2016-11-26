@@ -6,7 +6,7 @@ import org.slf4j.LoggerFactory;
 import java.util.UUID;
 
 /**
- *
+ * Root class of the non-object value
  * @author Thomas Minier
  */
 public abstract class Entity {
