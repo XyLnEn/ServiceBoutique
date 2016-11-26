@@ -21,8 +21,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import static spark.Spark.after;
-import static spark.Spark.init;
+import static spark.Spark.*;
 
 /**
  * Classe principale pour lancer le layer application
@@ -32,21 +31,40 @@ import static spark.Spark.init;
 public class Application {
     private static final Logger logger = Logger.getLogger(Application.class.getName());
 
-    public static void populateClients(IRepository<ThirdParty> clientRepo) {
-			ThirdParty part = new ThirdParty("Beta", new Identity("maga", "111112"), false);
-			clientRepo.add(part.getID(), part);
+    /**
+     *
+     * @param origin
+     * @param methods
+     * @param headers
+     */
+    private static void enableCORS(final String origin, final String methods, final String headers) {
+        options("/*", (request, response) -> {
+
+            String accessControlRequestHeaders = request.headers("Access-Control-Request-Headers");
+            if (accessControlRequestHeaders != null) {
+                response.header("Access-Control-Allow-Headers", accessControlRequestHeaders);
+            }
+
+            String accessControlRequestMethod = request.headers("Access-Control-Request-Method");
+            if (accessControlRequestMethod != null) {
+                response.header("Access-Control-Allow-Methods", accessControlRequestMethod);
+            }
+
+            return "OK";
+        });
+
+        before((request, response) -> {
+            response.header("Access-Control-Allow-Origin", origin);
+            response.header("Access-Control-Request-Method", methods);
+            response.header("Access-Control-Allow-Headers", headers);
+        });
     }
-    
-    public static void populateProducts(IRepository<Product> productRepo) {
-			Product p = new Product("prod", new Price(10, "EUR"), "a test product", new Category("test"));
-			productRepo.add(p.getID(), p);
-    }
-    
-    public static void populateDB(IRepository<Product> productRepo, IRepository<ThirdParty> clientRepo, 
-    		IRepository<Transaction> transactionRepo, IRepository<Order> orderHistory) {
-    	populateClients(clientRepo);
-    	populateProducts(productRepo);
-			
+
+    /**
+     *
+     */
+    private static void enableJSON() {
+        after((req, res) -> res.type("application/json"));
     }
     
     public static void main(String[] args) {
@@ -54,9 +72,8 @@ public class Application {
             logger.error("The application must be run with the path to the MongoDB config file as first argument");
             System.exit(1);
         }
-
-        // use a filter to convert all requests into JSON
-        after((req, res) -> res.type("application/json"));
+        enableCORS("*", "*", "*");
+        enableJSON();
 
         List<ShopController> controllers = new ArrayList<>();
         Shop shop = new Shop();
@@ -86,8 +103,8 @@ public class Application {
         PersonController persCont = new PersonController(shop);
         controllers.add(persCont); //client management
         
-				OrderController ordCont = new OrderController(shop);
-				controllers.add(ordCont); //order management
+        OrderController ordCont = new OrderController(shop);
+		controllers.add(ordCont); //order management
 
         // inject dependencies in controllers
         controllers.forEach(Injector::injectAttributes);

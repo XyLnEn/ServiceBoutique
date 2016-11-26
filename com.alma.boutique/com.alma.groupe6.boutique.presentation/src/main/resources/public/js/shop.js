@@ -1,20 +1,18 @@
 // Component Shop : display the shop
 const ShopComponent = Vue.component('shop', {
-template: '<catalog v-bind:products="products"></catalog>',
-data : function () {
-	return {
-		products : [{
-			id: 1,
-			name: "Awesome product",
-			price: 10.0,
-			description: "a simple product"
-		}, {
-			id: 2,
-			name: "Beautiful product",
-			price: 20.0,
-			description: "a beautiful product"
-		}]
-	}}
+	template: '<catalog v-bind:products="products"></catalog>',
+	data : function () {
+		return {
+			products : []
+		}
+	},
+	mounted: function() {
+		var that = this;
+		axios.get(config.api + config.urls.products.browse)
+		.then(function(response) {
+			that.products = response.data;
+		})
+	}
 })
 
 // Component Catalog : diplay all the products sell by the shop
@@ -28,7 +26,7 @@ const CatalogComponent = Vue.component('catalog', {
 // Component Product : display a simple product
 const ProductComponent = Vue.component('product', {
 	props: ['product'],
-	template: `<p>Nom : {{ product.name }}, prix : {{ product.price }}, description : {{ product.description }}</p>`
+	template: `<p>Nom : {{ product.name }}, prix : {{ product.price.value }}, devise : {{ product.price.currency }}, description : {{ product.description }}</p>`
 })
 
 // Component SaveProduct : save a product in the basket
