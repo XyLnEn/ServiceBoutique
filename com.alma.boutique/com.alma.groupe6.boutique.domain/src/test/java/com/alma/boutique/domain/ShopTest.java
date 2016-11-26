@@ -64,7 +64,7 @@ public class ShopTest {
 	}
 	
 	@Test
-	public void testBuyProduct() throws IOException, ProductNotFoundException, IllegalDiscountException {
+	public void testBuyProduct() throws IOException, ProductNotFoundException, IllegalDiscountException, OrderNotFoundException {
 		ProductMockRepository soldRepo = new ProductMockRepository();
 		
 		ProductMockFactory soldFacto = new ProductMockFactory("lemon", 5, "EUR", "bitter", "fruit");
@@ -88,7 +88,7 @@ public class ShopTest {
 	}
 	
 	@Test
-	public void testSaveTransaction() throws IOException, TransactionNotFoundException, IllegalDiscountException {
+	public void testSaveTransaction() throws IOException, TransactionNotFoundException, IllegalDiscountException, OrderNotFoundException {
 		ProductMockRepository soldRepo = new ProductMockRepository();
 		
 		ProductMockFactory soldFacto = new ProductMockFactory("lemon", 5, "EUR", "bitter", "fruit");

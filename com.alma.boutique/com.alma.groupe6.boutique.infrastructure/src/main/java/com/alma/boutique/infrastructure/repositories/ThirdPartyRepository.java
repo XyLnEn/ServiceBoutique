@@ -28,7 +28,7 @@ public class ThirdPartyRepository implements IRepository<ThirdParty> {
 
   @Override
   public void edit(int id, ThirdParty entity) {
-      database.update(id, entity);
+    	database.update(id, entity);
   }
 
   @Override

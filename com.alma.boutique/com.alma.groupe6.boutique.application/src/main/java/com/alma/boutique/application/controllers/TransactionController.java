@@ -17,6 +17,8 @@ import com.alma.boutique.infrastructure.factories.ProductFactory;
 import com.alma.boutique.infrastructure.factories.TransactionFactory;
 import com.alma.boutique.infrastructure.services.FixerExchanger;
 import com.alma.boutique.infrastructure.services.ProviderCatalog;
+import com.fasterxml.jackson.databind.JsonMappingException;
+
 import spark.Request;
 
 import java.io.IOException;
@@ -69,21 +71,23 @@ public class TransactionController extends ShopController {
 		super(shop);
 	}
 
-    private Purchase getResults(Request req) throws IOException {
-        return mapper.readValue(req.body(), Purchase.class);
-    }
+  private Purchase getResults(Request req) throws JsonMappingException, IOException {
+  	return mapper.readValue(req.body(), Purchase.class);
+  }
 	
-    public Transaction buy(Request req) throws IOException, IllegalDiscountException, OrderNotFoundException {
-        Purchase purchase = this.getResults(req);
-        String deliverer = purchase.getDeliverer();
-        String devise = purchase.getDevise();
-        IFactory<Order> factOrd = new OrderFactory(deliverer);
-        List<Integer> idList = new ArrayList<>(purchase.getIdList());
-        ThirdParty client = persons.read(purchase.getPersonId());
-        Order ord = shop.buyProduct(this.stock, persons, factOrd , idList, purchase.getPersonId(), devise, fixer);
-
-        return shop.saveTransaction(shop.getShopHistory(), this.transactions, new TransactionFactory(ord.getID(), shop.getShopOwner().getID(), client.getID()));
-    }
+	public Transaction buy(Request req) throws IOException, IllegalDiscountException, OrderNotFoundException {
+		Purchase purchase = this.getResults(req);
+		String deliverer = purchase.getDeliverer();
+  	String devise = purchase.getDevise();
+  	IFactory<Order> factOrd = new OrderFactory(deliverer);
+  	List<Integer> idList = new ArrayList<>(purchase.getIdList());
+  	ThirdParty client = persons.read(purchase.getPersonId());
+		Order ord = shop.buyProduct(this.stock, persons, factOrd , idList, purchase.getPersonId(), devise, fixer);
+		orderHistory.add(ord.getID(), ord);
+		
+		 return shop.saveTransaction(shop.getShopHistory(), this.transactions, new TransactionFactory(ord.getID(), shop.getShopOwner().getID(), client.getID()));
+	
+	}
 	
 
 	public Transaction resupply(Request req) throws IOException, IllegalDiscountException {

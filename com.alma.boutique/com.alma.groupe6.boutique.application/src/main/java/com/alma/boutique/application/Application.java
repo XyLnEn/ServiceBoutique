@@ -44,7 +44,7 @@ public class Application {
     
     public static void populateDB(IRepository<Product> productRepo, IRepository<ThirdParty> clientRepo, 
     		IRepository<Transaction> transactionRepo, IRepository<Order> orderHistory) {
-//    	populateClients(clientRepo);
+    	populateClients(clientRepo);
     	populateProducts(productRepo);
 			
     }
@@ -80,11 +80,14 @@ public class Application {
         ShopController supplierCatalogController = new SupplierCatalogController(shop);
         controllers.add(supplierCatalogController); //supplier stock management
 
-        TransactionController ordCont = new TransactionController(shop);
-        controllers.add(ordCont); //transaction management
+        TransactionController transCont = new TransactionController(shop);
+        controllers.add(transCont); //transaction management
 
         PersonController persCont = new PersonController(shop);
         controllers.add(persCont); //client management
+        
+				OrderController ordCont = new OrderController(shop);
+				controllers.add(ordCont);
 
         // inject dependencies in controllers
         controllers.forEach(Injector::injectAttributes);
