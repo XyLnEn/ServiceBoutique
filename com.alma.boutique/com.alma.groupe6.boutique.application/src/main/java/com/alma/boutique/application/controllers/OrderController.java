@@ -9,6 +9,11 @@ import com.alma.boutique.application.injection.RepositoryContainer;
 import com.alma.boutique.domain.Shop;
 import com.alma.boutique.domain.thirdperson.Order;
 
+/**
+ * A controller that expose the orders made at the shop
+ * @author Thomas Minier
+ * @author Lenny Lucas
+ */
 public class OrderController extends ShopController {
 
 	@InjectDependency(

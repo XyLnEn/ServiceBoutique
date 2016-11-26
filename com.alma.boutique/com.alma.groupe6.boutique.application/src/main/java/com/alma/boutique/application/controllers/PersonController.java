@@ -8,6 +8,11 @@ import com.alma.boutique.domain.thirdperson.ThirdParty;
 
 import static spark.Spark.get;
 
+/**
+ * A controller that expose every person related to the shop (clients, suppliers and the shop owner
+ * @author Thomas Minier
+ * @author Lenny Lucas
+ */
 public class PersonController extends ShopController {
 	@InjectDependency(
 			name = "ThirdPartyRepository",

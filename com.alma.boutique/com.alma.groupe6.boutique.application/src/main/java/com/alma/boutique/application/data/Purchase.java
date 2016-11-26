@@ -3,6 +3,11 @@ package com.alma.boutique.application.data;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * data class, used to map the post queries from the presentation to buy products
+ * @author Thomas Minier
+ * @author Lenny Lucas
+ */
 public class Purchase {
 
 	private String deliverer;

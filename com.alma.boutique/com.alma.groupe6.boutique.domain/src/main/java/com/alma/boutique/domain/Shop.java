@@ -1,6 +1,7 @@
 package com.alma.boutique.domain;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -73,14 +74,20 @@ public class Shop extends Entity{
 		return totalOrder.createProduct(productToBuy);
 	}
 	
-	public Order restock(IRepository<Product> stock, List<IFactory<Product>> productList, 
-			IFactory<Order> orderCreator, String deviseUsed, ExchangeRateService currentRate) throws IOException {
-		Order restockOrder = orderCreator.create();
+	public Order restock(IRepository<Product> stock, IRepository<ThirdParty> personList, 
+			List<IFactory<Product>> productList, IFactory<Order> orderCreator, 
+			int supplierId, String deviseUsed, ExchangeRateService currentRate) throws IOException, OrderNotFoundException {
+		ThirdParty supplier = personList.read(supplierId); 
+		Order restockOrder = supplier.createOrder(orderCreator);
+		List<Product> orderList = new ArrayList<>();
 		for (IFactory<Product> product : productList) {
 			Product newProd = buyProductFromSupplier(restockOrder, product);
+			orderList.add(newProd);
 			stock.add(newProd.getID(), newProd);
 		}
-		
+		restockOrder.setProducts(orderList);
+		supplier.updateOrder(restockOrder.getID(), restockOrder);
+		personList.edit(supplier.getID(), supplier);
 		return restockOrder;
 	}
 	

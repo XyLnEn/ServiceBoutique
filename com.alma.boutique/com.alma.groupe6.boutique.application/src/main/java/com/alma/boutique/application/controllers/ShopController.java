@@ -5,8 +5,8 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 /**
- * Classe abstraite représentant un controlleur quelconque offrant une partie des services d'une boutique
- * sous la forme d'une API REST
+ * Abstract class that represent a controller exposing one part of the services of the shop
+ * as a REST API
  * @author Lenny Lucas
  * @author Thomas Minier
  */
@@ -15,8 +15,8 @@ public abstract class ShopController {
     protected ObjectMapper mapper;
 
     /**
-     * Constructeur
-     * @param shop L'instance de boutique utilisée comme point d'entrée par le controlleur
+     * Constructor
+     * @param shop the shop
      */
     public ShopController(Shop shop) {
         this.shop = shop;
@@ -24,14 +24,14 @@ public abstract class ShopController {
     }
 
     /**
-     * Méthode initialisant le controlleur
+     * method that initialize the controller
      */
     public abstract void init();
 
     /**
-     * Méthode utilitaire renvoyant un objet sous forme de string JSON
-     * @param entity L'objet à serializer en JSON
-     * @return L'objet sous forme d'une string JSON
+     * method that map an object into a JSON
+     * @param entity the object to serialize
+     * @return the objext as a JSON
      */
     protected String toJson(Object entity) throws JsonProcessingException {
         return mapper.writeValueAsString(entity);

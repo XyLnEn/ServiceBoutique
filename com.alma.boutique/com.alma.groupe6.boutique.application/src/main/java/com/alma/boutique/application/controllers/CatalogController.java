@@ -9,7 +9,9 @@ import com.alma.boutique.domain.product.Product;
 import static spark.Spark.get;
 
 /**
+ * A controller that expose the products of the shop
  * @author Thomas Minier
+ * @author Lenny Lucas
  */
 public class CatalogController extends ShopController {
     @InjectDependency(

@@ -6,7 +6,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Annotation indiquant qu'un attribut d'une classe doit faire l'objet d'une injection de dépendance
+ * Annotation that signal that an attribute of a class must have it's dependencies injected
  * @author Lenny Lucas
  * @author Thomas Minier
  */

@@ -29,6 +29,11 @@ import java.util.stream.Collectors;
 import static spark.Spark.get;
 import static spark.Spark.post;
 
+/**
+ * A controller that expose every transactions made at the shop. It also expose the methods to buy products and resupply
+ * @author Thomas Minier
+ * @author Lenny Lucas
+ */
 public class TransactionController extends ShopController {
 
 	@InjectDependency(
@@ -75,7 +80,22 @@ public class TransactionController extends ShopController {
   	return mapper.readValue(req.body(), Purchase.class);
   }
 	
-	public Transaction buy(Request req) throws IOException, IllegalDiscountException, OrderNotFoundException {
+  /**
+   * method that inject the repositories from the infra into the domain to buy a set of products
+   * the request should have the following fields : 
+   * "deliverer" : the name of the deliverer,
+   * "devise" : the devise name,
+   * "idList" : [the list of all the ids of the products to buy]
+   * "personId" : the Id of the ThirdParty that is buying the products
+   * 
+   * @param req the request
+   * @return the completed transaction
+   * @throws IOException
+   * @throws IllegalDiscountException
+   * @throws OrderNotFoundException
+   * @throws JsonMappingException 
+   */
+	public Transaction buy(Request req) throws JsonMappingException, IOException, IllegalDiscountException, OrderNotFoundException {
 		Purchase purchase = this.getResults(req);
 		String deliverer = purchase.getDeliverer();
   	String devise = purchase.getDevise();
@@ -89,7 +109,7 @@ public class TransactionController extends ShopController {
 	}
 	
 
-	public Transaction resupply(Request req) throws IOException, IllegalDiscountException {
+	public Transaction resupply(Request req) throws IllegalDiscountException, OrderNotFoundException, JsonMappingException, IOException {
 		Purchase purchase = this.getResults(req);
 		String deliverer = purchase.getDeliverer();
         String devise = purchase.getDevise();
@@ -100,7 +120,7 @@ public class TransactionController extends ShopController {
         for (Integer id : idList) {
             productList.addAll(supply.browse().stream().filter(product -> product.getID() == id).map(product -> new ProductFactory(product.getName(), product.getPrice().getValue(), product.getPrice().getCurrency(), product.getDescription(), product.getCategory().getName())).collect(Collectors.toList()));
         }
-        Order ord = shop.restock(this.stock, productList, factOrd, devise, fixer);
+        Order ord = shop.restock(this.stock, persons, productList, factOrd, purchase.getPersonId(), devise, fixer);
 
         ThirdParty supplier = persons.read(purchase.getPersonId());
         return shop.saveTransaction(shop.getShopHistory(), this.transactions, new TransactionFactory(ord.getID(), shop.getShopOwner().getID(), supplier.getID()));
@@ -108,13 +128,14 @@ public class TransactionController extends ShopController {
 	
 	@Override
 	public void init() {
-        get("/transaction/all", (req, resp) -> transactions.browse(), this::toJson);
-
-        get("/transaction/:id", (req, resp) -> transactions.read(Integer.parseInt(req.params(":id"))), this::toJson);
-
-        post("/transaction/new/sale", (req, resp) -> this.buy(req), this::toJson);
-
-        post("/transaction/new/resupply", (req, resp) -> this.resupply(req), this::toJson);
+			// route used to see all the transactions
+		get("/transaction/all", (req, resp) -> transactions.browse(), this::toJson);
+			// route used to see a transaction in particular
+		get("/transaction/:id", (req, resp) -> transactions.read(Integer.parseInt(req.params(":id"))), this::toJson);
+			// route used to allow a client to buy products
+		post("/transaction/new/sale", (req, resp) -> this.buy(req), this::toJson);
+			// route used to buy products from a supplier
+		post("/transaction/new/resupply", (req, resp) -> this.resupply(req), this::toJson);
 
 	}
 

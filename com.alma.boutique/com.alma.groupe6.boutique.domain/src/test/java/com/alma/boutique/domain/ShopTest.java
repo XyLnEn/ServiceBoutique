@@ -39,6 +39,7 @@ public class ShopTest {
 
 	private Shop shop;
 	private ThirdParty client;
+	private ThirdParty supplier;
 	private ThirdPartyMockRepository personRepo;
 	
 	@Before
@@ -48,8 +49,10 @@ public class ShopTest {
 		personRepo.add(shopOwner.getID(), shopOwner);
 		this.shop = new Shop(personRepo);
 		this.client = new ThirdParty("client", new Identity("some adress", "a number"), false);
+		this.supplier = new ThirdParty("supplier", new Identity("nearby", "555"), true);
 		this.personRepo = new ThirdPartyMockRepository();
 		this.personRepo.add(this.client.getID(), this.client);
+		this.personRepo.add(this.supplier.getID(), this.supplier);
 		
 	}
 	
@@ -121,7 +124,7 @@ public class ShopTest {
 	}
 	
 	@Test
-	public void testRestock() throws IOException {
+	public void testRestock() throws IOException, OrderNotFoundException {
 		ProductMockRepository soldRepo = new ProductMockRepository();
 		
 		ProductMockFactory suppProd1 = new ProductMockFactory("duck", 1, "EUR", "motherducker", "food");
@@ -131,7 +134,7 @@ public class ShopTest {
 		
 		List<IFactory<Product>> testList = new ArrayList<>();
 		
-		Order ord = shop.restock(soldRepo, testList, ordSupp, "EUR", new ExchangeRateServiceMock());
+		Order ord = shop.restock(soldRepo, personRepo, testList, ordSupp, this.supplier.getID(), "EUR", new ExchangeRateServiceMock());
 		assertThat(ord.getDeliverer()).as("test that we can restock 0 items").isEqualTo("the poste");
 		
 		ordSupp = new OrderMockFactory("the true poste");
@@ -139,7 +142,7 @@ public class ShopTest {
 		testList.add(suppProd1);
 		testList.add(suppProd2);
 		
-		ord = shop.restock(soldRepo, testList, ordSupp, "EUR", new ExchangeRateServiceMock());
+		ord = shop.restock(soldRepo, personRepo, testList, ordSupp, this.supplier.getID(), "EUR", new ExchangeRateServiceMock());
 		assertThat(ord.getProducts().size()).as("test that the restock is working for a non-empty list of products").isEqualTo(2);
 		
 	}
