@@ -2,11 +2,9 @@ package com.alma.boutique.infrastructure.repositories;
 
 import com.alma.boutique.api.IFactory;
 import com.alma.boutique.api.IRepository;
-import com.alma.boutique.domain.product.Product;
 import com.alma.boutique.domain.thirdperson.Order;
 import com.alma.boutique.infrastructure.database.Database;
 import com.alma.boutique.infrastructure.factories.OrderFactory;
-import com.alma.boutique.infrastructure.factories.ProductFactory;
 import com.alma.boutique.infrastructure.util.DatabaseMock;
 import org.junit.Before;
 import org.junit.Test;

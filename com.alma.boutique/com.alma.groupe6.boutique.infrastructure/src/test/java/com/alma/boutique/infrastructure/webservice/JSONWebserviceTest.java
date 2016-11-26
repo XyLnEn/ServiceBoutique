@@ -1,7 +1,6 @@
 package com.alma.boutique.infrastructure.webservice;
 
 import com.alma.boutique.infrastructure.util.Comment;
-import com.alma.boutique.infrastructure.webservice.JSONWebservice;
 import org.junit.Before;
 import org.junit.Test;
 

@@ -2,19 +2,14 @@ package com.alma.boutique.infrastructure.repositories;
 
 import com.alma.boutique.api.IFactory;
 import com.alma.boutique.api.IRepository;
-import com.alma.boutique.domain.history.Transaction;
-import com.alma.boutique.domain.thirdperson.Order;
 import com.alma.boutique.domain.thirdperson.ThirdParty;
 import com.alma.boutique.infrastructure.database.Database;
-import com.alma.boutique.infrastructure.factories.OrderFactory;
 import com.alma.boutique.infrastructure.factories.ThirdPartyFactory;
-import com.alma.boutique.infrastructure.factories.TransactionFactory;
 import com.alma.boutique.infrastructure.util.DatabaseMock;
 import org.junit.Before;
 import org.junit.Test;
 
 import java.util.List;
-import java.util.function.Supplier;
 
 import static org.assertj.core.api.Assertions.assertThat;
 

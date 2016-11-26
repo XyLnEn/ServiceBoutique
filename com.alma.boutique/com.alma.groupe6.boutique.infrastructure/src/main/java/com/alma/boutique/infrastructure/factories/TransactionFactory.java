@@ -2,8 +2,6 @@ package com.alma.boutique.infrastructure.factories;
 
 import com.alma.boutique.api.IFactory;
 import com.alma.boutique.domain.history.Transaction;
-import com.alma.boutique.domain.thirdperson.Order;
-import com.alma.boutique.domain.thirdperson.ThirdParty;
 
 import java.io.IOException;
 

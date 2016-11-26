@@ -4,12 +4,11 @@ import com.alma.boutique.api.services.BrowseSuppliesService;
 import com.alma.boutique.domain.product.Product;
 import com.alma.boutique.domain.shared.Entity;
 import com.alma.boutique.infrastructure.webservice.WebService;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-
-import org.slf4j.LoggerFactory;
 
 /**
  * Classe implémentant le service permettant de consulter le catalogue d'un fournisseur

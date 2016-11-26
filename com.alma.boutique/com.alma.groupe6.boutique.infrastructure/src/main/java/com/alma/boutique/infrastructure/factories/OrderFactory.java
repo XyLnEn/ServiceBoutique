@@ -1,13 +1,13 @@
 package com.alma.boutique.infrastructure.factories;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-
 import com.alma.boutique.api.IFactory;
 import com.alma.boutique.domain.product.Product;
 import com.alma.boutique.domain.thirdperson.Order;
 import com.alma.boutique.domain.thirdperson.OrderStatus;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author Lenny Lucas
