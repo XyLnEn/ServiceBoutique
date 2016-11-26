@@ -19,15 +19,11 @@ public class OrderFactory implements IFactory<Order> {
 	protected OrderStatus orderStatus;
 	protected String deliverer;
 
-	
-
   public OrderFactory(String deliverer) {
 		this.products = new ArrayList<>();
 		this.orderStatus = OrderStatus.ORDERED;
 		this.deliverer = deliverer;
 	}
-
-
 
 	@Override
   public Order create() throws IOException {
