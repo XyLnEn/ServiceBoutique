@@ -9,7 +9,7 @@ import com.alma.boutique.domain.thirdperson.Order;
 import com.alma.boutique.domain.thirdperson.ThirdParty;
 
 /**
- * Interface représentant un conteneur utilisable pour des injections de dépendances
+ * Interface representing a container usable to inject dependencies
  * @author Lenny Lucas
  * @author Thomas Minier
  */

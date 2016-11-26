@@ -7,7 +7,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
 /**
- * Classe statique chargée d'effectuer l'injection de dépendances dans une classe
+ * Static class that take care of the injection of dependencies in a class
  * @author Lenny Lucas
  * @author Thomas Minier
  */
@@ -18,8 +18,8 @@ public class Injector {
     }
 
     /**
-     * Méthode effectuant l'injection de dépendances des attributs d'une classe correctement annotés
-     * @param target L'objet cible de l'injection de dépendances
+     * Method that inject dependencies of attributes in a well annoted class
+     * @param target the target of the dependencies injection
      */
     public static void injectAttributes(Object target) {
         Class<?> targetClass = target.getClass();

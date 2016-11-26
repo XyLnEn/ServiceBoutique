@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.util.List;
 
 /**
- * Interface repésentant un WebService quelconque.
+ * Interface representing a random webservice
  * @author Thomas Minier
  */
 public interface WebService<T> {

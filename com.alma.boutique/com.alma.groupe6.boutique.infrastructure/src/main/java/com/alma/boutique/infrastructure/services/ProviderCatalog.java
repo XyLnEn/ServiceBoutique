@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Classe implémentant le service permettant de consulter le catalogue d'un fournisseur
+ * Class implementing the service to consult the catalog of a supplier
  * @author Lenny Lucas
  * @author Thomas Minier
  */
@@ -20,9 +20,9 @@ public class ProviderCatalog implements BrowseSuppliesService<Product> {
     private WebService<Product> webService;
 
     /**
-     * Constructeur
-     * @param browseURL L'url du fournisseur pour accéder à son catalogue
-     * @param webService Le web service utilisé pour consommer les services du fournisseur
+     * Constructor
+     * @param browseURL the URL where the supplier catalog is accessible
+     * @param webService the webservice used to consume the supplier's service
      */
     public ProviderCatalog(String browseURL, WebService<Product> webService) {
         this.browseURL = browseURL;
@@ -30,8 +30,8 @@ public class ProviderCatalog implements BrowseSuppliesService<Product> {
     }
 
     /**
-     * Méthode permettant de récupérer le catalgue du fournisseur
-     * @return La liste des objets fournis par le fournisseur
+     * Method used to get the entire catalog of a supplier
+     * @return the list of all the products that the supplier is selling
      */
     @Override
     public List<Product> browse() {

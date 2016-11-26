@@ -22,7 +22,7 @@ import com.alma.boutique.infrastructure.webservice.WebService;
 import java.io.IOException;
 
 /**
- * Conteneur d'injection pour les repository liés à la base MongoDB
+ * Injection container for the MondoDB base repositories
  * @author Lenny Lucas
  * @author Thomas Minier
  */

@@ -7,7 +7,7 @@ import org.apache.log4j.Logger;
 import java.io.IOException;
 
 /**
- * Service de conversion de monnaie qui utilise le service web fixer.io
+ * Exchange rate service using the web service fixer.io
  * @author Lenny Lucas
  * @author Thomas Minier
  */
@@ -18,9 +18,9 @@ public class FixerExchanger implements ExchangeRateService {
     private WebService<FixerExchangeRates> webService;
 
     /**
-     * Constructeur
-     * @param dateUrl La date pour la version désirée des taux de change (format 'yyyy-mm-dd' ou 'latest' pour les derniers)
-     * @param webService Le web service utilisée pour consommer les services de fixer.io
+     * Constructor
+     * @param dateUrl the date for which the exchange rate is required (format 'yyyy-mm-dd' or 'latest' for the last)
+     * @param webServicethe web service used to consume the services of fixer.io
      */
     public FixerExchanger(String dateUrl, WebService<FixerExchangeRates> webService) {
         this.dateUrl = dateUrl;
@@ -28,10 +28,10 @@ public class FixerExchanger implements ExchangeRateService {
     }
 
     /**
-     * Méthode qui effectue la conversion d'une monnaie selon les taux de change désirés
-     * @param value La valeur à convertir
-     * @param currency La monnaie correspondant à la valeur ('EUR', 'USD, etc)
-     * @return La valeur convertie en euro (EUR)
+     * Method that exchange a value in a currency into our currency according to the desired exchange rate
+     * @param value the value to exchange
+     * @param currency the corresponding currency ('EUR', 'USD, etc)
+     * @return the value converted into euros (EUR)
      */
     @Override
     public float exchange(float value, String currency) {

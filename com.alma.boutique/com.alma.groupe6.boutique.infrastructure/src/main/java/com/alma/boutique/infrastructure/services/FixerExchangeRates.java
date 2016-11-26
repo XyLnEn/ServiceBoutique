@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * JavaBean servant de conteneur pour les taux d'échanges venant de fixer.io
+ * JavaBean uved as a container for the exchange rate from fixer.io
  * @author Lenny Lucas
  * @author Thomas Minier
  */
@@ -14,7 +14,7 @@ public class FixerExchangeRates {
     private Map<String, String> rates;
 
     /**
-     * Constructeur
+     * Constructor
      */
     public FixerExchangeRates() {
         rates = new HashMap<>();

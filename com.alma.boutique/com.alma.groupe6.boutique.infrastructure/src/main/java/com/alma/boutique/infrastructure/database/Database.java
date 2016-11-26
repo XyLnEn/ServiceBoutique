@@ -3,7 +3,7 @@ package com.alma.boutique.infrastructure.database;
 import java.util.List;
 
 /**
- * Interface représentant une facade pour une base de données quelconque, en respectant le modèle CRUD
+ * Interface of a random database using CRUD
  * @author Lenny Lucas
  * @author Thomas Minier
  */

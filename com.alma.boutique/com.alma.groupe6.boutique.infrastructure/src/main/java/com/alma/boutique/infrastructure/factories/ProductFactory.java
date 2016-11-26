@@ -8,7 +8,6 @@ import com.alma.boutique.domain.product.Product;
 import java.io.IOException;
 
 /**
- * @author Lenny Lucas
  * @author Thomas Minier
  */
 public class ProductFactory implements IFactory<Product> {

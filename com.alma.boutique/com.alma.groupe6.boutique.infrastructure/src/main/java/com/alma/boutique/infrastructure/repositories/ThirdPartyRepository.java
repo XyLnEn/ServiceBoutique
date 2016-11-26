@@ -7,6 +7,8 @@ import com.alma.boutique.infrastructure.database.Database;
 import java.util.List;
 
 /**
+ * Class to access a database to manage instances of the class ThirdParty
+ * @author Lenny Lucas
  * @author Thomas Minier
  */
 public class ThirdPartyRepository implements IRepository<ThirdParty> {

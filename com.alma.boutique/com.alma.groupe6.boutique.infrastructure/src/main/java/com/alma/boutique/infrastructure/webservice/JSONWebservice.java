@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * JSONWebservice représente un WebService utilisant du JSON
+ * JSONWebservice representing a webservice using JSON
  * @author Lenny Lucas
  * @author Thomas Minier
  */
@@ -23,9 +23,9 @@ public class JSONWebservice<T> implements WebService<T> {
     private Class<T> referenceClass;
 
     /**
-     * Constructeur
-     * @param baseURL L'url de base du webservice JSON
-     * @param referenceClass La classe des objets fournis par le web service
+     * Constructor
+     * @param baseURL the base url of the JSON webservice
+     * @param referenceClass the class of the object supplied by the supplier
      */
     public JSONWebservice(String baseURL, Class<T> referenceClass) {
         this.baseURL = baseURL;
@@ -34,9 +34,9 @@ public class JSONWebservice<T> implements WebService<T> {
     }
 
     /**
-     * Méthode privée utilisée pour créer une connexion HTTP pré-configurée avec une API
-     * @param url L'url du webserice avec lequel on veut ouvrir une connexion
-     * @return Une connexion HTTP correctement configurée avec le webservice
+     * Private method used to create a HTTP connexion pre-configured via an API
+     * @param url the url of the webservice that we are trying to contact
+     * @return an HTTP connexion configured for the webservice
      * @throws IOException
      */
     private HttpURLConnection setupConnection(String url) throws IOException {
@@ -47,9 +47,9 @@ public class JSONWebservice<T> implements WebService<T> {
     }
 
     /**
-     * Méthode qui renvoie un objet récupéré depuis une url d'un service offert par le webservice
-     * @param url L'url vers laquelle on souhaite faire un appel GET
-     * @return L'objet servie par l'urtl passée en paramètre
+     * Method that return an object read from an url of a service supplied by the webservice
+     * @param url the url to which we want to do a GET
+     * @return the object served by the url
      * @throws IOException
      */
     @Override
@@ -65,9 +65,9 @@ public class JSONWebservice<T> implements WebService<T> {
     }
 
     /**
-     * Méthode qui renvoie une liste d'objets récupérée depuis une url d'un service offert par le webservice
-     * @param url L'url vers laquelle on souhaite faire un appel GET
-     * @return La liste d'objets servie par l'url passée en paramètre
+     * Method that get a list of object from an url supplied by the webservice
+     * @param url the url to which we want to do a GET
+     * @return the list of objects from the url
      * @throws IOException
      */
     @Override

@@ -19,7 +19,7 @@ import java.util.Properties;
 import static com.mongodb.client.model.Filters.eq;
 
 /**
- * Classe singleton représentant une base de données MongoDB
+ * Singleton class representing a MongoDB database
  * @author Lenny Lucas
  * @author Thomas Minier
  */
@@ -33,7 +33,7 @@ public class MongoDBStore implements Database {
     private ObjectMapper mapper;
 
     /**
-     * Constructeur privé
+     * Private constructor
      * @throws IOException
      */
     private MongoDBStore() throws IOException {
@@ -52,8 +52,8 @@ public class MongoDBStore implements Database {
     }
 
     /**
-     * Accesseur permettant de récupérer l'instance de la base de données
-     * @return L'instance de la base de données MongoDB
+     * Getter that create the instance if it was not already created
+     * @return the MongoDB instance
      * @throws IOException
      */
     public static MongoDBStore getInstance() throws IOException {
@@ -69,16 +69,17 @@ public class MongoDBStore implements Database {
 
     /**
      * Mutateur statique utilisé pour changer le fichier de configuration utilisé par la base de données
-     * @param path Le chemin vers le fichier de configuration (au format .properties)
+     * Static method allowing the mutation of the configuration file used by the database
+     * @param path the path to the configuration file (.properties)
      */
     public static void setConfigFile(String path) {
         configFile = path;
     }
 
     /**
-     * Méthode privée qui permet d'accéder à une collection de documents, et de la créer si elle n'existe pas encore
-     * @param dataClass La classe des objets correspondant à la collection désirée
-     * @return La collection de documents correspondant à la classe passée en paramètre
+     * Private method to access a collection of documents. Create the collection if it does not exist.
+     * @param dataClass the class of the objects in the collection to find
+     * @return the collection of documents of the correct class
      */
     private MongoCollection<Document> getCollection(Class dataClass) {
         String collectionName = dataClass.getSimpleName() + "Collection";
@@ -93,9 +94,9 @@ public class MongoDBStore implements Database {
     }
 
     /**
-     * Méthode enregistrant un objet dans la base de données
-     * @param id L'id unique de l'objet
-     * @param entity L'objet à sauvegarder
+     * Method saving an object into the database
+     * @param id the unique Id of the object
+     * @param entity the object to save
      */
     @Override
     public void create(int id, Object entity) {
@@ -111,10 +112,10 @@ public class MongoDBStore implements Database {
     }
 
     /**
-     * Méthode récupérant un objet dans la base de données
-     * @param id L'id unique de l'objet
-     * @param entityType La classe de l'objet recherché
-     * @return L'objet correspondant à l'id passé en paramètre
+     * Method to get an object from the database
+     * @param id the unique ID of the object
+     * @param entityType the class of the object to find
+     * @return the object
      */
     @Override
     public <C> C retrieve(int id, Class<C> entityType) {
@@ -131,9 +132,9 @@ public class MongoDBStore implements Database {
     }
 
     /**
-     * Méthode permettant de récupérer tous les objets dans la base qui correspondent à une classe donnée
-     * @param entityType La classe des objets que l'on veut récupérer
-     * @return La liste de tous les objets stockés dans la base de données correspondant à la classe passée en paramètre
+     * Method to get every object of a certain class from the database
+     * @param entityType the class of the objects to find
+     * @return the list of every objects in the Database of the correct instance
      */
     @Override
     public <C> List<C> retrieveAll(Class<C> entityType) {
@@ -152,9 +153,9 @@ public class MongoDBStore implements Database {
     }
 
     /**
-     * Méthode mettant à jour un objet déjà présent dans la base de donnée
-     * @param id L'id unique de l'objet à mettre à jour
-     * @param entity La nouvelle version de l'objet
+     * Method to update an already present object in the database
+     * @param id the unique Id of the object
+     * @param entity the new version of the object
      */
     @Override
     public void update(int id, Object entity) {
@@ -163,9 +164,9 @@ public class MongoDBStore implements Database {
     }
 
     /**
-     * Méthode supprimant un objet de la base de données
-     * @param id l'id unique de l'objet à supprimer
-     * @param entityType La classe correspodant à l'objet que l'on veut supprimer
+     * Method to delete an already existing object from the database
+     * @param id the unique Id of the object
+     * @param entityType the class of the object to delete
      */
     @Override
     public void delete(int id, Class entityType) {

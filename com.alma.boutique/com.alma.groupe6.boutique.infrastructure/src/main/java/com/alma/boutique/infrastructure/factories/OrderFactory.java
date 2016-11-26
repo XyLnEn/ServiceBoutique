@@ -10,7 +10,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * @author Lenny Lucas
  * @author Thomas Minier
  */
 public class OrderFactory implements IFactory<Order> {

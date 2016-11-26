@@ -6,7 +6,6 @@ import com.alma.boutique.domain.history.Transaction;
 import java.io.IOException;
 
 /**
- *
  * @author Thomas Minier
  */
 public class TransactionFactory implements IFactory<Transaction> {

@@ -1,7 +1,7 @@
 package com.alma.boutique.infrastructure.webservice;
 
 /**
- * Classe utilitaire fournissant des méthodes pour le formattage d'urls
+ * Utility class supplying methods to format urls
  * @author Lenny Lucas
  * @author Thomas Minier
  */
@@ -11,10 +11,10 @@ public class URLFormatter {
     }
 
     /**
-     * Méthode utilitaire qui ajoute des paramètres à une URL
-     * @param url L'url à utiliser
-     * @param parameters les paramètres à ajouter
-     * @return L'url avec ses paramètres
+     * Method the add parameters to a url
+     * @param url the base url
+     * @param parameters the parameters to add
+     * @return the new url
      */
     public static String appendParameters(String url, String[] parameters) {
         StringBuilder finalURL = new StringBuilder();
