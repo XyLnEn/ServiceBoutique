@@ -23,7 +23,7 @@ public class SupplierCatalogController extends ShopController {
 
     @Override
     public void init() {
-        // route used to see all the products
+        // route used to see all the products from the supplier
       get("/supplier/catalog/all", (req, resp) -> suppliedProducts.browse(), this::toJson);
       
       //get("/supplier/catalog/:id", (req, resp) -> suppliedProducts.read(Integer.parseInt(req.params(":id"))), this::toJson);

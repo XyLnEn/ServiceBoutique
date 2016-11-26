@@ -21,9 +21,9 @@ public class PersonController extends ShopController {
 
 	@Override
 	public void init() {
-
+			// route used to see all the persons
     get("/person/all", (req, resp) -> persons.browse(), this::toJson);
-    
+			// route used to see a person in particular
     get("/person/:id", (req, resp) -> persons.read(Integer.parseInt(req.params(":id"))), this::toJson);
 
 	}

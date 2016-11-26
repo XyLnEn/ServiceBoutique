@@ -26,7 +26,7 @@ public class CatalogController extends ShopController {
     public void init() {
         // route used to see all the products
       get("/products/all", (req, resp) -> soldProducts.browse(), this::toJson);
-      
+      	// route used to see a product in particular
       get("/products/:id", (req, resp) -> soldProducts.read(Integer.parseInt(req.params(":id"))), this::toJson);
     }
 }

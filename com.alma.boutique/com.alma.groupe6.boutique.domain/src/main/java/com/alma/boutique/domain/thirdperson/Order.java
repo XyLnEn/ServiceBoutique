@@ -121,7 +121,7 @@ public class Order extends Entity {
 	 * @return the total price of the order
 	 * @throws IllegalDiscountException 
 	 */
-	public float getTotalPrice() throws IllegalDiscountException {
+	public float TotalPrice() throws IllegalDiscountException {
 		float calculatedPrice = 0;
 		for (Product stockProduct : products) {
 			calculatedPrice += stockProduct.calculatePrice();

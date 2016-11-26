@@ -49,14 +49,14 @@ public class OrderTest {
 		OrderMockFactory factoryOrd = new OrderMockFactory("DPS");
 		
 		Order ord = factoryOrd.create();
-		assertThat(ord.getTotalPrice()).as("test with the initial price").isEqualTo(0);
+		assertThat(ord.TotalPrice()).as("test with the initial price").isEqualTo(0);
 		
 		ProductMockFactory factoProd = new ProductMockFactory("DAB", 5, "EUR", "On 'em", "lol");
 		Product prod = ord.createProduct(factoProd);
-		assertThat(ord.getTotalPrice()).as("test with a non-empty Product list").isEqualTo(5);
+		assertThat(ord.TotalPrice()).as("test with a non-empty Product list").isEqualTo(5);
 		
 		ord.getProduct(prod.getID()).addDiscount(25);
-		assertThatExceptionOfType(IllegalDiscountException.class).isThrownBy(() -> ord.getTotalPrice())
+		assertThatExceptionOfType(IllegalDiscountException.class).isThrownBy(() -> ord.TotalPrice())
 		.as("check if the order can react when he is asked to get an order with a product that has a discount too high");
 		
 	}

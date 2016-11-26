@@ -87,7 +87,7 @@ public class Application {
         controllers.add(persCont); //client management
         
 				OrderController ordCont = new OrderController(shop);
-				controllers.add(ordCont);
+				controllers.add(ordCont); //order management
 
         // inject dependencies in controllers
         controllers.forEach(Injector::injectAttributes);
