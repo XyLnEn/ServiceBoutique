@@ -1,19 +1,24 @@
 package com.alma.boutique.application.controllers;
 
+import com.alma.boutique.application.injection.InjectDependency;
+import com.alma.boutique.application.injection.RepositoryContainer;
 import com.alma.boutique.domain.Shop;
 import com.alma.boutique.infrastructure.services.ProviderCatalog;
 
-import static spark.Spark.*;
+import static spark.Spark.get;
 
 /**
  * @author Thomas Minier
  */
 public class SupplierCatalogController extends ShopController {
+    @InjectDependency(
+            name = "ProviderCatalog",
+            containerClass = RepositoryContainer.class
+    )
     private ProviderCatalog suppliedProducts;
 
-    public SupplierCatalogController(Shop shop, ProviderCatalog suppliedProducts) {
+    public SupplierCatalogController(Shop shop) {
         super(shop);
-        this.suppliedProducts = suppliedProducts;
     }
 
     @Override

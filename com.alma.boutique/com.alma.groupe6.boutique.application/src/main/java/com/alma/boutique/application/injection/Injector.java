@@ -23,7 +23,7 @@ public class Injector {
      */
     public static void injectAttributes(Object target) {
         Class<?> targetClass = target.getClass();
-        for(Field field: targetClass.getFields()) {
+        for(Field field: targetClass.getDeclaredFields()) {
             // process only if the InjectDependency annotation on the field
             if(field.isAnnotationPresent(InjectDependency.class)) {
                 // retrieve the metadata provided by the annotation
@@ -39,7 +39,9 @@ public class Injector {
                     Method getter = containerClass.getMethod(getterName);
                     Object[] invokeParams = {};
                     Object dependency = getter.invoke(container, invokeParams);
+                    field.setAccessible(true);
                     field.set(target, dependency);
+                    field.setAccessible(false);
                 } catch (InstantiationException | IllegalAccessException | NoSuchMethodException | InvocationTargetException e) {
                     logger.error(e);
                 }

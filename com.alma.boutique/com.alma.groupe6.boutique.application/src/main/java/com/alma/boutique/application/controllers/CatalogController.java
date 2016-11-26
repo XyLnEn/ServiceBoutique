@@ -1,20 +1,25 @@
 package com.alma.boutique.application.controllers;
 
 import com.alma.boutique.api.IRepository;
+import com.alma.boutique.application.injection.InjectDependency;
+import com.alma.boutique.application.injection.RepositoryContainer;
 import com.alma.boutique.domain.Shop;
 import com.alma.boutique.domain.product.Product;
 
-import static spark.Spark.*;
+import static spark.Spark.get;
 
 /**
  * @author Thomas Minier
  */
 public class CatalogController extends ShopController {
+    @InjectDependency(
+            name = "ProductRepository",
+            containerClass = RepositoryContainer.class
+    )
     private IRepository<Product> soldProducts;
 
-    public CatalogController(Shop shop, IRepository<Product> soldProducts) {
+    public CatalogController(Shop shop) {
         super(shop);
-        this.soldProducts = soldProducts;
     }
 
     @Override

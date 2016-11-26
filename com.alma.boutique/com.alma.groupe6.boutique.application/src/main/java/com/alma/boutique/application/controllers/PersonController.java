@@ -1,19 +1,22 @@
 package com.alma.boutique.application.controllers;
 
-import static spark.Spark.get;
-
-
 import com.alma.boutique.api.IRepository;
+import com.alma.boutique.application.injection.InjectDependency;
+import com.alma.boutique.application.injection.RepositoryContainer;
 import com.alma.boutique.domain.Shop;
 import com.alma.boutique.domain.thirdperson.ThirdParty;
 
-public class PersonController extends ShopController {
+import static spark.Spark.get;
 
+public class PersonController extends ShopController {
+	@InjectDependency(
+			name = "ThirdPartyRepository",
+			containerClass = RepositoryContainer.class
+	)
 	private IRepository<ThirdParty> persons;
 	
-	public PersonController(Shop shop, IRepository<ThirdParty> persons) {
+	public PersonController(Shop shop) {
 		super(shop);
-		this.persons = persons;
 	}
 
 	@Override

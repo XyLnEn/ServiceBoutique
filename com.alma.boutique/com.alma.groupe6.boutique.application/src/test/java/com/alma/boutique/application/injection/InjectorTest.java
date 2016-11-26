@@ -24,7 +24,7 @@ public class InjectorTest {
         @InjectDependency(
                 name = "value",
                 containerClass = ExampleInjectionContainer.class)
-        public String value;
+        private String value;
 
         public ExampleClass() {
             Injector.injectAttributes(this);
