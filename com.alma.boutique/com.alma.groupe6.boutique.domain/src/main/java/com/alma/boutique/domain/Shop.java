@@ -15,7 +15,6 @@ import com.alma.boutique.domain.product.Price;
 import com.alma.boutique.domain.product.Product;
 import com.alma.boutique.domain.shared.Entity;
 import com.alma.boutique.domain.thirdperson.Order;
-import com.alma.boutique.domain.thirdperson.ShopOwner;
 import com.alma.boutique.domain.thirdperson.ThirdParty;
 
 public class Shop extends Entity{
@@ -25,12 +24,12 @@ public class Shop extends Entity{
 	
 	public Shop() {
 		super();
-		this.shopOwner = new ShopOwner();
+		this.shopOwner = new ThirdParty();
 		this.shopHistory = new History();
 	}
 
 
-	public Shop(IRepository<ShopOwner> repositoryShopOwner) {
+	public Shop(IRepository<ThirdParty> repositoryShopOwner) {
 		super();
 		this.shopOwner = repositoryShopOwner.browse().get(0);
 		this.shopHistory = new History();

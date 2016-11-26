@@ -59,7 +59,7 @@ public class TransactionController extends ShopController {
   	List<Integer> idList = new ArrayList<>(purchase.getIdList());
   	ThirdParty client = persons.read(purchase.getPersonId());
 		Order ord = shop.buyProduct(this.stock, persons, factOrd , idList, purchase.getPersonId(), devise, fixer);
-  	
+		orderHistory.add(ord.getID(), ord);
   	shop.saveTransaction(shop.getShopHistory(), this.transactions, new TransactionFactory(ord.getID(), shop.getShopOwner().getID(), client.getID()));
 	
 	}

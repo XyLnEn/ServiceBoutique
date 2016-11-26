@@ -16,7 +16,6 @@ import com.alma.boutique.domain.product.Product;
 import com.alma.boutique.domain.thirdperson.Identity;
 import com.alma.boutique.domain.thirdperson.Order;
 import com.alma.boutique.domain.thirdperson.OrderStatus;
-import com.alma.boutique.domain.thirdperson.ShopOwner;
 import com.alma.boutique.domain.thirdperson.ThirdParty;
 import com.alma.boutique.infrastructure.database.MongoDBStore;
 import com.alma.boutique.infrastructure.repositories.OrderRepository;
@@ -47,6 +46,28 @@ public class Application {
     private static final Logger logger = Logger.getLogger(Application.class.getName());
     
     private static String pathToSupplier = null;
+    
+    
+    public static void populateClients(IRepository<ThirdParty> clientRepo) {
+			ThirdParty part = new ThirdParty("Beta", new Identity("maga", "111112"), false);
+			clientRepo.add(part.getID(), part);
+    }
+    
+    public static void populateProducts(IRepository<Product> productRepo) {
+			Product p = new Product("prod", new Price(10, "EUR"), "a test product", new Category("test"));
+			productRepo.add(p.getID(), p);
+    }
+    
+    public static void populateDB(IRepository<Product> productRepo, IRepository<ThirdParty> clientRepo, 
+    		IRepository<Transaction> transactionRepo, IRepository<Order> orderHistory) {
+//    	populateClients(clientRepo);
+    	populateProducts(productRepo);
+			
+    }
+    
+    
+    
+    
     
     public static void affRepoTransaction(IRepository<Transaction> repo, Shop shop) {
     	System.out.println("avant : " + repo.browse().toString());
@@ -89,12 +110,8 @@ public class Application {
         IRepository<Order> orderHistory = null;
 				try {
 					productRepo = new ProductRepository(MongoDBStore.getInstance());
-//					Product p = new Product("prod", new Price(10, "EUR"), "a test product", new Category("test"));
-//					productRepo.add(p.getID(), p);
 					
 	        clientRepo = new ThirdPartyRepository(MongoDBStore.getInstance());
-//	        ThirdParty pers = new ThirdParty("Regis Robert", new Identity("Quelque part", "111111152"), false);
-//	        clientRepo.add(pers.getID(), pers);
 	        shop.setShopOwner(clientRepo.read(-1114086729));
 	        
 	        transactionRepo = new TransactionRepository(MongoDBStore.getInstance());
@@ -103,7 +120,9 @@ public class Application {
 					System.out.println(e.getMessage());
 					e.printStackTrace();
 				}
-        
+				
+				populateDB(productRepo, clientRepo, transactionRepo, orderHistory);
+				
         // create and register the REST controllers
 				ShopController catalogController = new CatalogController(shop, productRepo);
 				controllers.add(catalogController);//stock management
@@ -129,7 +148,6 @@ public class Application {
 
 				// launch the server
 				init();
-
-//				affRepoTransaction(transactionRepo, shop);
+				
     }
 }

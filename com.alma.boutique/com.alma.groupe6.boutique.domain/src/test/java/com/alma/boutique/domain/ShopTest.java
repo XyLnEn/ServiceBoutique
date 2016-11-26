@@ -23,7 +23,6 @@ import com.alma.boutique.domain.mocks.factories.OrderMockFactory;
 import com.alma.boutique.domain.mocks.factories.ProductMockFactory;
 import com.alma.boutique.domain.mocks.factories.ThirdPartyMockFactory;
 import com.alma.boutique.domain.mocks.factories.TransactionMockFactory;
-import com.alma.boutique.domain.mocks.repositories.ShopOwnerMockRepository;
 import com.alma.boutique.domain.mocks.repositories.ThirdPartyMockRepository;
 import com.alma.boutique.domain.mocks.repositories.OrderMockRepository;
 import com.alma.boutique.domain.mocks.repositories.ProductMockRepository;
@@ -32,7 +31,6 @@ import com.alma.boutique.domain.product.Product;
 import com.alma.boutique.domain.thirdperson.Identity;
 import com.alma.boutique.domain.thirdperson.Order;
 import com.alma.boutique.domain.thirdperson.OrderStatus;
-import com.alma.boutique.domain.thirdperson.ShopOwner;
 import com.alma.boutique.domain.thirdperson.ThirdParty;
 
 import pl.pojo.tester.api.assertion.Method;
@@ -45,10 +43,10 @@ public class ShopTest {
 	
 	@Before
 	public void setUp() throws Exception {
-		ShopOwnerMockRepository ownerRepo = new ShopOwnerMockRepository();
-		ShopOwner shopOwner = new ShopOwner("bob",new Identity("house", "11111111"));
-		ownerRepo.add(shopOwner.getID(), shopOwner);
-		this.shop = new Shop(ownerRepo);
+		personRepo = new ThirdPartyMockRepository();
+		ThirdParty shopOwner = new ThirdParty("bob",new Identity("house", "11111111"), true);
+		personRepo.add(shopOwner.getID(), shopOwner);
+		this.shop = new Shop(personRepo);
 		this.client = new ThirdParty("client", new Identity("some adress", "a number"), false);
 		this.personRepo = new ThirdPartyMockRepository();
 		this.personRepo.add(this.client.getID(), this.client);

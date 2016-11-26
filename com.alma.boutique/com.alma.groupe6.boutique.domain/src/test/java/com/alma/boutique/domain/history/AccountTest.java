@@ -11,6 +11,6 @@ import static pl.pojo.tester.api.assertion.Assertions.assertPojoMethodsFor;
 public class AccountTest {
     @Test
     public void testPojoStandard() {
-        assertPojoMethodsFor(Account.class).testing(Method.GETTER, Method.SETTER, Method.EQUALS, Method.HASH_CODE).areWellImplemented();
+        assertPojoMethodsFor(Account.class).testing(Method.GETTER, Method.SETTER).areWellImplemented();
     }
 }
