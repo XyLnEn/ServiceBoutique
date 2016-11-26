@@ -32,7 +32,16 @@ const BuyProductsComponent = Vue.component('buy-products', {
 			const ids = products.map(function(product) {
 				return product.id;
 			})
-			console.log("make a GET call to API here to buy products " + ids + " ;)");
+			const purchase = {
+				"deliverer": "UPS",
+				"idList": ids,
+				"devise": "EUR",
+				"personId": -1114086729
+			}
+			axios.post(config.api + config.urls.transactions.sale, purchase)
+			.catch(function(error) {
+				console.error(error);
+			})
 			eventBus.$emit('basket-cleared')
 		}
 	}
