@@ -8,7 +8,7 @@ Pour compiler et créer l'archive **war** :
 mvn package
 ```
 
-Pour déployer le **war** dans un container Tomcat en utilisant web-runner :
+Pour déployer le **war** dans un container Tomcat en utilisant web-runner sur le port 8081 :
 ```
-java -jar target/dependency/webapp-runner.jar target/com.alma.boutique.presentation-1.0-SNAPSHOT.war
+java -jar target/dependency/webapp-runner.jar target/com.alma.boutique.presentation-1.0-SNAPSHOT.war --port 8081
 ```
