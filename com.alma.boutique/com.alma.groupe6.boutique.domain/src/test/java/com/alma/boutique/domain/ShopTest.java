@@ -57,11 +57,11 @@ public class ShopTest {
 	@Test
 	public void testBrowseStock() throws IOException {
 		ProductMockRepository soldRepo = new ProductMockRepository();
-		assertThat(shop.browseStock(soldRepo)).as("assert that the shop can browse an empty stock").isEmpty();
+		assertThat(shop.browseStock(soldRepo, "EUR", new ExchangeRateServiceMock())).as("assert that the shop can browse an empty stock").isEmpty();
 		ProductMockFactory soldFacto = new ProductMockFactory("lemon", 5, "EUR", "bitter", "fruit");
 		Product prod = soldFacto.create();
 		soldRepo.add(prod.getId(), prod);
-		assertThat(shop.browseStock(soldRepo)).as("assert that the shop return the correct product").contains(prod);
+		assertThat(shop.browseStock(soldRepo, "EUR", new ExchangeRateServiceMock())).as("assert that the shop return the correct product").contains(prod);
 	}
 	
 	@Test

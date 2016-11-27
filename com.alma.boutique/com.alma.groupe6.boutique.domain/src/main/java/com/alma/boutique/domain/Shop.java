@@ -41,12 +41,20 @@ public class Shop extends Entity{
 	}
 	
 	/**
-	 * Method that open the stock to get all Products
+	 * Method that open the stock to get all Products according to a specifies devise
 	 * @param stock the repository to explore
-	 * @return
+	 * @param devise the name of the devise asked
+	 * @param currentRate the conversion exchange
+	 * @return the list of all products
+	 * @throws IOException 
 	 */
-	public List<Product> browseStock(IRepository<Product> stock) {
-		return stock.browse();
+	public List<Product> browseStock(IRepository<Product> stock, String devise, ExchangeRateService currentRate) throws IOException {
+		List<Product> oldList = new ArrayList<>();
+		for (Product product : stock.browse()) {
+			oldList.add(updatePriceToSell(product, currentRate, devise));
+		}
+		
+		return oldList;
 	}
 	
 	/**
@@ -109,16 +117,30 @@ public class Shop extends Entity{
 	}
 	
 	/**
-	 * Method that update a Product with a recalculated price
-	 * @param restockOrder the order which will contain the product
+	 * Method that convert the price of a product into EUR
 	 * @param product the product to update
 	 * @param currentRate the service to recalculate the price of the product using the currency
 	 * @return the updated product
 	 * @throws IOException
 	 */
-	public Product updatePrice(Order restockOrder, IFactory<Product> product, ExchangeRateService currentRate, String currency) throws IOException {
-		Product newProd = buyProductFromSupplier(restockOrder, product);
-		float priceConverted = currentRate.exchange(newProd.getPrice().getValue(), newProd.getPrice().getCurrency());
+	public Product updatePriceToStock(Product product, ExchangeRateService currentRate, String currency) throws IOException {
+		Product newProd = product;
+		float priceConverted = currentRate.exchange(product.getPrice().getValue(), product.getPrice().getCurrency());
+		Price newPrice = new Price(priceConverted, currency);
+		newProd.setPrice(newPrice);
+		return newProd;
+	}
+	
+	/**
+	 * Method that convert the price of a product from EUR to the desired devise
+	 * @param product the product to update
+	 * @param currentRate the service to recalculate the price of the product using the currency
+	 * @return the updated product
+	 * @throws IOException
+	 */
+	public Product updatePriceToSell(Product product, ExchangeRateService currentRate, String currency) throws IOException {
+		Product newProd = product;
+		float priceConverted = currentRate.exchangeBack(product.getPrice().getValue(), currency);
 		Price newPrice = new Price(priceConverted, currency);
 		newProd.setPrice(newPrice);
 		return newProd;
@@ -144,7 +166,8 @@ public class Shop extends Entity{
 		Order restockOrder = supplier.createOrder(orderCreator);
 		List<Product> orderList = new ArrayList<>();
 		for (IFactory<Product> product : productList) {
-			Product newProd = updatePrice(restockOrder, product, currentRate, "EUR");
+			Product oldProd = buyProductFromSupplier(restockOrder, product);
+			Product newProd = updatePriceToStock(oldProd, currentRate, "EUR");
 			orderList.add(newProd);
 			stock.add(newProd.getId(), newProd);
 		}

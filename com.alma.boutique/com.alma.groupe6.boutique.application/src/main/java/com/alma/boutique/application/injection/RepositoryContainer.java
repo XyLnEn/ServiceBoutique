@@ -94,7 +94,7 @@ public class RepositoryContainer implements InjectionContainer {
      */
     @Override
     public ExchangeRateService getExchangeService() {
-        return new FixerExchanger("/lastest", fixerWebService);
+        return new FixerExchanger("/latest", fixerWebService);
     }
 
     /**

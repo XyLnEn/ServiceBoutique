@@ -38,7 +38,7 @@ public class FixerExchangerTest {
       float value = 500;
       float expected = value / currentRate;
       // Note : this tests depends on the current rate of the AUD :/
-      assertThat(fixerExchanger.exchangeBack(value, currency)).as(("conversion should work for AUD to EUR")).isEqualTo(expected);
+      assertThat(fixerExchanger.exchangeBack(value, currency)).as(("conversion should work for EUR to USD")).isEqualTo(expected);
       assertThat(fixerExchanger.exchangeBack(value, "EUR")).as(("no conversion for EUR to EUR")).isEqualTo(value);
     }
 }
