@@ -10,5 +10,5 @@ mvn package
 
 Pour lancer le serveur et deployer l'API JSON sur le port 4567
 ```
-java -jar target/com.alma.boutique.application-1.0-SNAPSHOT-jar-with-dependencies.war
+java -jar target/com.alma.boutique.application-1.0-SNAPSHOT-jar-with-dependencies.jar
 ```
