@@ -2,6 +2,7 @@ package com.alma.boutique.application.injection;
 
 import com.alma.boutique.api.IRepository;
 import com.alma.boutique.api.services.BrowseSuppliesService;
+import com.alma.boutique.api.services.CreditCardValidation;
 import com.alma.boutique.api.services.ExchangeRateService;
 import com.alma.boutique.domain.history.Transaction;
 import com.alma.boutique.domain.product.Product;
@@ -20,4 +21,5 @@ public interface InjectionContainer {
     IRepository<Transaction> getTransactionRepository();
     BrowseSuppliesService<Product> getProviderCatalog();
     ExchangeRateService getExchangeService();
+    CreditCardValidation getValidationService();
 }

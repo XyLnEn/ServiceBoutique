@@ -3,7 +3,8 @@ package com.alma.boutique.api;
 import java.util.List;
 
 /**
- * Interface représentant un Repository offrant des services Browse, Read, Edit et Delete
+ * Interface representing a generic repository who's supporting CRUD operations
+ * @author Lenny Lucas
  * @author Thomas Minier
  */
 public interface IRepository<T> {

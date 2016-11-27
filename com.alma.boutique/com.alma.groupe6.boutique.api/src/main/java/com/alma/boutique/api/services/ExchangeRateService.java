@@ -1,7 +1,8 @@
 package com.alma.boutique.api.services;
 
 /**
- * Service qui gère la conversion de monnaie
+ * Service used to exchange currencies
+ * @author Lenny Lucas
  * @author Thomas Minier
  */
 public interface ExchangeRateService {

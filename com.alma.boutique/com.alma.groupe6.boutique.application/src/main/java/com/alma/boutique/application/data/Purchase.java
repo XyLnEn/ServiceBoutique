@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * data class, used to map the post queries from the presentation to buy products
+ * Data class, used to map the post queries from the presentation to buy products
  * @author Thomas Minier
  * @author Lenny Lucas
  */
@@ -14,17 +14,19 @@ public class Purchase {
 	private List<Integer> idList;
 	private String devise;
 	private int personId;
+	private int cardNumber;
 	
 	public Purchase() {
 		idList = new ArrayList<>();
 		
 	}
 
-	public Purchase(String deliverer, List<Integer> idList, String devise, int personId) {
+	public Purchase(String deliverer, List<Integer> idList, String devise, int personId, int cardNumber) {
 		this.deliverer = deliverer;
 		this.idList = idList;
 		this.devise = devise;
 		this.personId = personId;
+		this.cardNumber = cardNumber;
 	}
 	
 	public String getDeliverer() {
@@ -58,6 +60,12 @@ public class Purchase {
 	public void setPersonId(int personId) {
 		this.personId = personId;
 	}
-	
-	
+
+	public int getCardNumber() {
+		return cardNumber;
+	}
+
+	public void setCardNumber(int cardNumber) {
+		this.cardNumber = cardNumber;
+	}
 }

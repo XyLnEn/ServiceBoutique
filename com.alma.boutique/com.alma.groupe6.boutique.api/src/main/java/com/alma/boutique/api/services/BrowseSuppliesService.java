@@ -3,7 +3,8 @@ package com.alma.boutique.api.services;
 import java.util.List;
 
 /**
- * Service qui gère la consultation des produits d'un fournisseur
+ * Service used to display the catalog of a supplier
+ * @author Lenny Lucas
  * @author Thomas Minier
  */
 @FunctionalInterface

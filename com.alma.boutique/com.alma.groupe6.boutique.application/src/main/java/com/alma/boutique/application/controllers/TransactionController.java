@@ -2,6 +2,7 @@ package com.alma.boutique.application.controllers;
 
 import com.alma.boutique.api.IFactory;
 import com.alma.boutique.api.IRepository;
+import com.alma.boutique.api.services.CreditCardValidation;
 import com.alma.boutique.application.data.Purchase;
 import com.alma.boutique.application.injection.InjectDependency;
 import com.alma.boutique.application.injection.RepositoryContainer;
@@ -17,8 +18,6 @@ import com.alma.boutique.infrastructure.factories.ProductFactory;
 import com.alma.boutique.infrastructure.factories.TransactionFactory;
 import com.alma.boutique.infrastructure.services.FixerExchanger;
 import com.alma.boutique.infrastructure.services.ProviderCatalog;
-import com.fasterxml.jackson.databind.JsonMappingException;
-
 import spark.Request;
 
 import java.io.IOException;
@@ -71,73 +70,89 @@ public class TransactionController extends ShopController {
             containerClass = RepositoryContainer.class
     )
 	private FixerExchanger fixer;
+
+    @InjectDependency(
+            name = "ValidationService",
+            containerClass = RepositoryContainer.class
+    )
+	private CreditCardValidation cbValidator;
 	
 	public TransactionController(Shop shop) {
 		super(shop);
 	}
 
-  private Purchase getResults(Request req) throws JsonMappingException, IOException {
+  private Purchase getResults(Request req) throws IOException {
   	return mapper.readValue(req.body(), Purchase.class);
   }
-	
+
   /**
-   * method that inject the repositories from the infra into the domain to buy a set of products
-   * the request should have the following fields : 
-   * "deliverer" : the name of the deliverer,
-   * "devise" : the devise name,
-   * "idList" : [the list of all the ids of the products to buy]
-   * "personId" : the Id of the ThirdParty that is buying the products
-   * 
-   * @param req the request
-   * @return the completed transaction
-   * @throws IOException 
-   * @throws JsonMappingException 
-   * @throws OrderNotFoundException 
-   * @throws IllegalDiscountException 
+    * method that inject the repositories from the infra into the domain to buy a set of products
+    * the request should have the following fields :
+    * "deliverer" : the name of the deliverer,
+    * "devise" : the devise name,
+    * "idList" : [the list of all the ids of the products to buy]
+    * "personId" : the Id of the ThirdParty that is buying the products
+    * "cardNumber : the number of the credit card used in the transaction
+    *
+    * @param req the request
+    * @return the completed transaction
+    * @throws IOException
+    * @throws OrderNotFoundException
+    * @throws IllegalDiscountException
    */
-	public Transaction buy(Request req) throws JsonMappingException, IOException, IllegalDiscountException, OrderNotFoundException{
+	public Transaction buy(Request req) throws IOException, IllegalDiscountException, OrderNotFoundException {
+        Transaction newTransaction = null;
 		Purchase purchase = this.getResults(req);
-		String deliverer = purchase.getDeliverer();
-  	String devise = purchase.getDevise();
-  	IFactory<Order> factOrd = new OrderFactory(deliverer);
-  	List<Integer> idList = new ArrayList<>(purchase.getIdList());
-  	ThirdParty client = persons.read(purchase.getPersonId());
-		Order ord = shop.buyProduct(this.stock, persons, factOrd , idList, purchase.getPersonId(), devise, fixer);
-		orderHistory.add(ord.getId(), ord);
-		
-		return shop.saveTransaction(shop.getShopHistory(), this.transactions, new TransactionFactory(ord.getId(), shop.getShopHistory().getAccount().getOwner().getId(), client.getId()));
+        // first of all, validate the credit card number
+        if(cbValidator.validate(purchase.getCardNumber())) {
+            String deliverer = purchase.getDeliverer();
+            String devise = purchase.getDevise();
+            IFactory<Order> factOrd = new OrderFactory(deliverer);
+            List<Integer> idList = new ArrayList<>(purchase.getIdList());
+            ThirdParty client = persons.read(purchase.getPersonId());
+            Order ord = shop.buyProduct(this.stock, persons, factOrd , idList, purchase.getPersonId(), devise, fixer);
+            orderHistory.add(ord.getId(), ord);
+
+            newTransaction = shop.saveTransaction(shop.getShopHistory(), this.transactions, new TransactionFactory(ord.getId(), shop.getShopHistory().getAccount().getOwner().getId(), client.getId()));
+        }
+        return newTransaction;
 	}
 	
 	/**
-   * method that inject the repositories from the infra into the domain to resupply the stock
-   * the request should have the following fields : 
-   * "deliverer" : the name of the deliverer,
-   * "devise" : the devise name,
-   * "idList" : [the list of all the ids of the products to buy]
-   * "personId" : the Id of the ThirdParty that is supplying the products
-   * 
-   * @param req the request
-   * @return the completed transaction
+    * method that inject the repositories from the infra into the domain to resupply the stock
+    * the request should have the following fields :
+    * "deliverer" : the name of the deliverer,
+    * "devise" : the devise name,
+    * "idList" : [the list of all the ids of the products to buy]
+    * "personId" : the Id of the ThirdParty that is supplying the products
+    * "cardNumber : the number of the credit card used in the transaction
+    *
+    * @param req the request
+    * @return the completed transaction
 	 * @throws IllegalDiscountException
 	 * @throws OrderNotFoundException
-	 * @throws JsonMappingException
 	 * @throws IOException
 	 */
-	public Transaction resupply(Request req) throws JsonMappingException, IOException, IllegalDiscountException, OrderNotFoundException{
+	public Transaction resupply(Request req) throws IOException, IllegalDiscountException, OrderNotFoundException {
+        Transaction newTransaction = null;
 		Purchase purchase = this.getResults(req);
-		String deliverer = purchase.getDeliverer();
-        String devise = purchase.getDevise();
-        IFactory<Order> factOrd = new OrderFactory(deliverer);
-        List<Integer> idList = new ArrayList<>(purchase.getIdList());
-        List<IFactory<Product>> productList = new ArrayList<>();
+        // first of all, validate the credit card number
+        if(cbValidator.validate(purchase.getCardNumber())) {
+            String deliverer = purchase.getDeliverer();
+            String devise = purchase.getDevise();
+            IFactory<Order> factOrd = new OrderFactory(deliverer);
+            List<Integer> idList = new ArrayList<>(purchase.getIdList());
+            List<IFactory<Product>> productList = new ArrayList<>();
 
-        for (Integer id : idList) {
-            productList.addAll(supply.browse().stream().filter(product -> product.getId() == id).map(product -> new ProductFactory(product.getName(), product.getPrice().getValue(), product.getPrice().getCurrency(), product.getDescription(), product.getCategory().getName())).collect(Collectors.toList()));
+            for (Integer id : idList) {
+                productList.addAll(supply.browse().stream().filter(product -> product.getId() == id).map(product -> new ProductFactory(product.getName(), product.getPrice().getValue(), product.getPrice().getCurrency(), product.getDescription(), product.getCategory().getName())).collect(Collectors.toList()));
+            }
+            Order ord = shop.restock(this.stock, persons, productList, factOrd, purchase.getPersonId(), devise, fixer);
+
+            ThirdParty supplier = persons.read(purchase.getPersonId());
+            newTransaction = shop.saveTransaction(shop.getShopHistory(), this.transactions, new TransactionFactory(ord.getId(), shop.getShopHistory().getAccount().getOwner().getId(), supplier.getId()));
         }
-        Order ord = shop.restock(this.stock, persons, productList, factOrd, purchase.getPersonId(), devise, fixer);
-
-        ThirdParty supplier = persons.read(purchase.getPersonId());
-        return shop.saveTransaction(shop.getShopHistory(), this.transactions, new TransactionFactory(ord.getId(), shop.getShopHistory().getAccount().getOwner().getId(), supplier.getId()));
+        return newTransaction;
 	}
 	
 	@Override
@@ -150,7 +165,6 @@ public class TransactionController extends ShopController {
 		post("/transaction/new/sale", (req, resp) -> this.buy(req), this::toJson);
 			// route used to buy products from a supplier
 		post("/transaction/new/resupply", (req, resp) -> this.resupply(req), this::toJson);
-
 	}
 
 }

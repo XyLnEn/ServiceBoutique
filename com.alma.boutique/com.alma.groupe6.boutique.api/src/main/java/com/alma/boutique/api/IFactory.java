@@ -3,7 +3,8 @@ package com.alma.boutique.api;
 import java.io.IOException;
 
 /**
- * Interface représentant une factory générique.
+ * Interface representing a generic Factory, accoridng to the Factory Method pattern.
+ * @author Lenny Lucas
  * @author Thomas Minier
  */
 @FunctionalInterface
