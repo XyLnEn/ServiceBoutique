@@ -52,4 +52,30 @@ public class FixerExchanger implements ExchangeRateService {
         }
         return newValue;
     }
+    
+    /**
+     * Method that exchange a value in EUR into a new currency to the desired exchange rate
+     * @param value the value to exchange
+     * @param currency the corresponding currency ('EUR', 'USD, etc)
+     * @return the value converted into the currency
+     */
+    @Override
+    public float exchangeBack(float value, String currency) {
+        // returns the value if the currency is euro
+    		if("EUR".equals(currency)) {
+    			return value;
+    		}
+        float newValue = -1;
+        try {
+            FixerExchangeRates rates = webService.read(dateUrl);
+            // find the currency and use it's rate to convert to EUR
+            float rate = rates.getRate(currency);
+            if(Float.compare(rate, -1) != 0) {
+             newValue = value / rate;
+            }
+        } catch (IOException e) {
+            logger.warn(e);
+        }
+        return newValue;
+    }
 }

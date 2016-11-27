@@ -8,5 +8,10 @@ public class ExchangeRateServiceMock implements ExchangeRateService {
 	public float exchange(float value, String currency) {
 		return value;
 	}
+	
+	@Override
+	public float exchangeBack(float value, String currency) {
+		return value;
+	}
 
 }

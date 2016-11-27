@@ -73,7 +73,7 @@ public class Shop extends Entity{
 			Price convertedPrice = new Price();
 			convertedPrice.setCurrency("EUR");
 			
-			float newValue = currentRate.exchange(product.calculatePrice(),product.getPrice().getCurrency());
+			float newValue = currentRate.exchangeBack(product.calculatePrice(),deviseUsed);
 			convertedPrice.setValue(newValue);
 			
 			product.setPrice(convertedPrice);
