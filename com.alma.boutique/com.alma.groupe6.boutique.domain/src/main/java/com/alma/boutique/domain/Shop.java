@@ -65,7 +65,7 @@ public class Shop extends Entity{
 	 */
 	public Order buyProduct(IRepository<Product> stock, IRepository<ThirdParty> personList,
 			IFactory<Order> orderCreator, List<Integer> productIdList, int personId,
-			String deviseUsed, ExchangeRateService currentRate ) throws Exception {
+			String deviseUsed, ExchangeRateService currentRate ) throws IllegalDiscountException, OrderNotFoundException {
 		ThirdParty pers = personList.read(personId);
 		Order ord = pers.createOrder(orderCreator);
 		List<Product> orderList = productIdList.stream().map(stock::read).collect(Collectors.toList());

@@ -90,9 +90,12 @@ public class TransactionController extends ShopController {
    * 
    * @param req the request
    * @return the completed transaction
-   * @throws Exception 
+   * @throws IOException 
+   * @throws JsonMappingException 
+   * @throws OrderNotFoundException 
+   * @throws IllegalDiscountException 
    */
-	public Transaction buy(Request req) throws Exception {
+	public Transaction buy(Request req) throws JsonMappingException, IOException, IllegalDiscountException, OrderNotFoundException{
 		Purchase purchase = this.getResults(req);
 		String deliverer = purchase.getDeliverer();
   	String devise = purchase.getDevise();
@@ -120,7 +123,7 @@ public class TransactionController extends ShopController {
 	 * @throws JsonMappingException
 	 * @throws IOException
 	 */
-	public Transaction resupply(Request req) throws Exception {
+	public Transaction resupply(Request req) throws JsonMappingException, IOException, IllegalDiscountException, OrderNotFoundException{
 		Purchase purchase = this.getResults(req);
 		String deliverer = purchase.getDeliverer();
         String devise = purchase.getDevise();
