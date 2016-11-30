@@ -6,7 +6,8 @@ const HomeComponent = Vue.component('home', {
 const routes = [
 	{ path: '/home', component: HomeComponent },
 	{ path: '/shop', component: ShopComponent },
-	{ path: '/supplier', component: SupplierComponent }
+	{ path: '/supplier', component: SupplierComponent },
+	{ path: '/history', component: HistoryComponent }
 ]
 
 const router = new VueRouter({

@@ -6,14 +6,25 @@ const config = {
 	"api": "http://localhost:4567",
 	"urls": {
 		"products": {
-			"browse": "/products/all",
+			"all": "/products/all",
 			"read": "/products/"
 		},
-		"transactions": {
-			"all": "/transactions/all",
-			"read": "/transactions/",
+		"supplier": {
+			"all": "/supplier/catalog/all"
+		},
+		"transaction": {
+			"all": "/transaction/all",
+			"read": "/transaction/",
 			"sale": "/transaction/new/sale",
-			"resupply": "/transactions/new/resupply"
+			"resupply": "/transaction/new/resupply"
+		},
+		"thirdparty": {
+			"all": "/person/all",
+			"read": "/person/"
+		},
+		"order": {
+			"all": "/order/all",
+			"read": "/order/"
 		}
 	}
 }
