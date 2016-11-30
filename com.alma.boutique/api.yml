@@ -52,6 +52,29 @@ paths:
           description: Unexpected error
           schema:
             $ref: '#/definitions/Error'
+  /product/all/{id}:
+    get:
+      summary: Get all products in a special currency
+      parameters:
+        - name: id
+          in: path
+          description: The currency to use
+          required: true
+          type: string
+      tags:
+        - Product
+      responses:
+        200:
+          description: An array of products
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Product'
+        default:
+          description: Unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+            
   /product/new:
     post:
       summary: Create a new product
@@ -217,6 +240,28 @@ paths:
           description: Unexpected error
           schema:
             $ref: '#/definitions/Error'
+  /transaction/new/sale:
+    post:
+      summary: create a transaction with the specified products
+      parameters:
+        - name : resp
+          in: body
+          description : the responce
+          schema :
+            $ref : '#/definitions/Achat'
+          required : true
+      tags:
+        - Transaction
+      responses:
+        200:
+          description: A specific transaction
+          schema:
+            $ref: '#/definitions/Transaction'
+        default:
+          description: Unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+            
   /person/all:
     get:
       summary: Get all the persons
@@ -254,7 +299,7 @@ paths:
           description: Unexpected error
           schema:
             $ref: '#/definitions/Error'
-definitions:
+definitions :
   Error:
     type: object
     properties:
@@ -311,4 +356,23 @@ definitions:
         $ref: '#/definitions/Person'
       to:
         $ref: '#/definitions/Person'
-      
+  Achat:
+    type : object
+    properties:
+      deliverer:
+        type: string
+        description: The name of the deliverer
+      devise:
+        type: string
+        description: The name of the devise to use
+      personId:
+        type: integer
+        description: the id of the buyer
+      cardNumber:
+        type: integer
+        description: the card number
+      idList:
+        type: array
+        items:
+          type: int
+        description: the list of ids of products tu byu

@@ -18,6 +18,8 @@ import com.alma.boutique.infrastructure.factories.ProductFactory;
 import com.alma.boutique.infrastructure.factories.TransactionFactory;
 import com.alma.boutique.infrastructure.services.FixerExchanger;
 import com.alma.boutique.infrastructure.services.ProviderCatalog;
+import com.alma.boutique.infrastructure.services.ProviderCatalogThabo;
+
 import spark.Request;
 
 import java.io.IOException;
@@ -63,7 +65,7 @@ public class TransactionController extends ShopController {
             name = "ProviderCatalog",
             containerClass = RepositoryContainer.class
     )
-	private ProviderCatalog supply;
+	private ProviderCatalogThabo supply;
 
     @InjectDependency(
             name = "ExchangeService",

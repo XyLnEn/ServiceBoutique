@@ -8,6 +8,7 @@ import com.alma.boutique.domain.history.Transaction;
 import com.alma.boutique.domain.product.Product;
 import com.alma.boutique.domain.thirdperson.Order;
 import com.alma.boutique.domain.thirdperson.ThirdParty;
+import com.alma.boutique.infrastructure.conversion.ThaboProduct;
 import com.alma.boutique.infrastructure.database.Database;
 import com.alma.boutique.infrastructure.database.MongoDBStore;
 import com.alma.boutique.infrastructure.repositories.OrderRepository;
@@ -18,6 +19,7 @@ import com.alma.boutique.infrastructure.services.CBValidator;
 import com.alma.boutique.infrastructure.services.FixerExchangeRates;
 import com.alma.boutique.infrastructure.services.FixerExchanger;
 import com.alma.boutique.infrastructure.services.ProviderCatalog;
+import com.alma.boutique.infrastructure.services.ProviderCatalogThabo;
 import com.alma.boutique.infrastructure.webservice.JSONWebservice;
 import com.alma.boutique.infrastructure.webservice.WebService;
 
@@ -31,15 +33,17 @@ import java.io.IOException;
 public class RepositoryContainer implements InjectionContainer {
     private String supplierURL;
     private String catalogURL;
-    private WebService<Product> supplierWebService;
+    private WebService<ThaboProduct> supplierWebService;
+    private ProviderCatalogThabo catalog;
     private WebService<FixerExchangeRates> fixerWebService;
     private Database database;
 
     public RepositoryContainer() throws IOException {
         database = MongoDBStore.getInstance();
-        supplierURL = "";
+        supplierURL = "https://fluffy-stock.herokuapp.com/api/products";
         catalogURL = "";
-        supplierWebService = new JSONWebservice<>(supplierURL, Product.class);
+        supplierWebService = new JSONWebservice<>(supplierURL, ThaboProduct.class);
+        catalog = new ProviderCatalogThabo("", supplierWebService);
         fixerWebService = new JSONWebservice<>("http://api.fixer.io", FixerExchangeRates.class);
     }
 
@@ -85,7 +89,7 @@ public class RepositoryContainer implements InjectionContainer {
      */
     @Override
     public BrowseSuppliesService<Product> getProviderCatalog() {
-        return new ProviderCatalog(catalogURL, supplierWebService);
+        return new ProviderCatalogThabo(catalogURL, supplierWebService);
     }
 
     /**
