@@ -29,7 +29,7 @@ public class Application {
     	
     }
     /**
-     *
+     * Configure the application to enable Cross Origin Requests
      * @param origin
      * @param methods
      * @param headers
@@ -58,17 +58,13 @@ public class Application {
     }
 
     /**
-     *
+     * Configure the application to set response's type to 'application/json
      */
     private static void enableJSON() {
         after((req, res) -> res.type("application/json"));
     }
     
     public static void main(String[] args) {
-        if(args.length  == 0) {
-            logger.error("The application must be run with the path to the MongoDB config file as first argument");
-            System.exit(1);
-        }
         enableCORS("*", "*", "*");
         enableJSON();
 
@@ -77,8 +73,7 @@ public class Application {
         History shopHistory = new History(new Account(new ThirdParty()));
         shop.setShopHistory(shopHistory);
 
-        MongoDBStore.setConfigFile(args[0]);
-        IRepository<ThirdParty> clientRepo = null;
+        IRepository<ThirdParty> clientRepo;
         try {
 	        clientRepo = new ThirdPartyRepository(MongoDBStore.getInstance());
 	        shop.getShopHistory().getAccount().setOwner(clientRepo.read(-1114086729));

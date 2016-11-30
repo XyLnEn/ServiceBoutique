@@ -68,15 +68,6 @@ public class MongoDBStore implements Database {
     }
 
     /**
-     * Mutateur statique utilisé pour changer le fichier de configuration utilisé par la base de données
-     * Static method allowing the mutation of the configuration file used by the database
-     * @param path the path to the configuration file (.properties)
-     */
-    public static void setConfigFile(String path) {
-        configFile = path;
-    }
-
-    /**
      * Private method to access a collection of documents. Create the collection if it does not exist.
      * @param dataClass the class of the objects in the collection to find
      * @return the collection of documents of the correct class
