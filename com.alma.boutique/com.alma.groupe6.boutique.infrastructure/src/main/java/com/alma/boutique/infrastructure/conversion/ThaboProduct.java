@@ -78,9 +78,9 @@ public class ThaboProduct implements SupplierTraductor {
 
 	@Override
 	public Product translate() {
-		int prod = 0;
+		float prod = 0;
 		try {
-			prod = Integer.parseInt(price);
+			prod = Float.parseFloat(price);
 		} catch (Exception e) {
 			LoggerFactory.getLogger(Entity.class).warn(e.getMessage(),e);
 			prod = Integer.MAX_VALUE;	

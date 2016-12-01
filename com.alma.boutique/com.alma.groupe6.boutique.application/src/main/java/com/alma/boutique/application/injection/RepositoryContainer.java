@@ -38,8 +38,8 @@ public class RepositoryContainer implements InjectionContainer {
 
     public RepositoryContainer() throws IOException {
         database = MongoDBStore.getInstance();
-        supplierURL = "https://fluffy-stock.herokuapp.com/api/products";
-        catalogURL = "";
+        supplierURL = "https://fluffy-stock.herokuapp.com/api/product";
+        catalogURL = "s";
         supplierWebService = new JSONWebservice<>(supplierURL, ThaboProduct.class);
         fixerWebService = new JSONWebservice<>("http://api.fixer.io", FixerExchangeRates.class);
     }

@@ -93,7 +93,7 @@ public class TransactionController extends ShopController {
     * "devise" : the devise name,
     * "idList" : [the list of all the ids of the products to buy]
     * "personId" : the Id of the ThirdParty that is buying the products
-    * "cardNumber : the number of the credit card used in the transaction
+    * "cardNumber" : the number of the credit card used in the transaction
     *
     * @param req the request
     * @return the completed transaction
@@ -103,7 +103,7 @@ public class TransactionController extends ShopController {
    */
 	public Transaction buy(Request req) throws IOException, IllegalDiscountException, OrderNotFoundException {
         Transaction newTransaction = null;
-		Purchase purchase = this.getResults(req);
+        Purchase purchase = this.getResults(req);
         // first of all, validate the credit card number
         if(cbValidator.validate(purchase.getCardNumber())) {
             String deliverer = purchase.getDeliverer();
