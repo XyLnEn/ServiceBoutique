@@ -15,11 +15,9 @@ import com.alma.boutique.domain.thirdperson.Order;
 import com.alma.boutique.domain.thirdperson.ThirdParty;
 import com.alma.boutique.infrastructure.conversion.ThaboProduct;
 import com.alma.boutique.infrastructure.factories.OrderFactory;
-import com.alma.boutique.infrastructure.factories.ProductFactory;
 import com.alma.boutique.infrastructure.factories.ThaboProductFactory;
 import com.alma.boutique.infrastructure.factories.TransactionFactory;
 import com.alma.boutique.infrastructure.services.FixerExchanger;
-import com.alma.boutique.infrastructure.services.ProviderCatalog;
 import com.alma.boutique.infrastructure.services.ProviderCatalogThabo;
 
 import spark.Request;
@@ -27,7 +25,6 @@ import spark.Request;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import static spark.Spark.get;
 import static spark.Spark.post;
@@ -152,13 +149,9 @@ public class TransactionController extends ShopController {
             idList.addAll(purchase.getIdList());
             List<Product> productList = new ArrayList<>();
             for (String id : idList) {
-            	System.out.println("Product : ");
             	IFactory<ThaboProduct> remoteProd = new ThaboProductFactory(id);
-            	System.out.println("Product : ok facto");
             	ThaboProduct pr = remoteProd.create();
-            	System.out.println("Product : " + pr.getDescription());
             	productList.add(pr.translate());
-                //productList.addAll(supply.browse().stream().filter(product -> product.getId() == id).map(product -> new ProductFactory(product.getName(), product.getPrice().getValue(), product.getPrice().getCurrency(), product.getDescription(), product.getCategory().getName())).collect(Collectors.toList()));
             }
             Order ord = shop.restock(this.stock, persons, productList, factOrd, purchase.getPersonId(), devise, fixer);
 

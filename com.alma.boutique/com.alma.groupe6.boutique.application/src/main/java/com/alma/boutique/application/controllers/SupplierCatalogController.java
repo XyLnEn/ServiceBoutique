@@ -3,7 +3,6 @@ package com.alma.boutique.application.controllers;
 import com.alma.boutique.application.injection.InjectDependency;
 import com.alma.boutique.application.injection.RepositoryContainer;
 import com.alma.boutique.domain.Shop;
-import com.alma.boutique.infrastructure.services.ProviderCatalog;
 import com.alma.boutique.infrastructure.services.ProviderCatalogThabo;
 
 import static spark.Spark.get;

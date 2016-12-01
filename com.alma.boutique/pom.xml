@@ -25,6 +25,7 @@
         <sonar.java.coveragePlugin>jacoco</sonar.java.coveragePlugin>
         <sonar.dynamicAnalysis>reuseReports</sonar.dynamicAnalysis>
         <sonar.binaries>target/classes</sonar.binaries>
+        <sonar.exclusion>/com.alma.groupe6.boutique.presentation/*</sonar.exclusion>
         <sonar.language>java</sonar.language>
     </properties>
 

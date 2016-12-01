@@ -18,7 +18,6 @@ import com.alma.boutique.infrastructure.repositories.TransactionRepository;
 import com.alma.boutique.infrastructure.services.CBValidator;
 import com.alma.boutique.infrastructure.services.FixerExchangeRates;
 import com.alma.boutique.infrastructure.services.FixerExchanger;
-import com.alma.boutique.infrastructure.services.ProviderCatalog;
 import com.alma.boutique.infrastructure.services.ProviderCatalogThabo;
 import com.alma.boutique.infrastructure.webservice.JSONWebservice;
 import com.alma.boutique.infrastructure.webservice.WebService;
@@ -34,7 +33,6 @@ public class RepositoryContainer implements InjectionContainer {
     private String supplierURL;
     private String catalogURL;
     private WebService<ThaboProduct> supplierWebService;
-    private ProviderCatalogThabo catalog;
     private WebService<FixerExchangeRates> fixerWebService;
     private Database database;
 
@@ -43,7 +41,6 @@ public class RepositoryContainer implements InjectionContainer {
         supplierURL = "https://fluffy-stock.herokuapp.com/api/products";
         catalogURL = "";
         supplierWebService = new JSONWebservice<>(supplierURL, ThaboProduct.class);
-        catalog = new ProviderCatalogThabo("", supplierWebService);
         fixerWebService = new JSONWebservice<>("http://api.fixer.io", FixerExchangeRates.class);
     }
 

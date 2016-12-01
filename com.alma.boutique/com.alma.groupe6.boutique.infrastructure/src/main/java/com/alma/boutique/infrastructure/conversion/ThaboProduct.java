@@ -1,8 +1,11 @@
 package com.alma.boutique.infrastructure.conversion;
 
+import org.slf4j.LoggerFactory;
+
 import com.alma.boutique.domain.product.Category;
 import com.alma.boutique.domain.product.Price;
 import com.alma.boutique.domain.product.Product;
+import com.alma.boutique.domain.shared.Entity;
 
 public class ThaboProduct implements SupplierTraductor {
 	private String id;
@@ -13,7 +16,7 @@ public class ThaboProduct implements SupplierTraductor {
   private int quantity;
   
   public ThaboProduct() {
-  	
+  	//empty constructor for the serialisation
   }
   
 	public ThaboProduct(String id, String name, String price, String description, String productType, int quantity) {
@@ -79,6 +82,7 @@ public class ThaboProduct implements SupplierTraductor {
 		try {
 			prod = Integer.parseInt(price);
 		} catch (Exception e) {
+			LoggerFactory.getLogger(Entity.class).warn(e.getMessage(),e);
 			prod = Integer.MAX_VALUE;	
 		}
 		return new Product(this.getName(), new Price(prod, "EUR") , this.getDescription(), new Category(this.getProductType()));

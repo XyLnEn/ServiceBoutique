@@ -5,6 +5,7 @@ package com.alma.boutique.api.services;
  * @author Lenny Lucas
  * @author Thomas Minier
  */
+@FunctionalInterface
 public interface CreditCardValidation {
     boolean validate(int number);
 }
