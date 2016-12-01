@@ -1,14 +1,12 @@
 package com.alma.boutique.infrastructure.factories;
 
 import com.alma.boutique.api.IFactory;
-import com.alma.boutique.domain.product.Price;
 import com.alma.boutique.infrastructure.conversion.ThaboProduct;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.List;
 
 /**
  * @author Thomas Minier
@@ -16,11 +14,6 @@ import java.util.List;
 public class ThaboProductFactory implements IFactory<ThaboProduct> {
 	
 	private String id;
-  private String name;
-  private String price;
-  private String description;
-  private String productType;
-  private int quantity;
   
 
 

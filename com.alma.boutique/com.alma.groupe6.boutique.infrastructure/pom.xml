@@ -12,6 +12,13 @@
 
     <artifactId>com.alma.boutique.infrastructure</artifactId>
 
+	<repositories>
+        <repository>
+            <id>jcenter</id>
+            <url>http://jcenter.bintray.com/</url>
+        </repository>
+    </repositories>
+    
     <dependencies>
         <dependency>
             <groupId>com.alma.groupe6.boutique</groupId>
@@ -27,6 +34,12 @@
             <groupId>org.mongodb</groupId>
             <artifactId>mongo-java-driver</artifactId>
             <version>3.3.0</version>
+        </dependency>
+        <dependency>
+            <groupId>pl.pojo</groupId>
+            <artifactId>pojo-tester</artifactId>
+            <version>0.6.0</version>
+            <scope>test</scope>
         </dependency>
     </dependencies>
 
