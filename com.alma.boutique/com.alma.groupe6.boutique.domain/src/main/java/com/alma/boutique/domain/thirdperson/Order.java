@@ -4,9 +4,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.commons.lang3.builder.EqualsBuilder;
-import org.apache.commons.lang3.builder.HashCodeBuilder;
-
 import com.alma.boutique.api.IFactory;
 import com.alma.boutique.domain.exceptions.IllegalDiscountException;
 import com.alma.boutique.domain.exceptions.ProductNotFoundException;
@@ -159,34 +156,6 @@ public class Order extends Entity {
 
 	public void setDeliverer(String deliverer) {
 		this.deliverer = deliverer;
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (obj == null) {
-			return false;
-		}
-		if (obj == this) {
-			return true;
-		}
-		if (obj.getClass() != getClass()) {
-			return false;
-		}
-		Order rhs = (Order) obj;
-		return new EqualsBuilder()
-				.append(this.products, rhs.products)
-				.append(this.orderStatus, rhs.orderStatus)
-				.append(this.deliverer, rhs.deliverer)
-				.isEquals();
-	}
-
-	@Override
-	public int hashCode() {
-		return new HashCodeBuilder()
-				.append(products)
-				.append(orderStatus)
-				.append(deliverer)
-				.toHashCode();
 	}
 
 }

@@ -7,8 +7,6 @@ import java.util.List;
 import com.alma.boutique.api.IFactory;
 import com.alma.boutique.domain.exceptions.OrderNotFoundException;
 import com.alma.boutique.domain.shared.*;
-import org.apache.commons.lang3.builder.EqualsBuilder;
-import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 /**
  * class that represent a person with his/her order history
@@ -125,27 +123,4 @@ public class ThirdParty extends Entity {
 		this.isSupplier = isSupplier;
 	}
 
-	@Override
-	public boolean equals(Object obj) {
-		if (obj == null) {
-			return false;
-		}
-		if (obj == this) {
-			return true;
-		}
-		if (obj.getClass() != getClass()) {
-			return false;
-		}
-		ThirdParty rhs = (ThirdParty) obj;
-		return new EqualsBuilder()
-				.append(this.orderHistory, rhs.orderHistory)
-				.isEquals();
-	}
-
-	@Override
-	public int hashCode() {
-		return new HashCodeBuilder()
-				.append(orderHistory)
-				.toHashCode();
-	}
 }
