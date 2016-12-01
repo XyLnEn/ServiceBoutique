@@ -10,5 +10,5 @@ mvn package
 
 Pour déployer le **war** dans un container Tomcat en utilisant web-runner sur le port 8080 :
 ```
-java -jar target/dependency/webapp-runner.jar target/com.alma.boutique.creditcard-1.0-SNAPSHOT.war --port 8080
+java -jar target/dependency/webapp-runner.jar target/com.alma.groupe6.creditcard-1.0-SNAPSHOT.war --port 8080
 ```
