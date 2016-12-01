@@ -11,7 +11,6 @@ import static org.assertj.core.api.Assertions.*;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.alma.boutique.api.IFactory;
 import com.alma.boutique.domain.exceptions.IllegalDiscountException;
 import com.alma.boutique.domain.exceptions.OrderNotFoundException;
 import com.alma.boutique.domain.history.History;
@@ -130,15 +129,15 @@ public class ShopTest {
 		
 		OrderMockFactory ordSupp = new OrderMockFactory("the poste");
 		
-		List<IFactory<Product>> testList = new ArrayList<>();
+		List<Product> testList = new ArrayList<>();
 		
 		Order ord = shop.restock(soldRepo, personRepo, testList, ordSupp, this.supplier.getId(), "EUR", new ExchangeRateServiceMock());
 		assertThat(ord.getDeliverer()).as("test that we can restock 0 items").isEqualTo("the poste");
 		
 		ordSupp = new OrderMockFactory("the true poste");
 		
-		testList.add(suppProd1);
-		testList.add(suppProd2);
+		testList.add(suppProd1.create());
+		testList.add(suppProd2.create());
 		
 		ord = shop.restock(soldRepo, personRepo, testList, ordSupp, this.supplier.getId(), "EUR", new ExchangeRateServiceMock());
 		assertThat(ord.getProducts().size()).as("test that the restock is working for a non-empty list of products").isEqualTo(2);

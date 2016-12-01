@@ -11,7 +11,7 @@ import java.util.List;
 public class Purchase {
 
 	private String deliverer;
-	private List<Integer> idList;
+	private List<String> idList;
 	private String devise;
 	private int personId;
 	private int cardNumber;
@@ -21,7 +21,7 @@ public class Purchase {
 		
 	}
 
-	public Purchase(String deliverer, List<Integer> idList, String devise, int personId, int cardNumber) {
+	public Purchase(String deliverer, List<String> idList, String devise, int personId, int cardNumber) {
 		this.deliverer = deliverer;
 		this.idList = idList;
 		this.devise = devise;
@@ -45,11 +45,11 @@ public class Purchase {
 		this.devise = devise;
 	}
 	
-	public List<Integer> getIdList() {
+	public List<String> getIdList() {
 		return idList;
 	}
 	
-	public void setIdList(List<Integer> idList) {
+	public void setIdList(List<String> idList) {
 		this.idList = idList;
 	}
 

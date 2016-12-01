@@ -160,14 +160,14 @@ public class Shop extends Entity{
 	 * @throws OrderNotFoundException
 	 */
 	public Order restock(IRepository<Product> stock, IRepository<ThirdParty> personList, 
-			List<IFactory<Product>> productList, IFactory<Order> orderCreator, 
+			List<Product> productList, IFactory<Order> orderCreator, 
 			int supplierId, String deviseUsed, ExchangeRateService currentRate) throws IOException, OrderNotFoundException {
 		ThirdParty supplier = personList.read(supplierId); 
 		Order restockOrder = supplier.createOrder(orderCreator);
 		List<Product> orderList = new ArrayList<>();
-		for (IFactory<Product> product : productList) {
-			Product oldProd = buyProductFromSupplier(restockOrder, product);
-			Product newProd = updatePriceToStock(oldProd, currentRate, "EUR");
+		for (Product product : productList) {
+			
+			Product newProd = updatePriceToStock(product, currentRate, "EUR");
 			orderList.add(newProd);
 			stock.add(newProd.getId(), newProd);
 		}

@@ -13,8 +13,10 @@ import com.alma.boutique.domain.history.Transaction;
 import com.alma.boutique.domain.product.Product;
 import com.alma.boutique.domain.thirdperson.Order;
 import com.alma.boutique.domain.thirdperson.ThirdParty;
+import com.alma.boutique.infrastructure.conversion.ThaboProduct;
 import com.alma.boutique.infrastructure.factories.OrderFactory;
 import com.alma.boutique.infrastructure.factories.ProductFactory;
+import com.alma.boutique.infrastructure.factories.ThaboProductFactory;
 import com.alma.boutique.infrastructure.factories.TransactionFactory;
 import com.alma.boutique.infrastructure.services.FixerExchanger;
 import com.alma.boutique.infrastructure.services.ProviderCatalog;
@@ -110,7 +112,10 @@ public class TransactionController extends ShopController {
             String deliverer = purchase.getDeliverer();
             String devise = purchase.getDevise();
             IFactory<Order> factOrd = new OrderFactory(deliverer);
-            List<Integer> idList = new ArrayList<>(purchase.getIdList());
+            List<Integer> idList = new ArrayList<>();
+            for (String id : purchase.getIdList()) {
+							idList.add(Integer.parseInt(id));
+						}
             ThirdParty client = persons.read(purchase.getPersonId());
             Order ord = shop.buyProduct(this.stock, persons, factOrd , idList, purchase.getPersonId(), devise, fixer);
             orderHistory.add(ord.getId(), ord);
@@ -143,11 +148,17 @@ public class TransactionController extends ShopController {
             String deliverer = purchase.getDeliverer();
             String devise = purchase.getDevise();
             IFactory<Order> factOrd = new OrderFactory(deliverer);
-            List<Integer> idList = new ArrayList<>(purchase.getIdList());
-            List<IFactory<Product>> productList = new ArrayList<>();
-
-            for (Integer id : idList) {
-                productList.addAll(supply.browse().stream().filter(product -> product.getId() == id).map(product -> new ProductFactory(product.getName(), product.getPrice().getValue(), product.getPrice().getCurrency(), product.getDescription(), product.getCategory().getName())).collect(Collectors.toList()));
+            List<String> idList = new ArrayList<>();
+            idList.addAll(purchase.getIdList());
+            List<Product> productList = new ArrayList<>();
+            for (String id : idList) {
+            	System.out.println("Product : ");
+            	IFactory<ThaboProduct> remoteProd = new ThaboProductFactory(id);
+            	System.out.println("Product : ok facto");
+            	ThaboProduct pr = remoteProd.create();
+            	System.out.println("Product : " + pr.getDescription());
+            	productList.add(pr.translate());
+                //productList.addAll(supply.browse().stream().filter(product -> product.getId() == id).map(product -> new ProductFactory(product.getName(), product.getPrice().getValue(), product.getPrice().getCurrency(), product.getDescription(), product.getCategory().getName())).collect(Collectors.toList()));
             }
             Order ord = shop.restock(this.stock, persons, productList, factOrd, purchase.getPersonId(), devise, fixer);
 
