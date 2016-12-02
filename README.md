@@ -1,4 +1,4 @@
-# Projet de Service - Master 2 ALMA 2016/2017 [![Build Status](https://travis-ci.org/XyLnEn/ServiceBoutique.svg?branch=master)](https://travis-ci.org/XyLnEn/ServiceBoutique)
+# Projet de Service - Master 2 ALMA 2016/2017 [![Build Status](https://travis-ci.org/XyLnEn/ServiceBoutique.svg?branch=master)](https://travis-ci.org/XyLnEn/ServiceBoutique) [![Sonar](https://img.shields.io/badge/SonarQube-passed-blue.svg)](https://sonarqube.com/dashboard?id=com.alma.groupe6.boutique%3Acom.alma.groupe6.boutique)
 
 Projet de gestion de Boutique, réalisé dans le cadre du module Services, enseigné en Master 2 ALMA.    
 Ce projet a été réalisé en suivante le principe de [Domain Driven Development](https://en.wikipedia.org/wiki/Domain-driven_design).   
