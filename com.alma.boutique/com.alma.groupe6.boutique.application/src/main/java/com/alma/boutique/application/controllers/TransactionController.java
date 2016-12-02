@@ -18,7 +18,7 @@ import com.alma.boutique.infrastructure.factories.OrderFactory;
 import com.alma.boutique.infrastructure.factories.FluffyProductFactory;
 import com.alma.boutique.infrastructure.factories.TransactionFactory;
 import com.alma.boutique.infrastructure.services.FixerExchanger;
-import com.alma.boutique.infrastructure.services.ProviderCatalogThabo;
+import com.alma.boutique.infrastructure.services.FluffyProviderCatalog;
 
 import spark.Request;
 
@@ -64,7 +64,7 @@ public class TransactionController extends ShopController {
             name = "ProviderCatalog",
             containerClass = RepositoryContainer.class
     )
-	private ProviderCatalogThabo supply;
+	private FluffyProviderCatalog supply;
 
     @InjectDependency(
             name = "ExchangeService",

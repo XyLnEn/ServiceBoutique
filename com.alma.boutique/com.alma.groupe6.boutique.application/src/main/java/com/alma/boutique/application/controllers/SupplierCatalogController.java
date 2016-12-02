@@ -3,7 +3,7 @@ package com.alma.boutique.application.controllers;
 import com.alma.boutique.application.injection.InjectDependency;
 import com.alma.boutique.application.injection.RepositoryContainer;
 import com.alma.boutique.domain.Shop;
-import com.alma.boutique.infrastructure.services.ProviderCatalogThabo;
+import com.alma.boutique.infrastructure.services.FluffyProviderCatalog;
 
 import static spark.Spark.get;
 
@@ -17,7 +17,7 @@ public class SupplierCatalogController extends ShopController {
             name = "ProviderCatalog",
             containerClass = RepositoryContainer.class
     )
-    private ProviderCatalogThabo suppliedProducts;
+    private FluffyProviderCatalog suppliedProducts;
 
     public SupplierCatalogController(Shop shop) {
         super(shop);

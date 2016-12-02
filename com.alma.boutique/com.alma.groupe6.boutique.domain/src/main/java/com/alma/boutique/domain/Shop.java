@@ -179,9 +179,8 @@ public class Shop extends Entity{
 	
 	/**
 	 * Method that advance the state of an order
-	 * @param ordId the id of the order to advance
-	 * @param repositoryTrans the repository of transaction where to search for the order
-	 * @param orderList the repository 
+     * @param orderList the repository
+     * @param ordId the id of the order to advance
 	 * @throws OrderNotFoundException
 	 */
 	public void advanceOrder(IRepository<Order> orderList, int ordId) throws OrderNotFoundException{
@@ -208,8 +207,8 @@ public class Shop extends Entity{
 	/**
 	 * Method that apply a promotion on a list of products
 	 * @param stock where the products are stored
-	 * @param prodId the list of id of the products to update
-	 * @param discount the discount to apply
+	 * @param promo the promotion to apply
+	 * @param productIds the list of products which we want to promotion to be applied
 	 */
 	public void applyPromotionOnProducts(IRepository<Product> stock, float promo, List<Integer> productIds) {
 		for (Integer productId : productIds) {
@@ -219,7 +218,6 @@ public class Shop extends Entity{
 	
 	/**
 	 * Method that calculate the turnover of the shop
-	 * @param hist the history of the shop
 	 * @param transactionHistory the list of transactions done in the shop
 	 * @param orderList the list of orders made in the shop
 	 * @param personList the list of persons 

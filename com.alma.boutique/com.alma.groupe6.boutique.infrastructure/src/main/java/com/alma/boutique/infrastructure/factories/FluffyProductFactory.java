@@ -7,13 +7,13 @@ import com.alma.boutique.infrastructure.webservice.JSONPOSTWebservice;
 import java.io.IOException;
 
 /**
+ * Factory used to instantiate a product from the supplier FluffyStock
+ * @author Lenny Lucas
  * @author Thomas Minier
  */
 public class FluffyProductFactory implements IFactory<FluffyProduct> {
 	
 	private String id;
-  
-
 
 	public FluffyProductFactory(String id) {
 		

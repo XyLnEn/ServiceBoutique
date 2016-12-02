@@ -18,7 +18,7 @@ import com.alma.boutique.infrastructure.repositories.TransactionRepository;
 import com.alma.boutique.infrastructure.services.CBValidator;
 import com.alma.boutique.infrastructure.services.FixerExchangeRates;
 import com.alma.boutique.infrastructure.services.FixerExchanger;
-import com.alma.boutique.infrastructure.services.ProviderCatalogThabo;
+import com.alma.boutique.infrastructure.services.FluffyProviderCatalog;
 import com.alma.boutique.infrastructure.webservice.JSONWebservice;
 import com.alma.boutique.infrastructure.webservice.WebService;
 
@@ -86,7 +86,7 @@ public class RepositoryContainer implements InjectionContainer {
      */
     @Override
     public BrowseSuppliesService<Product> getProviderCatalog() {
-        return new ProviderCatalogThabo(catalogURL, supplierWebService);
+        return new FluffyProviderCatalog(catalogURL, supplierWebService);
     }
 
     /**

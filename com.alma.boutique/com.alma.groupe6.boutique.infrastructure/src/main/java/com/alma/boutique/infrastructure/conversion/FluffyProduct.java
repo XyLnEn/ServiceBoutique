@@ -7,6 +7,11 @@ import com.alma.boutique.domain.product.Price;
 import com.alma.boutique.domain.product.Product;
 import com.alma.boutique.domain.shared.Entity;
 
+/**
+ * Data class which represent the products supplied by FluffyStock
+ * @author Lenny Lucas
+ * @author Thomas Minier
+ */
 public class FluffyProduct implements SupplierTraductor {
 	private String id;
   private String name;

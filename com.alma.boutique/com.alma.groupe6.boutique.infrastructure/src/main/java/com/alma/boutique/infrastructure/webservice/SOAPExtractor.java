@@ -16,7 +16,7 @@ import java.net.URL;
  * @author Thomas Minier
  */
 public class SOAPExtractor {
-    private final static Logger logger = Logger.getLogger(SOAPExtractor.class);
+    private static final Logger logger = Logger.getLogger(SOAPExtractor.class);
 
     private String baseUrl;
 

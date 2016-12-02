@@ -12,11 +12,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Class implementing the service to consult the catalog of a supplier
+ * Class implementing the service to consult the catalog of the supplier FluffyStock
  * @author Lenny Lucas
  * @author Thomas Minier
  */
-public class ProviderCatalogThabo implements BrowseSuppliesService<Product> {
+public class FluffyProviderCatalog implements BrowseSuppliesService<Product> {
     private String browseURL;
     private WebService<FluffyProduct> webService;
 
@@ -25,7 +25,7 @@ public class ProviderCatalogThabo implements BrowseSuppliesService<Product> {
      * @param browseURL the URL where the supplier catalog is accessible
      * @param webService the webservice used to consume the supplier's service
      */
-    public ProviderCatalogThabo(String browseURL, WebService<FluffyProduct> webService) {
+    public FluffyProviderCatalog(String browseURL, WebService<FluffyProduct> webService) {
         this.browseURL = browseURL;
         this.webService = webService;
     }
