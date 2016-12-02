@@ -13,7 +13,8 @@ const SupplierComponent = Vue.component('supplier', {
 	methods: {
 		loadCatalog: function () {
 			var that = this;
-			axios.get(config.api + config.urls.supplier.browse)
+			console.log(config.api + config.urls.supplier.all);
+			axios.get(config.api + config.urls.supplier.all)
 			.then(function (response) {
 				that.products = response.data;
 			})
