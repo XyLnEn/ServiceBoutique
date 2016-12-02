@@ -3,7 +3,7 @@ package com.alma.boutique.infrastructure.services;
 import com.alma.boutique.api.services.BrowseSuppliesService;
 import com.alma.boutique.domain.product.Product;
 import com.alma.boutique.domain.shared.Entity;
-import com.alma.boutique.infrastructure.conversion.ThaboProduct;
+import com.alma.boutique.infrastructure.conversion.FluffyProduct;
 import com.alma.boutique.infrastructure.webservice.WebService;
 import org.slf4j.LoggerFactory;
 
@@ -18,14 +18,14 @@ import java.util.List;
  */
 public class ProviderCatalogThabo implements BrowseSuppliesService<Product> {
     private String browseURL;
-    private WebService<ThaboProduct> webService;
+    private WebService<FluffyProduct> webService;
 
     /**
      * Constructor
      * @param browseURL the URL where the supplier catalog is accessible
      * @param webService the webservice used to consume the supplier's service
      */
-    public ProviderCatalogThabo(String browseURL, WebService<ThaboProduct> webService) {
+    public ProviderCatalogThabo(String browseURL, WebService<FluffyProduct> webService) {
         this.browseURL = browseURL;
         this.webService = webService;
     }
@@ -38,9 +38,9 @@ public class ProviderCatalogThabo implements BrowseSuppliesService<Product> {
     public List<Product> browse() {
         List<Product> catalog = new ArrayList<>();
         try {
-            List<ThaboProduct> products = webService.browse(browseURL);
-            for (ThaboProduct thaboProduct : products) {
-              catalog.add(thaboProduct.translate());
+            List<FluffyProduct> products = webService.browse(browseURL);
+            for (FluffyProduct fluffyProduct : products) {
+              catalog.add(fluffyProduct.translate());
 						}
         } catch (IOException e) {
         	LoggerFactory.getLogger(Entity.class).warn(e.getMessage(),e);

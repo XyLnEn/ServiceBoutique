@@ -8,7 +8,7 @@ import com.alma.boutique.domain.history.Transaction;
 import com.alma.boutique.domain.product.Product;
 import com.alma.boutique.domain.thirdperson.Order;
 import com.alma.boutique.domain.thirdperson.ThirdParty;
-import com.alma.boutique.infrastructure.conversion.ThaboProduct;
+import com.alma.boutique.infrastructure.conversion.FluffyProduct;
 import com.alma.boutique.infrastructure.database.Database;
 import com.alma.boutique.infrastructure.database.MongoDBStore;
 import com.alma.boutique.infrastructure.repositories.OrderRepository;
@@ -32,7 +32,7 @@ import java.io.IOException;
 public class RepositoryContainer implements InjectionContainer {
     private String supplierURL;
     private String catalogURL;
-    private WebService<ThaboProduct> supplierWebService;
+    private WebService<FluffyProduct> supplierWebService;
     private WebService<FixerExchangeRates> fixerWebService;
     private Database database;
 
@@ -40,7 +40,7 @@ public class RepositoryContainer implements InjectionContainer {
         database = MongoDBStore.getInstance();
         supplierURL = "https://fluffy-stock.herokuapp.com/api/product";
         catalogURL = "s";
-        supplierWebService = new JSONWebservice<>(supplierURL, ThaboProduct.class);
+        supplierWebService = new JSONWebservice<>(supplierURL, FluffyProduct.class);
         fixerWebService = new JSONWebservice<>("http://api.fixer.io", FixerExchangeRates.class);
     }
 

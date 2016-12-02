@@ -32,7 +32,7 @@ const SupplierComponent = Vue.component('supplier', {
 			that.products = [];
 			// wait 5s before reloading, because latency
 			setTimeout(function () {
-				that.loadProducts();
+				that.loadCatalog();
 			}, 5000);
 		})
 

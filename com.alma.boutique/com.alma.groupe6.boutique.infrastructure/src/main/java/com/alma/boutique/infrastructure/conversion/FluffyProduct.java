@@ -7,7 +7,7 @@ import com.alma.boutique.domain.product.Price;
 import com.alma.boutique.domain.product.Product;
 import com.alma.boutique.domain.shared.Entity;
 
-public class ThaboProduct implements SupplierTraductor {
+public class FluffyProduct implements SupplierTraductor {
 	private String id;
   private String name;
   private String price;
@@ -15,11 +15,11 @@ public class ThaboProduct implements SupplierTraductor {
   private String productType;
   private int quantity;
   
-  public ThaboProduct() {
+  public FluffyProduct() {
   	//empty constructor for the serialisation
   }
   
-	public ThaboProduct(String id, String name, String price, String description, String productType, int quantity) {
+	public FluffyProduct(String id, String name, String price, String description, String productType, int quantity) {
 		this.id = id;
 		this.name = name;
 		this.price = price;

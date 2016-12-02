@@ -13,9 +13,9 @@ import com.alma.boutique.domain.history.Transaction;
 import com.alma.boutique.domain.product.Product;
 import com.alma.boutique.domain.thirdperson.Order;
 import com.alma.boutique.domain.thirdperson.ThirdParty;
-import com.alma.boutique.infrastructure.conversion.ThaboProduct;
+import com.alma.boutique.infrastructure.conversion.FluffyProduct;
 import com.alma.boutique.infrastructure.factories.OrderFactory;
-import com.alma.boutique.infrastructure.factories.ThaboProductFactory;
+import com.alma.boutique.infrastructure.factories.FluffyProductFactory;
 import com.alma.boutique.infrastructure.factories.TransactionFactory;
 import com.alma.boutique.infrastructure.services.FixerExchanger;
 import com.alma.boutique.infrastructure.services.ProviderCatalogThabo;
@@ -149,8 +149,8 @@ public class TransactionController extends ShopController {
             idList.addAll(purchase.getIdList());
             List<Product> productList = new ArrayList<>();
             for (String id : idList) {
-            	IFactory<ThaboProduct> remoteProd = new ThaboProductFactory(id);
-            	ThaboProduct pr = remoteProd.create();
+            	IFactory<FluffyProduct> remoteProd = new FluffyProductFactory(id);
+            	FluffyProduct pr = remoteProd.create();
             	productList.add(pr.translate());
             }
             Order ord = shop.restock(this.stock, persons, productList, factOrd, purchase.getPersonId(), devise, fixer);
