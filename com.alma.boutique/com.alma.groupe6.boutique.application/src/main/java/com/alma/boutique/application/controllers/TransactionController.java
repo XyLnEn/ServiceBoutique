@@ -154,7 +154,7 @@ public class TransactionController extends ShopController {
             	productList.add(pr.translate());
             }
             Order ord = shop.restock(this.stock, persons, productList, factOrd, purchase.getPersonId(), devise, fixer);
-
+            orderHistory.add(ord.getId(), ord);
             ThirdParty supplier = persons.read(purchase.getPersonId());
             newTransaction = shop.saveTransaction(shop.getShopHistory(), this.transactions, new TransactionFactory(ord.getId(), shop.getShopHistory().getAccount().getOwner().getId(), supplier.getId()));
         }
